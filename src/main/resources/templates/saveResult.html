@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Save Result</title>
+</head>
+<body>
+<h1>Save Result</h1>
+
+<div th:if="${savedHello}">
+    <p>Saved Hello:</p>
+    <p>ID: <span th:text="${savedHello.id}"></span></p>
+    <p>Text: <span th:text="${savedHello.text}"></span></p>
+    <p>Created At: <span th:text="${savedHello.createdAt}"></span></p>
+    <p>Updated At: <span th:text="${savedHello.updatedAt}"></span></p>
+</div>
+
+<div th:if="${error}">
+    <p>Error: <span th:text="${error}"></span></p>
+</div>
+
+</body>
+</html>
