@@ -139,6 +139,7 @@ replay_pid*
 /src/test/resources/*.yml
 !**/src/test/resources/*.yml
 intellij-java-google-style.xml
+application.yml
 
 ### jwt ###
 /src/main/resources/secret.properties
