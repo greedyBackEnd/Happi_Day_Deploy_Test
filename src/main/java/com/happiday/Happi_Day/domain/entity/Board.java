@@ -42,11 +42,4 @@ public class Board extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull
-    private LocalDateTime created_at;
-
-    @NotNull
-    private LocalDateTime updated_at;
-
-
 }
