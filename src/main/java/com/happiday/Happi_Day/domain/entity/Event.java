@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -45,5 +47,12 @@ public class Event extends BaseEntity{
     private String thumbnailUrl;
 
     private String imageUrl;
+
+    @OneToMany(mappedBy ="event")
+    private List<UserEventLike> eventLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy ="event")
+    private List<UserEventParticipation> EventParticipations = new ArrayList<>();
+
 
 }
