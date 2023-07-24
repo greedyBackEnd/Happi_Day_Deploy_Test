@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Entity
 @Getter
@@ -41,5 +42,9 @@ public class Board extends BaseEntity {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    // 게시글 매핑
+//    @OneToMany(mappedBy = "article")
+//    private List<Article> articles = new ArrayList<>();
 
 }
