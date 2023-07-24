@@ -40,9 +40,9 @@ public class Article extends BaseEntity {
     private String content;
 
     // 댓글 매핑
-//    @NotNull
-//    @OneToMany(mappedBy="comment")
-//    private List<Comment> comments = new ArrayList<>();
+    @NotNull
+    @OneToMany(mappedBy="comment")
+    private List<Comment> comments = new ArrayList<>();
 
     // 게시글 좋아요 매핑
 //    @NotNull
