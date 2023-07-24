@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 유저 식별 ID
@@ -34,14 +34,6 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String phoneNumber; // 전화번호(중복 X)
-
-    @Column(nullable = false)
-    @CreatedDate
-    private LocalDateTime createdAt; // 회원가입 날짜
-
-    @Column(nullable = false)
-    @LastModifiedDate
-    private LocalDateTime updateAt; // 회원정보 수정 날짜
 
     @Column(nullable = false)
     private String role; // 회원구분
