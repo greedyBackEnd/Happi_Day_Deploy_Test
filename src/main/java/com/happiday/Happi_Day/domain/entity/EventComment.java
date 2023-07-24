@@ -1,6 +1,7 @@
 package com.happiday.Happi_Day.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,10 +25,11 @@ public class EventComment extends BaseEntity{
 //    private UserEntity user;
 
     // 이벤트 게시글과 관계 설정
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "event_id")
-//    private EventEntity event;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    private Event event;
 
+    @NotNull
     @Column(columnDefinition = "TEXT")
     private String content;
 }
