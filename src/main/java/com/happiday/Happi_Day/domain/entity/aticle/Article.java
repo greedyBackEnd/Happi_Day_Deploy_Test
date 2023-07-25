@@ -46,13 +46,13 @@ public class Article extends BaseEntity {
     private List<Comment> comments = new ArrayList<>();
 
     // 게시글 좋아요 매핑
-//    @NotNull
-//    @OneToMany(mappedBy="user_article_likes")
-//    private List<UserArticleLikes> userArticleLikes = new ArrayList<>();
+    @NotNull
+    @OneToMany(mappedBy="user_article_likes")
+    private List<UserArticleLikes> userArticleLikes = new ArrayList<>();
 
     // 게시글 스크랩 매핑
-//    @NotNull
-//    @OneToMany(mappedBy="user_article_scrap")
-//    private List<UserArticleScrap> userArticleScraps = new ArrayList<>();
+    @NotNull
+    @OneToMany(mappedBy="user_article_scrap")
+    private List<UserArticleScrap> userArticleScraps = new ArrayList<>();
 
 }
