@@ -2,7 +2,6 @@ package com.happiday.Happi_Day.domain.entity.article;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,25 +32,21 @@ public class Article extends BaseEntity {
 //    @JoinColumn(name = "user_id")
 //    private User user;
 
-    @NotNull
+    @Column(nullable = false)
     private String title;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     // 댓글 매핑
-    @NotNull
     @OneToMany(mappedBy="comment")
     private List<Comment> comments = new ArrayList<>();
 
     // 게시글 좋아요 매핑
-    @NotNull
     @OneToMany(mappedBy="user_article_likes")
     private List<UserArticleLikes> userArticleLikes = new ArrayList<>();
 
     // 게시글 스크랩 매핑
-    @NotNull
     @OneToMany(mappedBy="user_article_scrap")
     private List<UserArticleScrap> userArticleScraps = new ArrayList<>();
 

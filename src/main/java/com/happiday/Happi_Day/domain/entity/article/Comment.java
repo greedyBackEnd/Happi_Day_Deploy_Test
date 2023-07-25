@@ -30,8 +30,7 @@ public class Comment extends BaseEntity {
 //    @JoinColumn(name="user_id")
 //    private User user;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
 }
