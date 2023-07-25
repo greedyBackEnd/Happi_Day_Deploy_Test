@@ -1,6 +1,5 @@
-package com.happiday.Happi_Day.domain.entity.aticle;
+package com.happiday.Happi_Day.domain.entity.article;
 
-import com.happiday.Happi_Day.domain.entity.aticle.Article;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
