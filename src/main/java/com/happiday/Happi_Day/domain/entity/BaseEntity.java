@@ -16,7 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-@NoArgsConstructor(access = AccessLevel.PACKAGE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @SuperBuilder(toBuilder = true)
