@@ -1,7 +1,15 @@
-package com.happiday.Happi_Day.domain.entity;
+package com.happiday.Happi_Day.domain.entity.user;
 
+import com.happiday.Happi_Day.domain.entity.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertFalse;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Table(name = "users")
+@EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 // 유저
 public class User extends BaseEntity {
@@ -17,6 +26,7 @@ public class User extends BaseEntity {
     private Long id; // 유저 식별 ID
 
     // 제약사항 추가
+    @Email
     @Column(nullable = false, unique = true)
     private String userEmail; // 이메일형식(중복 X)
 
@@ -35,12 +45,27 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private RoleType role; // 회원구분
 
-    @Column(nullable = false)
-    private Boolean isActive; // 활성화 상태구분(default => true)
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt; // 회원가입 날짜
 
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Boolean isDeleted; // 탈퇴, 관리자에 의한 삭제 구분(default => false)
+    private LocalDateTime updateAt; // 회원정보 수정날짜
 
+    @AssertTrue
+    @ColumnDefault("true")
+    @Column(nullable = false)
+    private Boolean isActive = true; // 활성화 상태구분(default => true)
+
+    @AssertFalse
+    @ColumnDefault("false")
+    @Column(nullable = false)
+    private Boolean isDeleted = false; // 탈퇴, 관리자에 의한 삭제 구분(default => false)
+
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastLoginAt; // 마지막 로그인 날짜
 
     // TODO 주문 매핑
@@ -55,11 +80,7 @@ public class User extends BaseEntity {
 
     // TODO 장바구니 매핑
     /*
-         @ManyToMany
-         @JoinTable(
-            name = "cart",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
+         @OneToMany(mappedBy = "product_id")
          private List<Cart> cart = new ArrayList<>();
     */
 
