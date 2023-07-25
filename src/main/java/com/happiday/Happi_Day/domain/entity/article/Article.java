@@ -39,7 +39,7 @@ public class Article extends BaseEntity {
     private String content;
 
     // 댓글 매핑
-    @OneToMany(mappedBy="comment")
+    @OneToMany(mappedBy="article")
     private List<Comment> comments = new ArrayList<>();
 
     // 게시글 좋아요 매핑
