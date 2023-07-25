@@ -1,7 +1,7 @@
-package com.happiday.Happi_Day.domain.entity;
+package com.happiday.Happi_Day.domain.entity.aticle;
 
+import com.happiday.Happi_Day.domain.entity.aticle.Article;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,24 +13,19 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@Table(name = "comment")
-public class Comment extends BaseEntity {
+@Table(name = "user_article_scrap")
+public class UserArticleScrap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // 게시글 id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="article_id")
-    private Article article;
 
     // 유저 id
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name="user_id")
 //    private User user;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
+    // 게시글 id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="article_id")
+    private Article article;
 }
