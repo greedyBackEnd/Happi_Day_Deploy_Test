@@ -1,10 +1,17 @@
-package com.happiday.Happi_Day.domain.entity;
+package com.happiday.Happi_Day.domain.entity.event;
 
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 @Table(name ="user_event_like")
 // 유저 이벤트 좋아요 Join Table
 public class UserEventLike {

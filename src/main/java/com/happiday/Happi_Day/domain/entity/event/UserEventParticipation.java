@@ -1,35 +1,31 @@
-package com.happiday.Happi_Day.domain.entity;
+package com.happiday.Happi_Day.domain.entity.event;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@Getter
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@Table(name ="event_comment")
-public class EventComment extends BaseEntity{
+@Table(name ="user_event_participation")
+// 유저 이벤트 참여하기 Join Table
+public class UserEventParticipation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 유저와 관계 설정
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id")
-//    private UserEntity user;
+//    private User user;
 
-    // 이벤트 게시글과 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
-    private String content;
+
 }

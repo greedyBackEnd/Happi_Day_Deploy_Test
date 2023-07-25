@@ -1,5 +1,6 @@
-package com.happiday.Happi_Day.domain.entity;
+package com.happiday.Happi_Day.domain.entity.event;
 
+import com.happiday.Happi_Day.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -18,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Table(name ="event")
-public class Event extends BaseEntity{
+public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
