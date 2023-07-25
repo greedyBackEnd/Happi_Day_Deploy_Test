@@ -13,12 +13,13 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @Table(name ="chat_room")
-public class ChatRoom extends BaseEntity {
+public class ChatRoom extends BaseE가ntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // TODO User 매핑
 /*
     @ManyToOne
     @JoinColumn(name = "sender_id")

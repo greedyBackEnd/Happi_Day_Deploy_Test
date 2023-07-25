@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,6 +21,7 @@ public class ChatMessage extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
+    // TODO User 매핑
 /*
     @ManyToOne
     @JoinColumn(name = "sender_id")
