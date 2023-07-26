@@ -29,31 +29,45 @@ public class Event extends BaseEntity {
 //    @JoinColumn(name = "user_id")
 //    private UserEntity user;
 
-    @NotNull
+    @Column(nullable = false)
     private String title;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
-    @NotNull
+    @Column(nullable = false)
     private LocalDateTime startTime;
 
-    @NotNull
+    @Column(nullable = false)
     private LocalDateTime endTime;
 
-    @NotNull
+    @Column(nullable = false)
     private String location;
 
     private String thumbnailUrl;
 
     private String imageUrl;
 
-    @OneToMany(mappedBy ="event")
-    private List<UserEventLike> eventLikes = new ArrayList<>();
+    // TODO 유저 이벤트 좋아요 맵핑
+    /*
+    @ManyToMany
+    @JoinTable(
+            name = "user_event_like",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<Event> users = new ArrayList<>();
+     */
 
-    @OneToMany(mappedBy ="event")
-    private List<UserEventParticipation> EventParticipations = new ArrayList<>();
-
+    // TODO 유저 이벤트 참여하기 맵핑
+    /*
+    @ManyToMany
+    @JoinTable(
+            name = "user_event_participation",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<Event> users = new ArrayList<>();
+     */
 
 }
