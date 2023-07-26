@@ -54,7 +54,7 @@ public class User extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastLoginAt; // 마지막 로그인 날짜
 
-    // 활성화 상태구분 & 탈퇴, 관리자에 의한 삭제 구분 => Default value settings
+    // 활성화 상태구분 & 탈퇴, 관리자에 의한 삭제 구분
     @PrePersist
     public void prePersist() {
         this.isActive = this.isActive == null || this.isActive;
