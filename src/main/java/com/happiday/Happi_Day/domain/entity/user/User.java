@@ -19,13 +19,6 @@ import java.time.LocalDateTime;
 // 유저
 public class User extends BaseEntity {
 
-    // 활성화 상태구분 & 탈퇴, 관리자에 의한 삭제 구분 => Default value settings
-    @PrePersist
-    public void prePersist() {
-        this.isActive = this.isActive == null || this.isActive;
-        this.isDeleted = this.isDeleted != null && this.isDeleted;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 유저 식별 ID
@@ -61,6 +54,13 @@ public class User extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastLoginAt; // 마지막 로그인 날짜
 
+    // 활성화 상태구분 & 탈퇴, 관리자에 의한 삭제 구분 => Default value settings
+    @PrePersist
+    public void prePersist() {
+        this.isActive = this.isActive == null || this.isActive;
+        this.isDeleted = this.isDeleted != null && this.isDeleted;
+    }
+
     // TODO 주문 매핑
     /*
          @ManyToMany
@@ -71,7 +71,7 @@ public class User extends BaseEntity {
          private List<Order> order = new ArrayList<>();
     */
 
-    // TODO 장바구니 매핑
+    // TODO 장바구니 매핑[보류]
     /*
          @OneToMany(mappedBy = "user")
          private List<Cart> cart = new ArrayList<>();
