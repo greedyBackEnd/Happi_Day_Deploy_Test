@@ -30,7 +30,6 @@ public class EventComment extends BaseEntity {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 }
