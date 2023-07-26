@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.apache.catalina.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +44,17 @@ public class Article extends BaseEntity {
     private List<Comment> comments = new ArrayList<>();
 
     // 게시글 좋아요 매핑
-    @OneToMany(mappedBy="user_article_likes")
-    private List<UserArticleLikes> userArticleLikes = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(name = "article_like",
+//        joinColumns = @JoinColumn(name ="article_id"),
+//        inverseJoinColumns = @JoinColumn(name="user_id"))
+//    private List<User> like_users = new ArrayList<>();
 
     // 게시글 스크랩 매핑
-    @OneToMany(mappedBy="user_article_scrap")
-    private List<UserArticleScrap> userArticleScraps = new ArrayList<>();
+//    @ManyToMany
+//    @JoinTable(name = "article_scrap",
+//        joinColumns = @JoinColumn(name= "article_id"),
+//        inverseJoinColumns = @JoinColumn(name ="user_id"))
+//    private List<User> scarp_users = new ArrayList<>();
 
 }
