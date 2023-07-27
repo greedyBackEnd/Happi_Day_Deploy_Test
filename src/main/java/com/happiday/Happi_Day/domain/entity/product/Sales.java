@@ -47,6 +47,10 @@ public class Sales extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SalesStatus salesStatus;
 
+    // 주문 매핑
+    @OneToOne(mappedBy = "sales")
+    private Order order;
+
     // 판매글 찜하기
     @ManyToMany
     @JoinTable(name="user_sales_like",
