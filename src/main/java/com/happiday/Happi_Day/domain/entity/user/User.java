@@ -1,5 +1,6 @@
 package com.happiday.Happi_Day.domain.entity.user;
 
+import com.happiday.Happi_Day.domain.entity.article.Article;
 import com.happiday.Happi_Day.domain.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertFalse;
@@ -9,13 +10,15 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Getter
 @Entity
 @Table(name = "user")
 @EntityListeners(value = AuditingEntityListener.class)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 // 유저
 public class User extends BaseEntity {
 
@@ -43,11 +46,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private RoleType role; // 회원구분
 
-    @AssertTrue
     @Column(nullable = false)
     private Boolean isActive; // 활성화 상태구분(default => true)
 
-    @AssertFalse
     @Column(nullable = false)
     private Boolean isDeleted; // 탈퇴, 관리자에 의한 삭제 구분(default => false)
 
@@ -60,6 +61,14 @@ public class User extends BaseEntity {
         this.isActive = this.isActive == null || this.isActive;
         this.isDeleted = this.isDeleted != null && this.isDeleted;
     }
+
+    // TODO 게시글 매핑
+//    @ManyToMany
+//    @JoinTable(
+//            name = "article",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "board_id"))
+//    private List<Article> article = new ArrayList<>();
 
     // TODO 주문 매핑
     /*
@@ -97,15 +106,6 @@ public class User extends BaseEntity {
          private List<Product> product = new ArrayList<>();
     */
 
-    // TODO 게시글 매핑
-    /*
-         @ManyToMany
-         @JoinTable(
-            name = "article",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "board_id"))
-         private List<Article> article = new ArrayList<>();
-    */
 
     // TODO 댓글 매핑
     /*
