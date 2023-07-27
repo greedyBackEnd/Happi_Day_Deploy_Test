@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum ProductStatus {
-    ONSALE("판매중"),
-    STOPSALE("판매중지"),
-    OUTOFSTOCK("품절");
+    ON_SALE("판매중"),
+    STOP_SALE("판매중지"),
+    OUT_OF_STOCK("품절");
 
     private String value;
 

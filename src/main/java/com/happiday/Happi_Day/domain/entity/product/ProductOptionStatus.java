@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ProductOptionStatus {
-    ONSALE("판매중"),
-    OUTOFSTOCK("품절");
+    ON_SALE("판매중"),
+    OUT_OF_STOCK("품절");
 
     private String value;
 
