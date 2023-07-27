@@ -1,4 +1,4 @@
-package com.happiday.Happi_Day.domain.entity.Board;
+package com.happiday.Happi_Day.domain.entity.board;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
 import jakarta.persistence.*;
