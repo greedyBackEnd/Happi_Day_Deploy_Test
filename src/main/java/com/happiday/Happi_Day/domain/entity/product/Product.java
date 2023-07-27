@@ -46,6 +46,7 @@ public class Product extends BaseEntity {
 
     private String image_url;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 
