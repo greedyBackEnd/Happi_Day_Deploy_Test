@@ -28,11 +28,8 @@ public class Order {
 
     // 상품 id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id")
-    private Product product;
-
-    @Column(nullable = false)
-    private int quantity;
+    @JoinColumn(name="sales_id")
+    private Sales sales;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
