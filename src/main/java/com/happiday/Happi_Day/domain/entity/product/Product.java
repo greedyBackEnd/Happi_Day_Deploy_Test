@@ -12,16 +12,16 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@Table(name = "product_option")
-public class ProductOption {
+@Table(name = "product")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 상품 ID
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name="sales_id", nullable = false)
+    private Sales sales;
 
     @Column(nullable = false)
     private String name;
@@ -31,7 +31,7 @@ public class ProductOption {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ProductStatus productStatus;
+    private SalesStatus salesStatus;
 
 
 }
