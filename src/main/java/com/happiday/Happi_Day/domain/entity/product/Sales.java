@@ -25,7 +25,7 @@ public class Sales extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 카테고리 id
+    // 판매글 카테고리 id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="category_id", nullable = false)
     private SalesCategory salesCategory;
@@ -47,21 +47,21 @@ public class Sales extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SalesStatus salesStatus;
 
-    // 상품 찜하기
+    // 판매글 찜하기
     @ManyToMany
     @JoinTable(name="user_sales_like",
         joinColumns = @JoinColumn(name="sales_id"),
         inverseJoinColumns = @JoinColumn(name="user_id"))
     private List<User> likeUsers = new ArrayList<>();
 
-    // 아티스트-상품 매핑
+    // 아티스트-판매글 매핑
     @ManyToMany
     @JoinTable(name="artist_sales",
             joinColumns = @JoinColumn(name="sales_id"),
             inverseJoinColumns = @JoinColumn(name="artist_id"))
     private List<Artist> artists = new ArrayList<>();
 
-    // 팀-상품 매핑
+    // 팀-판매글 매핑
     @ManyToMany
     @JoinTable(name="team_sales",
             joinColumns = @JoinColumn(name="sales_id"),

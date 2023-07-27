@@ -18,7 +18,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 상품 ID
+    // 판매글 ID
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sales_id", nullable = false)
     private Sales sales;

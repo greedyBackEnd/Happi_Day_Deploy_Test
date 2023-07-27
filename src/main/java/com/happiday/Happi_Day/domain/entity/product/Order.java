@@ -26,7 +26,7 @@ public class Order {
     @JoinColumn(name="user_id")
     private User user;
 
-    // 상품 id
+    // 판매글 id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="sales_id")
     private Sales sales;
