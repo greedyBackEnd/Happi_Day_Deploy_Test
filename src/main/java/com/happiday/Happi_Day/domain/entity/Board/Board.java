@@ -1,5 +1,6 @@
-package com.happiday.Happi_Day.domain.entity;
+package com.happiday.Happi_Day.domain.entity.Board;
 
+import com.happiday.Happi_Day.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -7,9 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 @Entity
 @Getter
