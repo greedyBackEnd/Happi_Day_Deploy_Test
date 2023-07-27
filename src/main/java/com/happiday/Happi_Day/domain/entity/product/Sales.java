@@ -19,16 +19,16 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@Table(name = "product")
-public class Product extends BaseEntity {
+@Table(name = "sales")
+public class Sales extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 카테고리 id
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="category_id", nullable = false)
-//    private ProductCategory productCategory;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="category_id", nullable = false)
+    private SalesCategory salesCategory;
 
     // 판매자 id
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,33 +41,30 @@ public class Product extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false)
-    private int price;
-
     private String imageUrl;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private ProductStatus productStatus;
+    private SalesStatus salesStatus;
 
     // 상품 찜하기
     @ManyToMany
-    @JoinTable(name="user_product_like",
-        joinColumns = @JoinColumn(name="product_id"),
+    @JoinTable(name="user_sales_like",
+        joinColumns = @JoinColumn(name="sales_id"),
         inverseJoinColumns = @JoinColumn(name="user_id"))
     private List<User> likeUsers = new ArrayList<>();
 
     // 아티스트-상품 매핑
     @ManyToMany
-    @JoinTable(name="artist_product",
-            joinColumns = @JoinColumn(name="product_id"),
+    @JoinTable(name="artist_sales",
+            joinColumns = @JoinColumn(name="sales_id"),
             inverseJoinColumns = @JoinColumn(name="artist_id"))
     private List<Artist> artists = new ArrayList<>();
 
     // 팀-상품 매핑
     @ManyToMany
-    @JoinTable(name="team_product",
-            joinColumns = @JoinColumn(name="product_id"),
+    @JoinTable(name="team_sales",
+            joinColumns = @JoinColumn(name="sales_id"),
             inverseJoinColumns = @JoinColumn(name="team_id"))
     private List<Team> teams = new ArrayList<>();
 }
