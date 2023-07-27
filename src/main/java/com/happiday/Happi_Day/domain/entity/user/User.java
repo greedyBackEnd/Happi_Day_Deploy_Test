@@ -1,6 +1,5 @@
 package com.happiday.Happi_Day.domain.entity.user;
 
-import com.happiday.Happi_Day.domain.entity.article.Article;
 import com.happiday.Happi_Day.domain.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertFalse;
@@ -10,17 +9,22 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Getter
 @Entity
 @Table(name = "user")
 @EntityListeners(value = AuditingEntityListener.class)
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 // 유저
 public class User extends BaseEntity {
+
+    // 활성화 상태구분 & 탈퇴, 관리자에 의한 삭제 구분 => Default value settings
+    @PrePersist
+    public void prePersist() {
+        this.isActive = this.isActive == null || this.isActive;
+        this.isDeleted = this.isDeleted != null && this.isDeleted;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,29 +50,16 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private RoleType role; // 회원구분
 
+    @AssertTrue
     @Column(nullable = false)
     private Boolean isActive; // 활성화 상태구분(default => true)
 
+    @AssertFalse
     @Column(nullable = false)
     private Boolean isDeleted; // 탈퇴, 관리자에 의한 삭제 구분(default => false)
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastLoginAt; // 마지막 로그인 날짜
-
-    // 활성화 상태구분 & 탈퇴, 관리자에 의한 삭제 구분
-    @PrePersist
-    public void prePersist() {
-        this.isActive = this.isActive == null || this.isActive;
-        this.isDeleted = this.isDeleted != null && this.isDeleted;
-    }
-
-    // TODO 게시글 매핑
-//    @ManyToMany
-//    @JoinTable(
-//            name = "article",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "board_id"))
-//    private List<Article> article = new ArrayList<>();
 
     // TODO 주문 매핑
     /*
@@ -80,7 +71,7 @@ public class User extends BaseEntity {
          private List<Order> order = new ArrayList<>();
     */
 
-    // TODO 장바구니 매핑[보류]
+    // TODO 장바구니 매핑
     /*
          @OneToMany(mappedBy = "user")
          private List<Cart> cart = new ArrayList<>();
@@ -106,6 +97,15 @@ public class User extends BaseEntity {
          private List<Product> product = new ArrayList<>();
     */
 
+    // TODO 게시글 매핑
+    /*
+         @ManyToMany
+         @JoinTable(
+            name = "article",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "board_id"))
+         private List<Article> article = new ArrayList<>();
+    */
 
     // TODO 댓글 매핑
     /*
