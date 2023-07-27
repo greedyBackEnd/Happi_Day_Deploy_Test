@@ -39,6 +39,6 @@ public class Order {
     private OrderStatus orderStatus;
 
     @Column(nullable = false)
-    private LocalDateTime ordered_at;
+    private LocalDateTime orderedAt;
 
 }

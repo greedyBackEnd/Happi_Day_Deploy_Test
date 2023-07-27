@@ -44,7 +44,7 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private int price;
 
-    private String image_url;
+    private String imageUrl;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -55,7 +55,7 @@ public class Product extends BaseEntity {
     @JoinTable(name="user_product_like",
         joinColumns = @JoinColumn(name="product_id"),
         inverseJoinColumns = @JoinColumn(name="user_id"))
-    private List<User> like_users = new ArrayList<>();
+    private List<User> likeUsers = new ArrayList<>();
 
     // 아티스트-상품 매핑
     @ManyToMany
