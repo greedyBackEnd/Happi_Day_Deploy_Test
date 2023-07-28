@@ -47,6 +47,10 @@ public class Sales extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SalesStatus salesStatus;
 
+    // 상품
+    @OneToMany(mappedBy = "sales")
+    private List<Product> products = new ArrayList<>();
+
     // 주문 매핑
     @OneToOne(mappedBy = "sales")
     private Order order;
