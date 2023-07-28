@@ -56,23 +56,14 @@ public class Sales extends BaseEntity {
     private Order order;
 
     // 판매글 찜하기
-    @ManyToMany
-    @JoinTable(name="user_sales_like",
-        joinColumns = @JoinColumn(name="sales_id"),
-        inverseJoinColumns = @JoinColumn(name="user_id"))
-    private List<User> likeUsers = new ArrayList<>();
+    @ManyToMany(mappedBy = "sales")
+    private List<User> users = new ArrayList<>();
 
     // 아티스트-판매글 매핑
-    @ManyToMany
-    @JoinTable(name="artist_sales",
-            joinColumns = @JoinColumn(name="sales_id"),
-            inverseJoinColumns = @JoinColumn(name="artist_id"))
+    @ManyToMany(mappedBy ="sales" )
     private List<Artist> artists = new ArrayList<>();
 
     // 팀-판매글 매핑
-    @ManyToMany
-    @JoinTable(name="team_sales",
-            joinColumns = @JoinColumn(name="sales_id"),
-            inverseJoinColumns = @JoinColumn(name="team_id"))
+    @ManyToMany(mappedBy = "sales")
     private List<Team> teams = new ArrayList<>();
 }
