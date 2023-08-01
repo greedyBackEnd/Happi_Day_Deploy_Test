@@ -65,12 +65,21 @@ public class Event extends BaseEntity {
     private List<Event> joinList = new ArrayList<>();
 
     // 이벤트 팀 매핑
-    @ManyToMany(mappedBy = "events")
+    @ManyToMany
+    @JoinTable(
+            name = "event_team",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id")
+    )
     private List<Team> teams = new ArrayList<>();
 
     // 이벤트 아티스트 매핑
-    @ManyToMany(mappedBy = "events")
+    @ManyToMany
+    @JoinTable(
+            name = "event_artist",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
     private List<Artist> artists = new ArrayList<>();
-
 
 }
