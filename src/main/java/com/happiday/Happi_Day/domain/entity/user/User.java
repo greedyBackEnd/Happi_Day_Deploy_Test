@@ -66,7 +66,7 @@ public class User extends BaseEntity {
         this.isDeleted = this.isDeleted != null && this.isDeleted;
     }
 
-    // 게시글 매핑(Article)
+    // 게시글 작성 매핑(Article) => 커뮤니티(자유게시글)
     @OneToMany(mappedBy = "user")
     private List<Article> articles = new ArrayList<>();
 
@@ -98,7 +98,7 @@ public class User extends BaseEntity {
 
     // 판매글 매핑
     @OneToMany(mappedBy = "user")
-    private List<Sales> saleList = new ArrayList<>();
+    private List<Sales> salesList = new ArrayList<>();
 
     // 판매글 찜하기 매핑
     @ManyToMany
@@ -109,9 +109,9 @@ public class User extends BaseEntity {
     )
     private List<Sales> salesLikes = new ArrayList<>();
 
-    // 이벤트 작성 매핑
+    // 이벤트 작성 매핑 => (별개)
     @OneToMany(mappedBy = "user")
-    private List<Event> eventWrites = new ArrayList<>();
+    private List<Event> events = new ArrayList<>();
 
     // 이벤트 댓글 매핑
     @OneToMany(mappedBy = "user")
@@ -124,7 +124,7 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> userEventParticipation = new ArrayList<>();
+    private List<Event> eventJoinList = new ArrayList<>();
 
     // 유저-이벤트 좋아요 매핑
     @ManyToMany
@@ -133,7 +133,7 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
-    private List<Event> userEventLikes = new ArrayList<>();
+    private List<Event> eventLikes = new ArrayList<>();
 
     // 유저-아티스트 구독 매핑
     @ManyToMany
@@ -142,7 +142,7 @@ public class User extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "artist_id")
     )
-    private List<Artist> subscribedArtistes = new ArrayList<>();
+    private List<Artist> subscribedArtists = new ArrayList<>();
 
     // 유저-팀 구독 매핑
     @ManyToMany
