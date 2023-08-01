@@ -61,7 +61,7 @@ public class Event extends BaseEntity {
     private List<Event> likes = new ArrayList<>();
 
     // 이벤트 참여하기 매핑
-    @ManyToMany(mappedBy = "eventJoinList")
+    @ManyToMany(mappedBy = "EventParticipations")
     private List<Event> joinList = new ArrayList<>();
 
     // 이벤트 팀 매핑
