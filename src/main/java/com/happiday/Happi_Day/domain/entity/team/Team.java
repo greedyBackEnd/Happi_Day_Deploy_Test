@@ -1,6 +1,10 @@
 package com.happiday.Happi_Day.domain.entity.team;
 
 import com.happiday.Happi_Day.domain.entity.artist.Artist;
+import com.happiday.Happi_Day.domain.entity.board.Board;
+import com.happiday.Happi_Day.domain.entity.event.Event;
+import com.happiday.Happi_Day.domain.entity.product.Sales;
+import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,8 +34,7 @@ public class Team {
     @ManyToMany(mappedBy = "teams")
     private List<Artist> artists = new ArrayList<>();
 
-    // TODO 이벤트 매핑
-    /*
+    // 이벤트
     @ManyToMany
     @JoinTable(
             name = "team_event",
@@ -39,16 +42,21 @@ public class Team {
             inverseJoinColumns = @JoinColumn(name = "event_id")
     )
     private List<Event> events = new ArrayList<>();
-     */
 
-    // TODO 상품 매핑
-    /*
+    // 판매글
     @ManyToMany
     @JoinTable(
-            name = "team_product",
+            name = "team_sales",
             joinColumns = @JoinColumn(name = "team_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
+            inverseJoinColumns = @JoinColumn(name = "sales_id")
     )
-    private List<Product> products = new ArrayList<>();
-     */
+    private List<Sales> salesList = new ArrayList<>();
+
+    // 유저 구독
+    @ManyToMany(mappedBy = "subscribedTeams")
+    private List<User> subscribers = new ArrayList<>();
+
+    // 게시판
+    @OneToMany(mappedBy = "team")
+    private List<Board> boards = new ArrayList<>();
 }
