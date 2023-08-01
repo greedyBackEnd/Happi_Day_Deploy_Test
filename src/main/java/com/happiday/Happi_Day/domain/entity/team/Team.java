@@ -35,12 +35,7 @@ public class Team {
     private List<Artist> artists = new ArrayList<>();
 
     // 이벤트
-    @ManyToMany
-    @JoinTable(
-            name = "team_event",
-            joinColumns = @JoinColumn(name = "team_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
+    @ManyToMany(mappedBy = "teams")
     private List<Event> events = new ArrayList<>();
 
     // 판매글
