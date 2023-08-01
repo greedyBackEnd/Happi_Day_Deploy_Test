@@ -56,23 +56,13 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
     private List<EventComment> comments;
 
-    // 이벤트 좋아요 맵핑
-    @ManyToMany
-    @JoinTable(
-            name = "event_like",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
+    // 이벤트 좋아요 매핑
+    @ManyToMany(mappedBy = "eventLikes")
     private List<Event> likes = new ArrayList<>();
 
-    // 이벤트 참여하기 맵핑
-    @ManyToMany
-    @JoinTable(
-            name = "event_participation",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<Event> participations = new ArrayList<>();
+    // 이벤트 참여하기 매핑
+    @ManyToMany(mappedBy = "eventJoinList")
+    private List<Event> joinList = new ArrayList<>();
 
     // 이벤트 팀 매핑
     @ManyToMany(mappedBy = "events")
