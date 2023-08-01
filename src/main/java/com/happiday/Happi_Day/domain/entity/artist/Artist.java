@@ -47,12 +47,7 @@ public class Artist extends BaseEntity {
     private List<Team> teams = new ArrayList<>();
 
     // 이벤트
-    @ManyToMany
-    @JoinTable(
-            name = "artist_event",
-            joinColumns = @JoinColumn(name = "artist_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
+    @ManyToMany(mappedBy = "artists")
     private List<Event> events = new ArrayList<>();
 
     // 판매글
