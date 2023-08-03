@@ -5,7 +5,6 @@ import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.team.Team;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,11 +57,11 @@ public class Event extends BaseEntity {
 
     // 이벤트 좋아요 매핑
     @ManyToMany(mappedBy = "eventLikes")
-    private List<Event> likes = new ArrayList<>();
+    private List<User> likes = new ArrayList<>();
 
     // 이벤트 참여하기 매핑
     @ManyToMany(mappedBy = "eventJoinList")
-    private List<Event> joinList = new ArrayList<>();
+    private List<User> joinList = new ArrayList<>();
 
     // 이벤트 팀 매핑
     @ManyToMany
