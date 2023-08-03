@@ -1,7 +1,11 @@
 package com.happiday.Happi_Day.domain.entity.artist;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
+import com.happiday.Happi_Day.domain.entity.board.Board;
+import com.happiday.Happi_Day.domain.entity.event.Event;
+import com.happiday.Happi_Day.domain.entity.product.Sales;
 import com.happiday.Happi_Day.domain.entity.team.Team;
+import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,6 +37,7 @@ public class Artist extends BaseEntity {
 
     private String nationality;
 
+    // 팀-아티스트
     @ManyToMany
     @JoinTable(
             name = "artist_team",
@@ -41,27 +46,26 @@ public class Artist extends BaseEntity {
     )
     private List<Team> teams = new ArrayList<>();
 
-    // TODO 이벤트 매핑
-    /*
-    @ManyToMany
-    @JoinTable(
-            name = "artist_event",
-            joinColumns = @JoinColumn(name = "artist_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id")
-    )
+    // 이벤트
+    @ManyToMany(mappedBy = "artists")
     private List<Event> events = new ArrayList<>();
-     */
 
-    // TODO 상품 매핑
-    /*
+    // 판매글
     @ManyToMany
     @JoinTable(
-            name = "artist_product",
+            name = "artist_sales",
             joinColumns = @JoinColumn(name = "artist_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
+            inverseJoinColumns = @JoinColumn(name = "sales_id")
     )
-    private List<Product> products = new ArrayList<>();
-     */
+    private List<Sales> salesList = new ArrayList<>();
+
+    // 유저 구독
+    @ManyToMany(mappedBy = "subscribedArtists")
+    private List<User> subscribers = new ArrayList<>();
+
+    // 게시판
+    @OneToMany(mappedBy = "artist")
+    private List<Board> boards = new ArrayList<>();
 
     // isSolo default true
     @PrePersist

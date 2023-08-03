@@ -1,37 +1,41 @@
-package com.happiday.Happi_Day.domain.entity.article;
+package com.happiday.Happi_Day.domain.entity.product;
 
-import com.happiday.Happi_Day.domain.entity.BaseEntity;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@Table(name = "comment")
-public class Comment extends BaseEntity {
+@Table(name = "order")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // 게시글 id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="article_id")
-    private Article article;
 
     // 유저 id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String content;
+    // 판매글 id
+    @OneToOne
+    @JoinColumn(name="sales_id")
+    private Sales sales;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
+    @Column(nullable = false)
+    private LocalDateTime orderedAt;
 
 }

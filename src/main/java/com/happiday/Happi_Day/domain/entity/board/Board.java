@@ -1,5 +1,9 @@
-package com.happiday.Happi_Day.domain.entity;
+package com.happiday.Happi_Day.domain.entity.board;
 
+import com.happiday.Happi_Day.domain.entity.BaseEntity;
+import com.happiday.Happi_Day.domain.entity.article.Article;
+import com.happiday.Happi_Day.domain.entity.artist.Artist;
+import com.happiday.Happi_Day.domain.entity.team.Team;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -8,8 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,14 +32,14 @@ public class Board extends BaseEntity {
     private BoardCategory category;
 
     // 아티스트 id
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name ="artist_id")
-//    private Artist artist;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="artist_id")
+    private Artist artist;
 
     // 팀 id
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "team_id")
-//    private Team team;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @NotNull
     private String name;
@@ -44,7 +48,7 @@ public class Board extends BaseEntity {
     private String description;
 
     // 게시글 매핑
-//    @OneToMany(mappedBy = "article")
-//    private List<Article> articles = new ArrayList<>();
+    @OneToMany(mappedBy = "board")
+    private List<Article> articles = new ArrayList<>();
 
 }

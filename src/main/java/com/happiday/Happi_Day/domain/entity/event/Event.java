@@ -1,8 +1,10 @@
 package com.happiday.Happi_Day.domain.entity.event;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
+import com.happiday.Happi_Day.domain.entity.artist.Artist;
+import com.happiday.Happi_Day.domain.entity.team.Team;
+import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,11 +25,12 @@ public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "event_id")
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private UserEntity user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private String title;
@@ -48,26 +51,34 @@ public class Event extends BaseEntity {
 
     private String imageUrl;
 
-    // TODO 유저 이벤트 좋아요 맵핑
-    /*
-    @ManyToMany
-    @JoinTable(
-            name = "user_event_like",
-            joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<Event> users = new ArrayList<>();
-     */
+    // 이벤트 댓글 관계 설정
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    private List<EventComment> comments;
 
-    // TODO 유저 이벤트 참여하기 맵핑
-    /*
+    // 이벤트 좋아요 매핑
+    @ManyToMany(mappedBy = "eventLikes")
+    private List<User> likes = new ArrayList<>();
+
+    // 이벤트 참여하기 매핑
+    @ManyToMany(mappedBy = "eventJoinList")
+    private List<User> joinList = new ArrayList<>();
+
+    // 이벤트 팀 매핑
     @ManyToMany
     @JoinTable(
-            name = "user_event_participation",
+            name = "event_team",
             joinColumns = @JoinColumn(name = "event_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            inverseJoinColumns = @JoinColumn(name = "team_id")
     )
-    private List<Event> users = new ArrayList<>();
-     */
+    private List<Team> teams = new ArrayList<>();
+
+    // 이벤트 아티스트 매핑
+    @ManyToMany
+    @JoinTable(
+            name = "event_artist",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
+    private List<Artist> artists = new ArrayList<>();
 
 }
