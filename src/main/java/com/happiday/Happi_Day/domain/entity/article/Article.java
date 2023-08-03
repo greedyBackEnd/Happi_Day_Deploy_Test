@@ -1,13 +1,14 @@
 package com.happiday.Happi_Day.domain.entity.article;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
+import com.happiday.Happi_Day.domain.entity.board.Board;
+import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.apache.catalina.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +25,14 @@ public class Article extends BaseEntity {
     private Long id;
 
     // 게시판 id
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="board_id")
-//    private Board board;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="board_id")
+    private Board board;
 
     // 유저 id
-//    @ManyToOne(fetch =FetchType.LAZY)
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne(fetch =FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private String title;
@@ -44,17 +45,10 @@ public class Article extends BaseEntity {
     private List<Comment> comments = new ArrayList<>();
 
     // 게시글 좋아요 매핑
-//    @ManyToMany
-//    @JoinTable(name = "article_like",
-//        joinColumns = @JoinColumn(name ="article_id"),
-//        inverseJoinColumns = @JoinColumn(name="user_id"))
-//    private List<User> like_users = new ArrayList<>();
+    @ManyToMany(mappedBy = "articleLikes")
+    private List<User> likeUsers = new ArrayList<>();
 
     // 게시글 스크랩 매핑
-//    @ManyToMany
-//    @JoinTable(name = "article_scrap",
-//        joinColumns = @JoinColumn(name= "article_id"),
-//        inverseJoinColumns = @JoinColumn(name ="user_id"))
-//    private List<User> scarp_users = new ArrayList<>();
-
+    @ManyToMany(mappedBy = "articleScraps")
+    private List<User> scrapUsers = new ArrayList<>();
 }

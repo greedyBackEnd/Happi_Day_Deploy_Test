@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,4 +25,7 @@ public class SalesCategory {
     private String name;
 
     private String description;
+
+    @OneToMany(mappedBy = "salesCategory")
+    private List<Sales> salesList = new ArrayList<>();
 }
