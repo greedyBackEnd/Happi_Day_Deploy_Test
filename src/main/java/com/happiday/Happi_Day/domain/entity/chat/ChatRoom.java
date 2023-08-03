@@ -1,5 +1,6 @@
-package com.happiday.Happi_Day.domain.entity;
+package com.happiday.Happi_Day.domain.entity.chat;
 
+import com.happiday.Happi_Day.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,23 +13,21 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
-@Table(name ="chat_message")
-public class ChatMessage extends BaseEntity {
+@Table(name ="chat_room")
+public class ChatRoom extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String content;
 
     // TODO User 매핑
 /*
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private User sender;
-    */
 
     @ManyToOne
-    @JoinColumn(name = "room_id")
-    private ChatRoom chatRoom;
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
+*/
 }
