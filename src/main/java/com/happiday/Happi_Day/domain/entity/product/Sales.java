@@ -33,7 +33,7 @@ public class Sales extends BaseEntity {
     // 판매자 id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
-    private User user;
+    private User users;
 
     @Column(nullable = false)
     private String name;
@@ -56,14 +56,14 @@ public class Sales extends BaseEntity {
     private Order order;
 
     // 판매글 찜하기
-    @ManyToMany(mappedBy = "sales")
-    private List<User> users = new ArrayList<>();
+    @ManyToMany(mappedBy = "salesLikes")
+    private List<User> salesLikesUsers = new ArrayList<>();
 
     // 아티스트-판매글 매핑
-    @ManyToMany(mappedBy ="sales" )
+    @ManyToMany(mappedBy ="salesList" )
     private List<Artist> artists = new ArrayList<>();
 
     // 팀-판매글 매핑
-    @ManyToMany(mappedBy = "sales")
+    @ManyToMany(mappedBy = "salesList")
     private List<Team> teams = new ArrayList<>();
 }
