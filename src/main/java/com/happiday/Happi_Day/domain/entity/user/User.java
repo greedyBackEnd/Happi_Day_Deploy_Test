@@ -1,6 +1,6 @@
 package com.happiday.Happi_Day.domain.entity.user;
 
-import com.happiday.Happi_Day.domain.entity.base.BaseEntity;
+import com.happiday.Happi_Day.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertFalse;
 import jakarta.validation.constraints.AssertTrue;
