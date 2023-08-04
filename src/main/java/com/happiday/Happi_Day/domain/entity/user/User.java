@@ -1,11 +1,11 @@
 package com.happiday.Happi_Day.domain.entity.user;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
-import com.happiday.Happi_Day.domain.entity.ChatMessage;
-import com.happiday.Happi_Day.domain.entity.ChatRoom;
 import com.happiday.Happi_Day.domain.entity.article.Article;
 import com.happiday.Happi_Day.domain.entity.article.Comment;
 import com.happiday.Happi_Day.domain.entity.artist.Artist;
+import com.happiday.Happi_Day.domain.entity.chat.ChatMessage;
+import com.happiday.Happi_Day.domain.entity.chat.ChatRoom;
 import com.happiday.Happi_Day.domain.entity.event.Event;
 import com.happiday.Happi_Day.domain.entity.product.Order;
 import com.happiday.Happi_Day.domain.entity.product.Sales;
@@ -97,7 +97,7 @@ public class User extends BaseEntity {
     private List<Order> orders = new ArrayList<>();
 
     // 판매글 매핑
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users") // mappedBy user => users로 수정
     private List<Sales> salesList = new ArrayList<>();
 
     // 판매글 찜하기 매핑
@@ -154,11 +154,11 @@ public class User extends BaseEntity {
     private List<Team> subscribedTeams = new ArrayList<>();
 
     // 채팅방 매핑
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "sender") // mappedBy user => sender로 수정
     private List<ChatRoom> chatRooms = new ArrayList<>();
 
     // 채팅메세지 매핑
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "sender") // mappedBy user => sender로 수정
     private List<ChatMessage> chatMessages = new ArrayList<>();
 }
 
