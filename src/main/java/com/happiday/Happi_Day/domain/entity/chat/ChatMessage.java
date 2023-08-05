@@ -1,6 +1,7 @@
 package com.happiday.Happi_Day.domain.entity.chat;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
+import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,12 +23,9 @@ public class ChatMessage extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    // TODO User 매핑
-/*
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private User sender;
-    */
 
     @ManyToOne
     @JoinColumn(name = "room_id")

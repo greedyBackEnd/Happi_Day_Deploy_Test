@@ -154,11 +154,14 @@ public class User extends BaseEntity {
     private List<Team> subscribedTeams = new ArrayList<>();
 
     // 채팅방 매핑
-    @OneToMany(mappedBy = "sender") // mappedBy user => sender로 수정
-    private List<ChatRoom> chatRooms = new ArrayList<>();
+    @OneToMany(mappedBy = "sender")
+    private List<ChatRoom> sendChatRooms = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver")
+    private List<ChatRoom> receiveChatRooms = new ArrayList<>();
 
     // 채팅메세지 매핑
-    @OneToMany(mappedBy = "sender") // mappedBy user => sender로 수정
+    @OneToMany(mappedBy = "sender")
     private List<ChatMessage> chatMessages = new ArrayList<>();
 }
 
