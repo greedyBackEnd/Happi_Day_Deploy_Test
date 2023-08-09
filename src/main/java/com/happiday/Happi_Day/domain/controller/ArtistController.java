@@ -23,31 +23,17 @@ public class ArtistController {
 
     private final ArtistService artistService;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ArtistResponseDto> registerArtist(@RequestParam("artist") String artistStr,
-                                                            @RequestParam(value = "file", required = false) MultipartFile imageFile) {
-        ArtistRegisterDto requestDto = null;
-        try {
-            requestDto = new ObjectMapper().readValue(artistStr, ArtistRegisterDto.class);
-        } catch (JsonProcessingException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 입력입니다.", e);
-        }
-
+    @PostMapping
+    public ResponseEntity<ArtistResponseDto> registerArtist(@RequestPart(name = "artist") ArtistRegisterDto requestDto,
+                                                            @RequestPart(value = "file", required = false) MultipartFile imageFile) {
         ArtistResponseDto responseDto = artistService.registerArtist(requestDto, imageFile);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{artistId}")
     public ResponseEntity<ArtistResponseDto> updateArtist(@PathVariable Long artistId,
-                                                          @RequestParam("artist") String artistStr,
-                                                          @RequestParam(value = "file", required = false) MultipartFile imageFile) {
-        ArtistUpdateDto requestDto = null;
-        try {
-            requestDto = new ObjectMapper().readValue(artistStr, ArtistUpdateDto.class);
-        } catch (JsonProcessingException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 입력입니다.", e);
-        }
-
+                                                          @RequestPart(name = "artist") ArtistUpdateDto requestDto,
+                                                          @RequestPart(value = "file", required = false) MultipartFile imageFile) {
         ArtistResponseDto responseDto = artistService.updateArtist(artistId, requestDto, imageFile);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
