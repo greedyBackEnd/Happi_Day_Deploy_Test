@@ -10,7 +10,6 @@ public class ArtistUpdateDto {
     private ArtistType type;
     private String description;
     private String nationality;
-    private String profileUrl;
 
     public Artist toEntity() {
         return Artist.builder()
@@ -18,7 +17,6 @@ public class ArtistUpdateDto {
                 .type(type)
                 .description(description)
                 .nationality(nationality)
-                .profileUrl(toEntity().getProfileUrl())
                 .build();
     }
 }

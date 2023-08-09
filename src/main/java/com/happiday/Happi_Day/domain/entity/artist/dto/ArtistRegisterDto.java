@@ -10,7 +10,6 @@ public class ArtistRegisterDto {
     private ArtistType type;
     private String description;
     private String nationality;
-    private String profileUrl;
 
     public Artist toEntity() {
         return Artist.builder()
@@ -18,7 +17,6 @@ public class ArtistRegisterDto {
                 .type(type)
                 .description(description)
                 .nationality(nationality)
-                .profileUrl(profileUrl)
                 .build();
     }
 }
