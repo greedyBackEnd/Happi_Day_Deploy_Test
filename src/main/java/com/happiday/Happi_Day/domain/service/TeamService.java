@@ -59,7 +59,6 @@ public class TeamService {
     }
 
     public List<TeamResponseDto> getTeams() {
-        List<Team> teams = teamRepository.findAll();
         return teamRepository.findAll().stream()
                 .map(TeamResponseDto::of)
                 .collect(Collectors.toList());
