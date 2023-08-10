@@ -13,6 +13,7 @@ import com.happiday.Happi_Day.domain.entity.team.Team;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "user")
 @EntityListeners(value = AuditingEntityListener.class)
