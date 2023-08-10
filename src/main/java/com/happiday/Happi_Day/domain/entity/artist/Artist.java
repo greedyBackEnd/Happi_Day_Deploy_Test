@@ -29,7 +29,8 @@ public class Artist extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private boolean isSolo = true;
+    @Enumerated(EnumType.STRING)
+    private ArtistType type = ArtistType.SOLO;
 
     private String description;
 
@@ -67,9 +68,10 @@ public class Artist extends BaseEntity {
     @OneToMany(mappedBy = "artist")
     private List<Board> boards = new ArrayList<>();
 
-    // isSolo default true
-    @PrePersist
-    public void defaultIsSolo() {
-        this.isSolo = true;
+    public void update(Artist artistUpdate) {
+        this.name = artistUpdate.getName();
+        this.type = artistUpdate.getType();
+        this.description = artistUpdate.getDescription();
+        this.nationality = artistUpdate.getNationality();
     }
 }
