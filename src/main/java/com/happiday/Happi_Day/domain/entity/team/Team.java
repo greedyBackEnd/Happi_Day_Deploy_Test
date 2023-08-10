@@ -54,4 +54,10 @@ public class Team {
     // 게시판
     @OneToMany(mappedBy = "team")
     private List<Board> boards = new ArrayList<>();
+
+    public void update(Team teamUpdate) {
+        this.name  = teamUpdate.getName();
+        this.description = teamUpdate.getDescription();
+        this.logoUrl =teamUpdate.getLogoUrl();
+    }
 }
