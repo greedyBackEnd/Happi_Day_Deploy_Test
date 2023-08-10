@@ -48,7 +48,7 @@ public class Board extends BaseEntity {
     private String description;
 
     // 게시글 매핑
-    @OneToMany(mappedBy = "board")
+    @ManyToMany(mappedBy = "boards")
     private List<Article> articles = new ArrayList<>();
 
 }

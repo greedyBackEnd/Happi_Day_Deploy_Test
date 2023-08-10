@@ -1,6 +1,7 @@
 package com.happiday.Happi_Day.domain.entity.article;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
+import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.board.Board;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
@@ -25,9 +26,14 @@ public class Article extends BaseEntity {
     private Long id;
 
     // 게시판 id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="board_id")
-    private Board board;
+    @ManyToMany
+    @JoinTable(
+            name = "article_board",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "board_id")
+    )
+    private List<Board> boards  = new ArrayList<>();
+
 
     // 유저 id
     @ManyToOne(fetch =FetchType.LAZY)
