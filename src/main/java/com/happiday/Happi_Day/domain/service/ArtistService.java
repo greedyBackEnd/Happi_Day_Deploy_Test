@@ -4,7 +4,8 @@ import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistRegisterDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistUpdateDto;
-import com.happiday.Happi_Day.domain.entity.team.dto.TeamResponseDto;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamDetailResponseDto;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.repository.ArtistRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -64,12 +65,12 @@ public class ArtistService {
                 .collect(Collectors.toList());
     }
 
-    public List<TeamResponseDto> getArtistTeams(Long artistId) {
+    public List<TeamListResponseDto> getArtistTeams(Long artistId) {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
 
         return artist.getTeams().stream()
-                .map(TeamResponseDto::of)
+                .map(TeamListResponseDto::of)
                 .collect(Collectors.toList());
     }
 }

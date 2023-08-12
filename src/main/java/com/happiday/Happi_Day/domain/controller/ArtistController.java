@@ -3,7 +3,8 @@ package com.happiday.Happi_Day.domain.controller;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistRegisterDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistUpdateDto;
-import com.happiday.Happi_Day.domain.entity.team.dto.TeamResponseDto;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamDetailResponseDto;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.service.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,8 +55,8 @@ public class ArtistController {
     }
 
     @GetMapping("/{artistId}/teams")
-    public ResponseEntity<List<TeamResponseDto>> getArtistTeams(@PathVariable Long artistId) {
-        List<TeamResponseDto> artistTeams = artistService.getArtistTeams(artistId);
+    public ResponseEntity<List<TeamListResponseDto>> getArtistTeams(@PathVariable Long artistId) {
+        List<TeamListResponseDto> artistTeams = artistService.getArtistTeams(artistId);
         return new ResponseEntity<>(artistTeams, HttpStatus.OK);
     }
 }
