@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ArtistResponseDto {
+public class ArtistDetailResponseDto {
     private Long id;
     private String name;
     private ArtistType type;
@@ -15,8 +15,8 @@ public class ArtistResponseDto {
     private String profileUrl;
     private String nationality;
 
-    public static ArtistResponseDto of(Artist artist) {
-        return ArtistResponseDto.builder()
+    public static ArtistDetailResponseDto of(Artist artist) {
+        return ArtistDetailResponseDto.builder()
                 .id(artist.getId())
                 .name(artist.getName())
                 .type(artist.getType())
