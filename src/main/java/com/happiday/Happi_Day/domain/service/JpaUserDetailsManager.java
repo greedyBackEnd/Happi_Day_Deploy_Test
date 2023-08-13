@@ -8,18 +8,45 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailService implements UserDetailsService {
+public class JpaUserDetailsManager implements UserDetailsManager {
 
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByUserEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
         return CustomUserDetails.fromEntity(user);
     }
+
+    @Override
+    public boolean userExists(String username) {
+        return this.userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public void createUser(UserDetails user) {
+
+    }
+
+    @Override
+    public void updateUser(UserDetails user) {
+
+    }
+
+    @Override
+    public void deleteUser(String username) {
+
+    }
+
+    @Override
+    public void changePassword(String oldPassword, String newPassword) {
+
+    }
+
 }

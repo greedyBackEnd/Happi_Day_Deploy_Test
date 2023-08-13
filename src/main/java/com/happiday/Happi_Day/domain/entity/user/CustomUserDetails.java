@@ -20,10 +20,10 @@ import java.util.List;
 public class CustomUserDetails implements UserDetails {
 
     private Long id;
-    private String nickname;
+    private String username; // 이메일
     private String password;
-    private String username;
-    private String email;
+    private String nickname; // 닉네임
+    private String realname; // 실명
     private String phone;
     private RoleType role;
 
@@ -66,23 +66,24 @@ public class CustomUserDetails implements UserDetails {
 
     public static CustomUserDetails fromEntity(User entity) {
         return CustomUserDetails.builder()
-                .id(entity.getId())
-                .nickname(entity.getNickName())
-                .username(entity.getUserName())
+//                .id(entity.getId())
+                .username(entity.getUsername())
                 .password(entity.getPassword())
-                .email(entity.getUserEmail())
-                .phone(entity.getPhoneNumber())
+                .nickname(entity.getNickname())
+                .realname(entity.getRealname())
+                .phone(entity.getPhone())
                 .role(entity.getRole())
                 .build();
     }
 
+    // 회원가입하는 유저를 USER 권한으로 저장
     public User newEntity() {
         return User.builder()
-                .userEmail(email)
+                .username(username)
                 .password(password)
-                .nickName(nickname)
-                .userName(username)
-                .phoneNumber(phone)
+                .nickname(nickname)
+                .realname(realname)
+                .phone(phone)
                 .role(RoleType.USER)
                 .build();
 

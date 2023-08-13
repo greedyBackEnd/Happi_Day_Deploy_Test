@@ -26,7 +26,7 @@ public class TokenController {
 
     @PostMapping("/issue")
     public JwtTokenDto issueJwtToken(@RequestBody JwtRequestDto dto) {
-        UserDetails user = manager.loadUserByUsername(dto.getEmail());
+        UserDetails user = manager.loadUserByUsername(dto.getUsername());
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword()))
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         JwtTokenDto token = new JwtTokenDto();

@@ -8,10 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 public class SecurityUtils {
 
-    public static String getCurrentUserEmail() {
+    public static String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        return userDetails.getEmail();
+        return userDetails.getUsername();
     }
 
 }

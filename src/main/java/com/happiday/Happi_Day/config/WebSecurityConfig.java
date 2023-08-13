@@ -23,7 +23,7 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtTokenFilter, AuthorizationFilter.class)
                 .authorizeHttpRequests(authHttp -> authHttp
-                        .requestMatchers("/token/issue").permitAll()
+                        .requestMatchers("api/v1/token/issue").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(

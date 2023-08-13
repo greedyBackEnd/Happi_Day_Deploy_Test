@@ -33,10 +33,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             if (jwtTokenUtils.validate(token)) {
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-                String email = jwtTokenUtils.parseClaims(token).getSubject();
+                String username = jwtTokenUtils.parseClaims(token).getSubject();
 
                 AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        CustomUserDetails.builder().email(email).build(), token, new ArrayList<>()
+                        CustomUserDetails.builder().username(username).build(), token, new ArrayList<>()
                 );
 
                 context.setAuthentication(authenticationToken);
