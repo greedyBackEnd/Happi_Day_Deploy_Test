@@ -1,24 +1,18 @@
 package com.happiday.Happi_Day.domain.entity.article;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
-import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.board.Board;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@SuperBuilder(toBuilder = true)
 @Table(name = "article")
 public class Article extends BaseEntity {
     @Id
