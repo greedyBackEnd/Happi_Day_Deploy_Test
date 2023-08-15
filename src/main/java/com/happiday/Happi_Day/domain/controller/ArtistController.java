@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistRegisterDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistUpdateDto;
+import com.happiday.Happi_Day.domain.entity.product.dto.SalesListResponseDto;
 import com.happiday.Happi_Day.domain.service.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -53,6 +54,12 @@ public class ArtistController {
     @GetMapping
     public ResponseEntity<List<ArtistResponseDto>> getArtists() {
         List<ArtistResponseDto> responseDtos = artistService.getArtists();
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/{artistId}/sales")
+    public ResponseEntity<List<SalesListResponseDto>> getArtistSales(@PathVariable Long artistId) {
+        List<SalesListResponseDto> responseDtos = artistService.getSalesList(artistId);
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 }
