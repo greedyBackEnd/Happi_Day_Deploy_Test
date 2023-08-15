@@ -6,14 +6,14 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class TeamResponseDto {
+public class TeamDetailResponseDto {
     private Long id;
     private String name;
     private String description;
     private String logoUrl;
 
-    public static TeamResponseDto of(Team team) {
-        return TeamResponseDto.builder()
+    public static TeamDetailResponseDto of(Team team) {
+        return TeamDetailResponseDto.builder()
                 .id(team.getId())
                 .name(team.getName())
                 .description(team.getDescription())
