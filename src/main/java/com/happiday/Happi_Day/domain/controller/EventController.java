@@ -1,7 +1,8 @@
 package com.happiday.Happi_Day.domain.controller;
 
-import com.happiday.Happi_Day.domain.dto.event.EventRequestDto;
+import com.happiday.Happi_Day.domain.dto.event.EventCreateDto;
 import com.happiday.Happi_Day.domain.dto.event.EventResponseDto;
+import com.happiday.Happi_Day.domain.dto.event.EventUpdateDto;
 import com.happiday.Happi_Day.domain.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,32 +24,32 @@ public class EventController {
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventResponseDto> createEvent(
-            @Valid @RequestPart(value = "event")EventRequestDto eventRequestDto,
+            @Valid @RequestPart(value = "event") EventCreateDto eventCreateDto,
             @RequestPart List<MultipartFile> eventImages
             ){
-        EventResponseDto responseDto = eventService.createEvent(eventRequestDto, eventImages);
+        EventResponseDto responseDto = eventService.createEvent(eventCreateDto, eventImages);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<EventResponseDto> readEvent(@PathVariable Long eventId){
-        EventResponseDto responseDto = EventService.readEvent(eventId);
+        EventResponseDto responseDto = eventService.readEvent(eventId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<EventResponseDto>> readEvents(){
-        List<EventResponseDto> responseDtoList = EventService.readEvents();
+        List<EventResponseDto> responseDtoList = eventService.readEvents();
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
     @PutMapping(value = "{eventId}",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventResponseDto> updateEvent(
             @PathVariable Long eventId,
-            @Valid @RequestPart(value = "event")EventRequestDto eventRequestDto,
+            @Valid @RequestPart(value = "event") EventUpdateDto eventUpdateDto,
             @RequestPart List<MultipartFile> eventImages
     ){
-        EventResponseDto responseDto = eventService.updateEvent(eventId, eventRequestDto, eventImages);
+        EventResponseDto responseDto = eventService.updateEvent(eventId, eventUpdateDto, eventImages);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -57,5 +58,6 @@ public class EventController {
         eventService.deleteEvent(eventId);
         return new ResponseEntity<>("삭제 성공", HttpStatus.NO_CONTENT);
     }
+
 
 }
