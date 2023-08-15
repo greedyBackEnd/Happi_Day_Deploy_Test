@@ -56,7 +56,7 @@ public class TeamService {
     public TeamDetailResponseDto getTeam(Long teamId) {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
-        return TeamResponseDto.of(team);
+        return TeamDetailResponseDto.of(team);
     }
 
     public List<TeamListResponseDto> getTeams() {

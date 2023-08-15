@@ -74,6 +74,7 @@ public class ArtistService {
 
         return artist.getTeams().stream()
                 .map(TeamListResponseDto::of)
+                .collect(Collectors.toList());
     }
   
     public List<SalesListResponseDto> getSalesList(Long artistId) {
