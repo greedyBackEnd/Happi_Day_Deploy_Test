@@ -1,7 +1,9 @@
-package com.happiday.Happi_Day.domain.dto.event;
+package com.happiday.Happi_Day.domain.entity.event.dto;
 
 import com.happiday.Happi_Day.domain.entity.event.Event;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,8 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class EventResponseDto {
-
+public class EventListResponseDto {
     private Long id;
 
     private String username;
@@ -20,25 +21,22 @@ public class EventResponseDto {
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
-
-    private String description;
-
+    
     private String location;
 
-    private String imageUrl;
+    private String thumbnailUrl;
 
     private List<String> artists;
 
-    public static EventResponseDto fromEntity(Event event) {
-        return EventResponseDto.builder()
+    public static EventListResponseDto fromEntity(Event event) {
+        return EventListResponseDto.builder()
                 .id(event.getId())
                 .username(event.getUser().getNickName())
                 .title(event.getTitle())
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())
-                .description(event.getDescription())
                 .location(event.getLocation())
-                .imageUrl(event.getImageUrl())
+                .thumbnailUrl(event.getThumbnailUrl())
 //                .artists(event.getArtists()) TODO 아티스트 네임 추가
                 .build();
     }

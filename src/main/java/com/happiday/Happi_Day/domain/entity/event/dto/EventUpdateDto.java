@@ -1,4 +1,4 @@
-package com.happiday.Happi_Day.domain.dto.event;
+package com.happiday.Happi_Day.domain.entity.event.dto;
 
 import com.happiday.Happi_Day.domain.entity.event.Event;
 import jakarta.validation.constraints.NotBlank;

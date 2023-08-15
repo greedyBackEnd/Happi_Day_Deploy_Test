@@ -1,11 +1,10 @@
 package com.happiday.Happi_Day.domain.service;
 
-import com.happiday.Happi_Day.domain.dto.event.EventCreateDto;
-import com.happiday.Happi_Day.domain.dto.event.EventResponseDto;
-import com.happiday.Happi_Day.domain.dto.event.EventUpdateDto;
+import com.happiday.Happi_Day.domain.entity.event.dto.EventCreateDto;
+import com.happiday.Happi_Day.domain.entity.event.dto.EventResponseDto;
+import com.happiday.Happi_Day.domain.entity.event.dto.EventUpdateDto;
 import com.happiday.Happi_Day.domain.entity.event.Event;
 import com.happiday.Happi_Day.domain.repository.EventRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
