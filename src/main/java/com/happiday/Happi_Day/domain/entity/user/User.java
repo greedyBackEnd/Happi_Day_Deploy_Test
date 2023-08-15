@@ -13,6 +13,7 @@ import com.happiday.Happi_Day.domain.entity.team.Team;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@SuperBuilder(toBuilder = true)
 @Entity
 @Table(name = "user")
 @EntityListeners(value = AuditingEntityListener.class)
@@ -30,31 +32,31 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 유저 식별 ID
 
-    // 제약사항 추가
     @Email
     @Column(nullable = false, unique = true)
-    private String userEmail; // 이메일형식(중복 X)
+    private String username;
 
     @Column(nullable = false)
-    private String password; // 비밀번호
+    private String password;
 
     @Column(nullable = false, unique = true)
-    private String nickName; // 닉네임(중복 X)
+    private String nickname;
+
     @Column(nullable = false)
-    private String userName; // 실명
+    private String realname;
 
     @Column(nullable = false, unique = true)
-    private String phoneNumber; // 전화번호(중복 X)
+    private String phone;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RoleType role; // 회원구분
+    private RoleType role;
 
     @Column(nullable = false)
-    private Boolean isActive; // 활성화 상태구분(default => true)
+    private Boolean isActive;
 
     @Column(nullable = false)
-    private Boolean isDeleted; // 탈퇴, 관리자에 의한 삭제 구분(default => false)
+    private Boolean isDeleted;
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastLoginAt; // 마지막 로그인 날짜
