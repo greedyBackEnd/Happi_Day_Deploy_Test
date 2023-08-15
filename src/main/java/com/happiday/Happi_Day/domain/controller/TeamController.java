@@ -1,7 +1,8 @@
 package com.happiday.Happi_Day.domain.controller;
 
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamRegisterDto;
-import com.happiday.Happi_Day.domain.entity.team.dto.TeamResponseDto;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamDetailResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamUpdateDto;
 import com.happiday.Happi_Day.domain.service.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -20,17 +21,17 @@ public class TeamController {
     private final TeamService teamService;
 
     @PostMapping
-    public ResponseEntity<TeamResponseDto> registerTeam(@RequestPart(name = "team") TeamRegisterDto requestDto,
-                                                        @RequestPart(value = "file", required = false) MultipartFile imageFile) {
-        TeamResponseDto responseDto = teamService.registerTeam(requestDto, imageFile);
+    public ResponseEntity<TeamDetailResponseDto> registerTeam(@RequestPart(name = "team") TeamRegisterDto requestDto,
+                                                              @RequestPart(value = "file", required = false) MultipartFile imageFile) {
+        TeamDetailResponseDto responseDto = teamService.registerTeam(requestDto, imageFile);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{teamId}")
-    public ResponseEntity<TeamResponseDto> updateTeam(@PathVariable Long teamId,
-                                                      @RequestPart(name = "team") TeamUpdateDto requestDto,
-                                                      @RequestPart(value = "file", required = false) MultipartFile imageFile) {
-        TeamResponseDto responseDto = teamService.updateTeam(teamId, requestDto, imageFile);
+    public ResponseEntity<TeamDetailResponseDto> updateTeam(@PathVariable Long teamId,
+                                                            @RequestPart(name = "team") TeamUpdateDto requestDto,
+                                                            @RequestPart(value = "file", required = false) MultipartFile imageFile) {
+        TeamDetailResponseDto responseDto = teamService.updateTeam(teamId, requestDto, imageFile);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -41,14 +42,14 @@ public class TeamController {
     }
 
     @GetMapping("/{teamId}")
-    public ResponseEntity<TeamResponseDto> getTeam(@PathVariable Long teamId) {
-        TeamResponseDto responseDto = teamService.getTeam(teamId);
+    public ResponseEntity<TeamDetailResponseDto> getTeam(@PathVariable Long teamId) {
+        TeamDetailResponseDto responseDto = teamService.getTeam(teamId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<TeamResponseDto>> getTeams() {
-        List<TeamResponseDto> responseDtos = teamService.getTeams();
+    public ResponseEntity<List<TeamListResponseDto>> getTeams() {
+        List<TeamListResponseDto> responseDtos = teamService.getTeams();
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 }

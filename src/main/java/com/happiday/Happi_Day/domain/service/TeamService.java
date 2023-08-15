@@ -1,8 +1,9 @@
 package com.happiday.Happi_Day.domain.service;
 
 import com.happiday.Happi_Day.domain.entity.team.Team;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamRegisterDto;
-import com.happiday.Happi_Day.domain.entity.team.dto.TeamResponseDto;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamDetailResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamUpdateDto;
 import com.happiday.Happi_Day.domain.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +24,17 @@ public class TeamService {
     private final TeamRepository teamRepository;
 
     @Transactional
-    public TeamResponseDto registerTeam(TeamRegisterDto requestDto, MultipartFile imageFile) {
+    public TeamDetailResponseDto registerTeam(TeamRegisterDto requestDto, MultipartFile imageFile) {
 
         // TODO 이미지 저장 로직
 
         Team team = requestDto.toEntity();
         team = teamRepository.save(team);
-        return TeamResponseDto.of(team);
+        return TeamDetailResponseDto.of(team);
     }
 
     @Transactional
-    public TeamResponseDto updateTeam(Long teamId, TeamUpdateDto requestDto, MultipartFile imageFile) {
+    public TeamDetailResponseDto updateTeam(Long teamId, TeamUpdateDto requestDto, MultipartFile imageFile) {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Team을 찾을 수 없습니다."));
 
@@ -42,7 +43,7 @@ public class TeamService {
         team.update(requestDto.toEntity());
         teamRepository.save(team);
 
-        return TeamResponseDto.of(team);
+        return TeamDetailResponseDto.of(team);
     }
 
     @Transactional
@@ -52,15 +53,15 @@ public class TeamService {
         teamRepository.delete(team);
     }
 
-    public TeamResponseDto getTeam(Long teamId) {
+    public TeamDetailResponseDto getTeam(Long teamId) {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Team을 찾을 수 없습니다."));
-        return TeamResponseDto.of(team);
+        return TeamDetailResponseDto.of(team);
     }
 
-    public List<TeamResponseDto> getTeams() {
+    public List<TeamListResponseDto> getTeams() {
         return teamRepository.findAll().stream()
-                .map(TeamResponseDto::of)
+                .map(TeamListResponseDto::of)
                 .collect(Collectors.toList());
     }
 }

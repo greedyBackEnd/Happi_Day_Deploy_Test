@@ -1,19 +1,17 @@
 package com.happiday.Happi_Day.domain.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistRegisterDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistUpdateDto;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamDetailResponseDto;
+import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.SalesListResponseDto;
 import com.happiday.Happi_Day.domain.service.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -57,6 +55,12 @@ public class ArtistController {
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/{artistId}/teams")
+    public ResponseEntity<List<TeamListResponseDto>> getArtistTeams(@PathVariable Long artistId) {
+        List<TeamListResponseDto> artistTeams = artistService.getArtistTeams(artistId);
+        return new ResponseEntity<>(artistTeams, HttpStatus.OK);
+    }
+      
     @GetMapping("/{artistId}/sales")
     public ResponseEntity<List<SalesListResponseDto>> getArtistSales(@PathVariable Long artistId) {
         List<SalesListResponseDto> responseDtos = artistService.getSalesList(artistId);
