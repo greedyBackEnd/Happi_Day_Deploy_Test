@@ -1,8 +1,9 @@
 package com.happiday.Happi_Day.domain.service;
 
 import com.happiday.Happi_Day.domain.entity.artist.Artist;
+import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistListResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistRegisterDto;
-import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistResponseDto;
+import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistDetailResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistUpdateDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.SalesListResponseDto;
@@ -26,17 +27,17 @@ public class ArtistService {
     private final SalesRepository salesRepository;
 
     @Transactional
-    public ArtistResponseDto registerArtist(ArtistRegisterDto requestDto, MultipartFile imageFile) {
+    public ArtistDetailResponseDto registerArtist(ArtistRegisterDto requestDto, MultipartFile imageFile) {
 
         // TODO 이미지 저장 로직
 
         Artist artistEntity = requestDto.toEntity();
         artistEntity = artistRepository.save(artistEntity);
-        return ArtistResponseDto.of(artistEntity);
+        return ArtistDetailResponseDto.of(artistEntity);
     }
 
     @Transactional
-    public ArtistResponseDto updateArtist(Long artistId, ArtistUpdateDto requestDto, MultipartFile imageFile) {
+    public ArtistDetailResponseDto updateArtist(Long artistId, ArtistUpdateDto requestDto, MultipartFile imageFile) {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. : " + artistId));
 
@@ -45,7 +46,7 @@ public class ArtistService {
         artist.update(requestDto.toEntity());
         artistRepository.save(artist);
 
-        return ArtistResponseDto.of(artist);
+        return ArtistDetailResponseDto.of(artist);
     }
 
     @Transactional
@@ -55,15 +56,15 @@ public class ArtistService {
         artistRepository.delete(artist);
     }
 
-    public ArtistResponseDto getArtist(Long artistId) {
+    public ArtistDetailResponseDto getArtist(Long artistId) {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
-        return ArtistResponseDto.of(artist);
+        return ArtistDetailResponseDto.of(artist);
     }
 
-    public List<ArtistResponseDto> getArtists() {
+    public List<ArtistListResponseDto> getArtists() {
         return artistRepository.findAll().stream()
-                .map(ArtistResponseDto::of)
+                .map(ArtistListResponseDto::of)
                 .collect(Collectors.toList());
     }
 

@@ -1,7 +1,8 @@
 package com.happiday.Happi_Day.domain.controller;
 
+import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistListResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistRegisterDto;
-import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistResponseDto;
+import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistDetailResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistUpdateDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamDetailResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
@@ -23,17 +24,17 @@ public class ArtistController {
     private final ArtistService artistService;
 
     @PostMapping
-    public ResponseEntity<ArtistResponseDto> registerArtist(@RequestPart(name = "artist") ArtistRegisterDto requestDto,
-                                                            @RequestPart(value = "file", required = false) MultipartFile imageFile) {
-        ArtistResponseDto responseDto = artistService.registerArtist(requestDto, imageFile);
+    public ResponseEntity<ArtistDetailResponseDto> registerArtist(@RequestPart(name = "artist") ArtistRegisterDto requestDto,
+                                                                  @RequestPart(value = "file", required = false) MultipartFile imageFile) {
+        ArtistDetailResponseDto responseDto = artistService.registerArtist(requestDto, imageFile);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{artistId}")
-    public ResponseEntity<ArtistResponseDto> updateArtist(@PathVariable Long artistId,
-                                                          @RequestPart(name = "artist") ArtistUpdateDto requestDto,
-                                                          @RequestPart(value = "file", required = false) MultipartFile imageFile) {
-        ArtistResponseDto responseDto = artistService.updateArtist(artistId, requestDto, imageFile);
+    public ResponseEntity<ArtistDetailResponseDto> updateArtist(@PathVariable Long artistId,
+                                                                @RequestPart(name = "artist") ArtistUpdateDto requestDto,
+                                                                @RequestPart(value = "file", required = false) MultipartFile imageFile) {
+        ArtistDetailResponseDto responseDto = artistService.updateArtist(artistId, requestDto, imageFile);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -44,14 +45,14 @@ public class ArtistController {
     }
 
     @GetMapping("/{artistId}")
-    public ResponseEntity<ArtistResponseDto> getArtist(@PathVariable Long artistId) {
-        ArtistResponseDto responseDto = artistService.getArtist(artistId);
+    public ResponseEntity<ArtistDetailResponseDto> getArtist(@PathVariable Long artistId) {
+        ArtistDetailResponseDto responseDto = artistService.getArtist(artistId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<ArtistResponseDto>> getArtists() {
-        List<ArtistResponseDto> responseDtos = artistService.getArtists();
+    public ResponseEntity<List<ArtistListResponseDto>> getArtists() {
+        List<ArtistListResponseDto> responseDtos = artistService.getArtists();
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
