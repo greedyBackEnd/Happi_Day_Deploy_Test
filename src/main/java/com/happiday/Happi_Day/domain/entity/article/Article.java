@@ -5,7 +5,6 @@ import com.happiday.Happi_Day.domain.entity.board.Board;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +38,9 @@ public class Article extends BaseEntity {
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    // 카테고리 -홍보 에만 필요
+    private String address;
 
     // 댓글 매핑
     @OneToMany(mappedBy="article")
