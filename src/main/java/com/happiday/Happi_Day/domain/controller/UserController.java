@@ -10,6 +10,7 @@ import com.happiday.Happi_Day.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +20,28 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final UserDetailsManager manager;
 
-    @GetMapping("/profile")
+    @GetMapping("/info")
     public ResponseEntity<UserResponseDto> getUser() {
         String username = SecurityUtils.getCurrentUsername();
         UserResponseDto myProfile = userService.getUserProfile(username);
         return new ResponseEntity<>(myProfile,HttpStatus.OK);
     }
 
-    @PatchMapping("/profile")
+    @PatchMapping("/info")
     public ResponseEntity<UserResponseDto> updateUser(@RequestBody UserUpdateDto dto) {
         String username = SecurityUtils.getCurrentUsername();
         UserResponseDto newProfile = userService.updateUserProfile(username, dto);
         return new ResponseEntity<>(newProfile,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/withdrawal")
+    public ResponseEntity<String> withdrawUser() {
+        String username = SecurityUtils.getCurrentUsername();
+        manager.deleteUser(username);
+        return new ResponseEntity<>("회원탈퇴되었습니다.", HttpStatus.OK);
+
     }
 
 }

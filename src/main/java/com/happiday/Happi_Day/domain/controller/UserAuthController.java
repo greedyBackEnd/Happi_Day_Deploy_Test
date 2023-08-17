@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/auth")
 public class UserAuthController {
 
     private final UserRepository userRepository;
@@ -63,7 +63,7 @@ public class UserAuthController {
     }
 
     @GetMapping("/logout")
-    private ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
         return new ResponseEntity<>("로그아웃되었습니다.", HttpStatus.OK);
     }

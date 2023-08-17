@@ -1,7 +1,6 @@
 package com.happiday.Happi_Day.domain.entity.user.dto;
 
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
