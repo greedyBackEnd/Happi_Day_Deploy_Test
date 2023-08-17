@@ -74,4 +74,8 @@ public class Artist extends BaseEntity {
         this.description = artistUpdate.getDescription();
         this.nationality = artistUpdate.getNationality();
     }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
 }
