@@ -15,6 +15,7 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 유저 식별 ID
 
-    @Email
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -165,5 +165,20 @@ public class User extends BaseEntity {
     // 채팅메세지 매핑
     @OneToMany(mappedBy = "sender")
     private List<ChatMessage> chatMessages = new ArrayList<>();
+
+    public void setLastLoginAt(LocalDateTime date) {
+        this.lastLoginAt = date;
+    }
+
+    public void update(User userUpdate, PasswordEncoder passwordEncoder) {
+        if (userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty())
+            this.password = passwordEncoder.encode(userUpdate.password);
+
+        if (userUpdate.getNickname() != null && !userUpdate.getNickname().isEmpty())
+            this.nickname = userUpdate.nickname;
+
+        if (userUpdate.getPhone() != null && !userUpdate.getPhone().isEmpty())
+            this.phone = userUpdate.phone;
+    }
 }
 

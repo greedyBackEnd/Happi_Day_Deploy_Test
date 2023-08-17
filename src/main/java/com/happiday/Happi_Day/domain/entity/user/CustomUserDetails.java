@@ -1,5 +1,6 @@
 package com.happiday.Happi_Day.domain.entity.user;
 
+import com.happiday.Happi_Day.domain.entity.user.dto.UserRegisterDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
