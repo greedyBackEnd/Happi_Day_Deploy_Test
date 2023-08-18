@@ -28,6 +28,8 @@ public class EventListResponseDto {
 
     private List<String> artists;
 
+    private List<String> teams;
+
     public static EventListResponseDto fromEntity(Event event) {
         return EventListResponseDto.builder()
                 .id(event.getId())
@@ -37,7 +39,8 @@ public class EventListResponseDto {
                 .endTime(event.getEndTime())
                 .location(event.getLocation())
                 .thumbnailUrl(event.getThumbnailUrl())
-//                .artists(event.getArtists()) TODO 아티스트 네임 추가
+//                .artists(event.getArtists()) TODO 아티스트 네임, 팀 네임 추가
+//                .teams
                 .build();
     }
 }

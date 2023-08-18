@@ -39,7 +39,7 @@ public class EventResponseDto {
                 .description(event.getDescription())
                 .location(event.getLocation())
                 .imageUrl(event.getImageUrl())
-//                .artists(event.getArtists()) TODO 아티스트 네임 추가
+//                .artists(event.getArtists())  아티스트 네임, 팀 네임 추가
                 .build();
     }
 }

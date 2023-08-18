@@ -82,7 +82,7 @@ public class Event extends BaseEntity {
     private List<Artist> artists = new ArrayList<>();
 
     public void update(Event updateEvent) {
-        if (updateEvent.getTitle() != null) {
+        if (updateEvent.getTitle() != null &&  !updateEvent.getTitle().isEmpty()) {
             this.title = updateEvent.getTitle();
         }
         if (updateEvent.getStartTime() != null) {
@@ -91,13 +91,14 @@ public class Event extends BaseEntity {
         if (updateEvent.getEndTime() != null) {
             this.endTime = updateEvent.getEndTime();
         }
-        if (updateEvent.getDescription() != null) {
+        if (updateEvent.getDescription() != null && !updateEvent.getDescription().isEmpty()) {
             this.description = updateEvent.getDescription();
         }
         if (updateEvent.getLocation() != null) {
             this.location = updateEvent.getLocation();
         }
-        if (updateEvent.getArtists() != null) {
+        if (updateEvent.getArtists() != null && !updateEvent.getArtists().isEmpty()) {
+            this.artists.clear();
             this.artists = updateEvent.getArtists();
         }
     }

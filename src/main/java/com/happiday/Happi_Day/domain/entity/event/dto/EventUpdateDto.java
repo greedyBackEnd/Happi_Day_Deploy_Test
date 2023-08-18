@@ -31,7 +31,8 @@ public class EventUpdateDto {
                 .title(title)
 //                .imageUrl()
 //                .thumbnailUrl()
-//                .artists()
+//                .artists()    TODO 아티스트 팀 추가
+//                .teams()
                 .startTime(startTime)
                 .endTime(endTime)
                 .description(description)

@@ -1,6 +1,7 @@
 package com.happiday.Happi_Day.domain.service;
 
 import com.happiday.Happi_Day.domain.entity.event.dto.EventCreateDto;
+import com.happiday.Happi_Day.domain.entity.event.dto.EventListResponseDto;
 import com.happiday.Happi_Day.domain.entity.event.dto.EventResponseDto;
 import com.happiday.Happi_Day.domain.entity.event.dto.EventUpdateDto;
 import com.happiday.Happi_Day.domain.entity.event.Event;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,65 +28,43 @@ public class EventService {
 
     @Transactional
     public EventResponseDto createEvent(EventCreateDto request, List<MultipartFile> eventImages) {
-
         // TODO - 유저, 이미지 추가
 
         Event event = request.toEntity();
-
         eventRepository.save(event);
         return EventResponseDto.fromEntity(event);
     }
 
-    public  List<EventResponseDto> readEvents() {
-
+    public  List<EventListResponseDto> readEvents() {
         // TODO - 이미지 추가
-
-        List<Event> events = eventRepository.findAll();
-        List<EventResponseDto> eventDtoList = new ArrayList<>();
-
-        for (Event event : events) {
-            eventDtoList.add(EventResponseDto.fromEntity(event));
-        }
-
-        return eventDtoList;
+        return eventRepository.findAll().stream()
+                .map(EventListResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public EventResponseDto readEvent(Long eventId) {
-
         // TODO - 이미지 추가
-
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
-        if(optionalEvent.isPresent()) {
-            return EventResponseDto.fromEntity(optionalEvent.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return EventResponseDto.fromEntity(event);
     }
 
     @Transactional
     public EventResponseDto updateEvent(Long eventId, EventUpdateDto request, List<MultipartFile> eventImages) {
-
         // TODO - 유저, 이미지 추가
 
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
-        if(optionalEvent.isPresent()) {
-            Event event = optionalEvent.get();
-            event.update(request.toEntity());
-            return EventResponseDto.fromEntity(event);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        event.update(request.toEntity());
+        eventRepository.save(event);
+        return EventResponseDto.fromEntity(event);
     }
 
     @Transactional
     public void deleteEvent(Long eventId) {
-        Optional<Event> optionalEvent = eventRepository.findById(eventId);
-
-        if (optionalEvent.isPresent()) {
-            Event event = optionalEvent.get();
-            eventRepository.delete(event);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        eventRepository.delete(event);
     }
 }

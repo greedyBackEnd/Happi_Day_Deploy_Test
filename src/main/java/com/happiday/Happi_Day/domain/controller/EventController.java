@@ -1,6 +1,7 @@
 package com.happiday.Happi_Day.domain.controller;
 
 import com.happiday.Happi_Day.domain.entity.event.dto.EventCreateDto;
+import com.happiday.Happi_Day.domain.entity.event.dto.EventListResponseDto;
 import com.happiday.Happi_Day.domain.entity.event.dto.EventResponseDto;
 import com.happiday.Happi_Day.domain.entity.event.dto.EventUpdateDto;
 import com.happiday.Happi_Day.domain.service.EventService;
@@ -38,8 +39,8 @@ public class EventController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EventResponseDto>> readEvents(){
-        List<EventResponseDto> responseDtoList = eventService.readEvents();
+    public ResponseEntity<List<EventListResponseDto>> readEvents(){
+        List<EventListResponseDto> responseDtoList = eventService.readEvents();
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
