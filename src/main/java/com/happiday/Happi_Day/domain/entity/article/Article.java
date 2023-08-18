@@ -69,4 +69,8 @@ public class Article extends BaseEntity {
     @ManyToMany(mappedBy = "articleTeams")
     private List<Team> teams = new ArrayList<>();
 
+    // 해시태그 매핑
+    @ManyToMany(mappedBy = "articleHashtag")
+    private List<Hashtag> hashtags = new ArrayList<>();
+
 }
