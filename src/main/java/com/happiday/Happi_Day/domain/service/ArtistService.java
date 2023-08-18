@@ -8,9 +8,10 @@ import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistUpdateDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.SalesListResponseDto;
 import com.happiday.Happi_Day.domain.repository.ArtistRepository;
-import com.happiday.Happi_Day.domain.repository.SalesRepository;
+import com.happiday.Happi_Day.utils.FileUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,20 +19,25 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ArtistService {
 
     private final ArtistRepository artistRepository;
-    private final SalesRepository salesRepository;
+    private final FileUtils fileUtils;
 
     @Transactional
     public ArtistDetailResponseDto registerArtist(ArtistRegisterDto requestDto, MultipartFile imageFile) {
-
-        // TODO 이미지 저장 로직
-
         Artist artistEntity = requestDto.toEntity();
+
+        // 이미지 저장 로직
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String saveFileUrl = fileUtils.uploadFile(imageFile);
+            artistEntity.setProfileUrl(saveFileUrl);
+        }
+
         artistEntity = artistRepository.save(artistEntity);
         return ArtistDetailResponseDto.of(artistEntity);
     }
@@ -41,7 +47,23 @@ public class ArtistService {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. : " + artistId));
 
-        // TODO 이미지 저장 로직
+        // 이미지 저장 및 기존 이미지 삭제 로직
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // 기존 이미지가 있다면 삭제
+            if (artist.getProfileUrl() != null && !artist.getProfileUrl().isEmpty()) {
+                try {
+                    fileUtils.deleteFile(artist.getProfileUrl());
+                    log.info("이미지 삭제 완료: " + artist.getProfileUrl());
+                } catch (Exception e) {
+                    log.error("이미지 삭제 실패: " + artist.getProfileUrl(), e);
+                }
+            }
+
+            // 새로운 이미지 업로드
+            String saveFileUrl = fileUtils.uploadFile(imageFile);
+            artist.setProfileUrl(saveFileUrl);
+            log.info("이미지 업데이트: " + saveFileUrl);
+        }
 
         artist.update(requestDto.toEntity());
         artistRepository.save(artist);
@@ -76,7 +98,7 @@ public class ArtistService {
                 .map(TeamListResponseDto::of)
                 .collect(Collectors.toList());
     }
-  
+
     public List<SalesListResponseDto> getSalesList(Long artistId) {
         Artist artist = artistRepository.findById(artistId)
                 .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
