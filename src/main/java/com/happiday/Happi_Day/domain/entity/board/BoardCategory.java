@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
 @Getter
 @Table(name = "board_category")
 public class BoardCategory extends BaseEntity {
