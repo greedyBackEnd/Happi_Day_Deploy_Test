@@ -32,7 +32,7 @@ public class EventResponseDto {
     public static EventResponseDto fromEntity(Event event) {
         return EventResponseDto.builder()
                 .id(event.getId())
-                .username(event.getUser().getNickName())
+                .username(event.getUser().getNickname())
                 .title(event.getTitle())
                 .startTime(event.getStartTime())
                 .endTime(event.getEndTime())

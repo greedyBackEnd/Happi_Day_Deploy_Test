@@ -58,6 +58,9 @@ public class Team {
     public void update(Team teamUpdate) {
         this.name  = teamUpdate.getName();
         this.description = teamUpdate.getDescription();
-        this.logoUrl =teamUpdate.getLogoUrl();
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
     }
 }
