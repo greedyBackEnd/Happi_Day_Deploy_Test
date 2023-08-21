@@ -7,13 +7,16 @@ import com.happiday.Happi_Day.domain.entity.team.Team;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
 @Getter
+@NoArgsConstructor(access =  AccessLevel.PROTECTED)
+@AllArgsConstructor
+@SuperBuilder(toBuilder= true)
 @Table(name = "article")
 public class Article extends BaseEntity {
     @Id
@@ -42,7 +45,7 @@ public class Article extends BaseEntity {
     private String content;
 
     // 카테고리 -홍보 에만 필요
-    private String address;
+    private String eventAddress;
 
     // 게시글 카테고리
     @ManyToOne(fetch = FetchType.LAZY)
@@ -72,5 +75,14 @@ public class Article extends BaseEntity {
     // 해시태그 매핑
     @ManyToMany(mappedBy = "articleHashtag")
     private List<Hashtag> hashtags = new ArrayList<>();
+
+    public void update(Article updateArticle){
+        if(updateArticle.getTitle() != null) this.title = updateArticle.getTitle();
+        if(updateArticle.getContent() != null) this.content = updateArticle.getContent();
+        if(updateArticle.getEventAddress() != null) this.eventAddress = updateArticle.getEventAddress();
+        if(updateArticle.getArtists() != null) this.artists = updateArticle.getArtists();
+        if(updateArticle.getTeams() != null) this.teams = updateArticle.getTeams();
+        if(updateArticle.getHashtags() != null) this.hashtags = updateArticle.getHashtags();
+    }
 
 }
