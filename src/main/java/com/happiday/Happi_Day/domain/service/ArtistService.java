@@ -5,6 +5,7 @@ import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistListResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistRegisterDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistDetailResponseDto;
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistUpdateDto;
+import com.happiday.Happi_Day.domain.entity.event.dto.EventListResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.SalesListResponseDto;
 import com.happiday.Happi_Day.domain.repository.ArtistRepository;
@@ -105,6 +106,15 @@ public class ArtistService {
 
         return artist.getSalesList().stream()
                 .map(SalesListResponseDto::of)
+                .collect(Collectors.toList());
+    }
+
+    public List<EventListResponseDto> getEvents(Long artistId) {
+        Artist artist = artistRepository.findById(artistId)
+                .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
+
+        return artist.getEvents().stream()
+                .map(EventListResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 }
