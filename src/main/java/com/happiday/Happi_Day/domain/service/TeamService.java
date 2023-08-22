@@ -8,8 +8,10 @@ import com.happiday.Happi_Day.domain.entity.team.dto.TeamRegisterDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamDetailResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamUpdateDto;
 import com.happiday.Happi_Day.domain.repository.TeamRepository;
+import com.happiday.Happi_Day.utils.FileUtils;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,21 +19,27 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final FileUtils fileUtils;
 
     @Transactional
     public TeamDetailResponseDto registerTeam(TeamRegisterDto requestDto, MultipartFile imageFile) {
+        Team teamEntity = requestDto.toEntity();
 
-        // TODO 이미지 저장 로직
+        // 이미지 저장 로직
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String saveFileUrl = fileUtils.uploadFile(imageFile);
+            teamEntity.setLogoUrl(saveFileUrl);
+        }
 
-        Team team = requestDto.toEntity();
-        team = teamRepository.save(team);
-        return TeamDetailResponseDto.of(team);
+        teamEntity = teamRepository.save(teamEntity);
+        return TeamDetailResponseDto.of(teamEntity);
     }
 
     @Transactional
@@ -39,7 +47,23 @@ public class TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
 
-        // TODO 이미지 저장 로직
+        // 이미지 저장 및 기존 이미지 삭제 로직
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // 기존 이미지가 있다면 삭제
+            if (team.getLogoUrl() != null && !team.getLogoUrl().isEmpty()) {
+                try {
+                    fileUtils.deleteFile(team.getLogoUrl());
+                    log.info("이미지 삭제 완료: " + team.getLogoUrl());
+                } catch (Exception e) {
+                    log.error("이미지 삭제 실패: " + team.getLogoUrl(), e);
+                }
+            }
+
+            // 새로운 이미지 업로드
+            String saveFileUrl = fileUtils.uploadFile(imageFile);
+            team.setLogoUrl(saveFileUrl);
+            log.info("이미지 업데이트: " + saveFileUrl);
+        }
 
         team.update(requestDto.toEntity());
         teamRepository.save(team);
