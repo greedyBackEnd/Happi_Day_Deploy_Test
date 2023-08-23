@@ -14,9 +14,9 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access =  AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SuperBuilder(toBuilder= true)
+@SuperBuilder(toBuilder = true)
 @Table(name = "article")
 public class Article extends BaseEntity {
     @Id
@@ -34,7 +34,7 @@ public class Article extends BaseEntity {
 
 
     // 유저 id
-    @ManyToOne(fetch =FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -49,11 +49,11 @@ public class Article extends BaseEntity {
 
     // 게시글 카테고리
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="category_id")
+    @JoinColumn(name = "category_id")
     private BoardCategory category;
 
     // 댓글 매핑
-    @OneToMany(mappedBy="article")
+    @OneToMany(mappedBy = "article")
     private List<Comment> comments = new ArrayList<>();
 
     // 게시글 좋아요 매핑
@@ -65,7 +65,7 @@ public class Article extends BaseEntity {
     private List<User> scrapUsers = new ArrayList<>();
 
     // 게시글 아티스트 매핑
-    @ManyToMany(mappedBy ="articleArtists")
+    @ManyToMany(mappedBy = "articleArtists")
     private List<Artist> artists = new ArrayList<>();
 
     // 게시글 팀 매핑
@@ -76,13 +76,13 @@ public class Article extends BaseEntity {
     @ManyToMany(mappedBy = "articleHashtag")
     private List<Hashtag> hashtags = new ArrayList<>();
 
-    public void update(Article updateArticle){
-        if(updateArticle.getTitle() != null) this.title = updateArticle.getTitle();
-        if(updateArticle.getContent() != null) this.content = updateArticle.getContent();
-        if(updateArticle.getEventAddress() != null) this.eventAddress = updateArticle.getEventAddress();
-        if(updateArticle.getArtists() != null) this.artists = updateArticle.getArtists();
-        if(updateArticle.getTeams() != null) this.teams = updateArticle.getTeams();
-        if(updateArticle.getHashtags() != null) this.hashtags = updateArticle.getHashtags();
+    public void update(Article updateArticle) {
+        if (updateArticle.getTitle() != null) this.title = updateArticle.getTitle();
+        if (updateArticle.getContent() != null) this.content = updateArticle.getContent();
+        if (updateArticle.getEventAddress() != null) this.eventAddress = updateArticle.getEventAddress();
+        if (updateArticle.getArtists() != null) this.artists = updateArticle.getArtists();
+        if (updateArticle.getTeams() != null) this.teams = updateArticle.getTeams();
+        if (updateArticle.getHashtags() != null) this.hashtags = updateArticle.getHashtags();
     }
 
 }

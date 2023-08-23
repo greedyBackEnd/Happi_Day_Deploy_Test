@@ -1,7 +1,6 @@
 package com.happiday.Happi_Day.domain.controller;
 
 import com.happiday.Happi_Day.domain.entity.board.dto.CreateCategoryDto;
-import com.happiday.Happi_Day.domain.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

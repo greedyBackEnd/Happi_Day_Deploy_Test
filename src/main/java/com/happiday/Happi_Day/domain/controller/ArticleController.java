@@ -22,18 +22,18 @@ public class ArticleController {
     private final ArticleService articleService;
 
     // 글 작성
-    @PostMapping(value ="/{categoryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/{categoryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Article> writeArticle(
             @PathVariable("categoryId") Long id,
-            @RequestPart(name="article") WriteArticleDto requestDto,
-            @RequestPart(name="thumbnailImage", required = false)MultipartFile thumbnailImage) throws IOException {
+            @RequestPart(name = "article") WriteArticleDto requestDto,
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
         Article responseArticle = articleService.writeArticle(id, requestDto, thumbnailImage);
         return new ResponseEntity<>(responseArticle, HttpStatus.CREATED);
     }
 
     // 글 상세 조회
     @GetMapping("/{articleId}")
-    public ResponseEntity<ReadOneArticleDto> readOne(@PathVariable("articleId") Long id){
+    public ResponseEntity<ReadOneArticleDto> readOne(@PathVariable("articleId") Long id) {
         ReadOneArticleDto responseDto = articleService.readOne(id);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
@@ -42,8 +42,8 @@ public class ArticleController {
     @GetMapping("/{categoryId}")
     public ResponseEntity<List<ReadListArticleDto>> readList(
             @PathVariable("categoryId") Long categoryId,
-            @RequestPart(name="filter", required = false) String filter){
-        List<ReadListArticleDto> responseArticles= articleService.readList(categoryId, filter);
+            @RequestPart(name = "filter", required = false) String filter) {
+        List<ReadListArticleDto> responseArticles = articleService.readList(categoryId, filter);
         return new ResponseEntity<>(responseArticles, HttpStatus.OK);
     }
 
@@ -51,8 +51,8 @@ public class ArticleController {
     @PutMapping("/{articleId}")
     public ResponseEntity<Article> updateArticle(
             @PathVariable("articleId") Long articleId,
-            @RequestPart(name="article") WriteArticleDto requestDto,
-            @RequestPart(name="thumbnailImage", required = false)MultipartFile thumbnailImage) throws IOException {
+            @RequestPart(name = "article") WriteArticleDto requestDto,
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
         Article responseArticle = articleService.updateArticle(articleId, requestDto, thumbnailImage);
         return new ResponseEntity<>(responseArticle, HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class ArticleController {
     public ResponseEntity<String> deleteArticle(
             @PathVariable("articleId") Long articleId) throws IOException {
         articleService.deleteArticle(articleId);
-        return new ResponseEntity<>("삭제 성공",HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("삭제 성공", HttpStatus.NO_CONTENT);
     }
 
 }

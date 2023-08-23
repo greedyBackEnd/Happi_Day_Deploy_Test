@@ -37,9 +37,9 @@ public class ArticleService {
         List<String> teamList = Arrays.asList(dto.getTeams().replace(" ", "").split("#"));
 
         // 해시태그
-        List<String> hashtags = Arrays.asList(dto.getHashtag().replace(" ","").split("#"));
+        List<String> hashtags = Arrays.asList(dto.getHashtag().replace(" ", "").split("#"));
         List<Hashtag> hashtagList = new ArrayList<>();
-        for (String hashtag: hashtags) {
+        for (String hashtag : hashtags) {
             Hashtag newHashtag = Hashtag.builder()
                     .tag(hashtag)
                     .build();
@@ -48,7 +48,7 @@ public class ArticleService {
 
         // 카테고리
         BoardCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         // TODO 정보 저장 : 유저, 댓글, 좋아요, 스크랩, 아티스트 리스트, 팀 리스트 추가예정
         Article newArticle = Article.builder()
@@ -81,7 +81,7 @@ public class ArticleService {
     // 글 목록 조회
     public List<ReadListArticleDto> readList(Long categoryId, String filter) {
         BoardCategory category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         List<ReadListArticleDto> articles = articleRepository.findAllByCategory(category);
         // TODO 필터 적용 추가 예정
@@ -101,9 +101,9 @@ public class ArticleService {
         List<String> teamList = Arrays.asList(dto.getTeams().replace(" ", "").split("#"));
 
         // 해시태그
-        List<String> hashtags = Arrays.asList(dto.getHashtag().replace(" ","").split("#"));
+        List<String> hashtags = Arrays.asList(dto.getHashtag().replace(" ", "").split("#"));
         List<Hashtag> hashtagList = new ArrayList<>();
-        for (String hashtag: hashtags) {
+        for (String hashtag : hashtags) {
             Hashtag newHashtag = Hashtag.builder()
                     .tag(hashtag)
                     .build();
@@ -122,7 +122,7 @@ public class ArticleService {
         return articleRepository.save(article);
     }
 
-    public void deleteArticle(Long articleId){
+    public void deleteArticle(Long articleId) {
         Optional<Article> optionalArticle = articleRepository.findById(articleId);
         if (!optionalArticle.isEmpty()) {
             articleRepository.deleteById(articleId);
