@@ -1,6 +1,7 @@
 package com.happiday.Happi_Day.domain.controller;
 
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistListResponseDto;
+import com.happiday.Happi_Day.domain.entity.event.dto.EventListResponseDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.SalesListResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamRegisterDto;
@@ -64,6 +65,12 @@ public class TeamController {
     @GetMapping("/{teamId}/sales")
     public ResponseEntity<List<SalesListResponseDto>> getTeamSales(@PathVariable Long teamId) {
         List<SalesListResponseDto> responseDtos = teamService.getSalesList(teamId);
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/{teamId}/events")
+    public ResponseEntity<List<EventListResponseDto>> getArtistEvents(@PathVariable Long teamId) {
+        List<EventListResponseDto> responseDtos = teamService.getEvents(teamId);
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 }

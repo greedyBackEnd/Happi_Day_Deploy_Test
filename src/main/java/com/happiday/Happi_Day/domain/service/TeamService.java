@@ -1,6 +1,7 @@
 package com.happiday.Happi_Day.domain.service;
 
 import com.happiday.Happi_Day.domain.entity.artist.dto.ArtistListResponseDto;
+import com.happiday.Happi_Day.domain.entity.event.dto.EventListResponseDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.SalesListResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.Team;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
@@ -105,6 +106,15 @@ public class TeamService {
 
         return team.getSalesList().stream()
                 .map(SalesListResponseDto::of)
+                .collect(Collectors.toList());
+    }
+
+    public List<EventListResponseDto> getEvents(Long teamId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
+
+        return team.getEvents().stream()
+                .map(EventListResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 }
