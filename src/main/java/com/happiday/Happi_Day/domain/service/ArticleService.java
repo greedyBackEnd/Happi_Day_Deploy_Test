@@ -71,7 +71,6 @@ public class ArticleService {
 
     // 글 상세 조회
     // TODO user, 댓글, 좋아요, 스크랩 정보 추가 예정
-    @Transactional
     public ReadOneArticleDto readOne(Long articleId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -80,7 +79,6 @@ public class ArticleService {
     }
 
     // 글 목록 조회
-    @Transactional
     public List<ReadListArticleDto> readList(Long categoryId, String filter) {
         BoardCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
