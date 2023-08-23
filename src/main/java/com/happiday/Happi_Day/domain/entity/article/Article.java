@@ -65,11 +65,21 @@ public class Article extends BaseEntity {
     private List<User> scrapUsers = new ArrayList<>();
 
     // 게시글 아티스트 매핑
-    @ManyToMany(mappedBy = "articleArtists")
+    @ManyToMany
+    @JoinTable(
+            name = "article_artist",  // 조인 테이블 이름
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
     private List<Artist> artists = new ArrayList<>();
 
     // 게시글 팀 매핑
-    @ManyToMany(mappedBy = "articleTeams")
+    @ManyToMany
+    @JoinTable(
+            name = "article_team",  // 조인 테이블 이름
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
     private List<Team> teams = new ArrayList<>();
 
     // 해시태그 매핑

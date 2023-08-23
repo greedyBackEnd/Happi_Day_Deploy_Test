@@ -1,7 +1,7 @@
 package com.happiday.Happi_Day.domain.entity.artist;
 
 import com.happiday.Happi_Day.domain.entity.BaseEntity;
-import com.happiday.Happi_Day.domain.entity.board.Board;
+import com.happiday.Happi_Day.domain.entity.article.Article;
 import com.happiday.Happi_Day.domain.entity.event.Event;
 import com.happiday.Happi_Day.domain.entity.product.Sales;
 import com.happiday.Happi_Day.domain.entity.team.Team;
@@ -65,8 +65,8 @@ public class Artist extends BaseEntity {
     private List<User> subscribers = new ArrayList<>();
 
     // 게시판
-    @OneToMany(mappedBy = "artist")
-    private List<Board> boards = new ArrayList<>();
+    @ManyToMany(mappedBy = "artists")
+    private List<Article> articles = new ArrayList<>();
 
     public void update(Artist artistUpdate) {
         this.name = artistUpdate.getName();

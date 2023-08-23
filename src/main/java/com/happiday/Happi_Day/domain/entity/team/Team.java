@@ -1,7 +1,7 @@
 package com.happiday.Happi_Day.domain.entity.team;
 
+import com.happiday.Happi_Day.domain.entity.article.Article;
 import com.happiday.Happi_Day.domain.entity.artist.Artist;
-import com.happiday.Happi_Day.domain.entity.board.Board;
 import com.happiday.Happi_Day.domain.entity.event.Event;
 import com.happiday.Happi_Day.domain.entity.product.Sales;
 import com.happiday.Happi_Day.domain.entity.user.User;
@@ -52,8 +52,8 @@ public class Team {
     private List<User> subscribers = new ArrayList<>();
 
     // 게시판
-    @OneToMany(mappedBy = "team")
-    private List<Board> boards = new ArrayList<>();
+    @ManyToMany(mappedBy = "teams")
+    private List<Article> articles = new ArrayList<>();
 
     public void update(Team teamUpdate) {
         this.name  = teamUpdate.getName();
