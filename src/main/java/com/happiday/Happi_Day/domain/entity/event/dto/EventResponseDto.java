@@ -1,10 +1,13 @@
 package com.happiday.Happi_Day.domain.entity.event.dto;
 
+import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.event.Event;
+import com.happiday.Happi_Day.domain.entity.team.Team;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,6 +32,9 @@ public class EventResponseDto {
 
     private List<String> artists;
 
+    private List<String> teams;
+
+
     public static EventResponseDto fromEntity(Event event) {
         return EventResponseDto.builder()
                 .id(event.getId())
@@ -39,7 +45,8 @@ public class EventResponseDto {
                 .description(event.getDescription())
                 .location(event.getLocation())
                 .imageUrl(event.getImageUrl())
-//                .artists(event.getArtists())  아티스트 네임, 팀 네임 추가
+                .artists(event.getArtists().stream().map(Artist::getName).collect(Collectors.toList()))
+                .teams(event.getTeams().stream().map(Team::getName).collect(Collectors.toList()))
                 .build();
     }
 }
