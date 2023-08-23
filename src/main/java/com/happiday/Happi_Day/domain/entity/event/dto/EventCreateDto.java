@@ -40,28 +40,28 @@ public class EventCreateDto {
     private String imageUrl;
 
     @NotBlank(message = "아티스트를 입력해주세요")
-    private List<String> artists;
+    private List<Artist> artists;
 
-    private List<String> teams;
+    private List<Team> teams;
 
     public Event toEntity() {
 
-        List<Artist> artistList = artists.stream()
-                .map(artistName -> artistRepository.findByName(artistName)
-                        .orElseThrow(() -> new EntityNotFoundException("Artist not found with name: " + artistName)))
-                .collect(Collectors.toList());
-
-        List<Team> teamList = teams.stream()
-                .map(teamName -> teamRepository.findByName(teamName)
-                        .orElseThrow(() -> new EntityNotFoundException("Team not found with name: " + teamName)))
-                .collect(Collectors.toList());
+//        List<Artist> artistList = artists.stream()
+//                .map(artistName -> artistRepository.findByName(artistName)
+//                        .orElseThrow(() -> new EntityNotFoundException("Artist not found with name: " + artistName)))
+//                .collect(Collectors.toList());
+//
+//        List<Team> teamList = teams.stream()
+//                .map(teamName -> teamRepository.findByName(teamName)
+//                        .orElseThrow(() -> new EntityNotFoundException("Team not found with name: " + teamName)))
+//                .collect(Collectors.toList());
 
         return Event.builder()
                 .title(title)
-//                .imageUrl()
-//                .thumbnailUrl()
-                .artists(artistList)
-                .teams(teamList)
+                .imageUrl(imageUrl)
+                .thumbnailUrl(thumbnailUrl)
+                .artists(artists)
+                .teams(teams)
                 .startTime(startTime)
                 .endTime(endTime)
                 .description(description)

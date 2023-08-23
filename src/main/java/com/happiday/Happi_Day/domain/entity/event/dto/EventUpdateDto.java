@@ -1,6 +1,8 @@
 package com.happiday.Happi_Day.domain.entity.event.dto;
 
+import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.event.Event;
+import com.happiday.Happi_Day.domain.entity.team.Team;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,15 +26,22 @@ public class EventUpdateDto {
 
     private String location;
 
-    private List<String> artists;
+    private String thumbnailUrl;
+
+    private String imageUrl;
+
+    private List<Artist> artists;
+
+    private List<Team> teams;
 
     public Event toEntity() {
+
         return Event.builder()
                 .title(title)
-//                .imageUrl()
-//                .thumbnailUrl()
-//                .artists()    TODO 아티스트 팀 추가
-//                .teams()
+                .imageUrl(imageUrl)
+                .thumbnailUrl(thumbnailUrl)
+                .artists(artists)
+                .teams(teams)
                 .startTime(startTime)
                 .endTime(endTime)
                 .description(description)
