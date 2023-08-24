@@ -44,17 +44,14 @@ public class EventCreateDto {
 
     private List<Team> teams;
 
-    public Event toEntity() {
-
-//        List<Artist> artistList = artists.stream()
-//                .map(artistName -> artistRepository.findByName(artistName)
-//                        .orElseThrow(() -> new EntityNotFoundException("Artist not found with name: " + artistName)))
-//                .collect(Collectors.toList());
-//
-//        List<Team> teamList = teams.stream()
-//                .map(teamName -> teamRepository.findByName(teamName)
-//                        .orElseThrow(() -> new EntityNotFoundException("Team not found with name: " + teamName)))
-//                .collect(Collectors.toList());
+    public Event toEntity(String defaultThumbnailUrl, String defaultImageUrl) {
+        // TODO - defaultImageUrl 추가
+        if (thumbnailUrl == null || thumbnailUrl.isEmpty()) {
+            thumbnailUrl = defaultThumbnailUrl;
+        }
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            imageUrl = defaultImageUrl;
+        }
 
         return Event.builder()
                 .title(title)
