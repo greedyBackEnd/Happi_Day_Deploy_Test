@@ -24,6 +24,6 @@ public class Hashtag {
 
     private String tag;
 
-    @ManyToMany(mappedBy ="articleHashtag")
+    @ManyToMany(mappedBy ="hashtags")
     private List<Article> articles = new ArrayList<>();
 }

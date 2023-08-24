@@ -25,7 +25,6 @@ public class BoardCategory extends BaseEntity {
     private String description;
 
     // 게시글 매핑
-    @OneToMany(mappedBy="boardCategory")
+    @OneToMany(mappedBy = "category")
     private List<Article> articles = new ArrayList<>();
-
 }

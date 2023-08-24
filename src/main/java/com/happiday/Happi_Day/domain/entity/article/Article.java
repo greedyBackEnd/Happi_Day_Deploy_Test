@@ -65,15 +65,30 @@ public class Article extends BaseEntity {
     private List<User> scrapUsers = new ArrayList<>();
 
     // 게시글 아티스트 매핑
-    @ManyToMany(mappedBy = "articleArtists")
+    @ManyToMany
+    @JoinTable(
+            name = "article_artist",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
     private List<Artist> artists = new ArrayList<>();
 
     // 게시글 팀 매핑
-    @ManyToMany(mappedBy = "articleTeams")
+    @ManyToMany
+    @JoinTable(
+            name = "article_team",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "artist_id")
+    )
     private List<Team> teams = new ArrayList<>();
 
     // 해시태그 매핑
-    @ManyToMany(mappedBy = "articleHashtag")
+    @ManyToMany
+    @JoinTable(
+            name = "article_hashtag",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "hashtag_id")
+    )
     private List<Hashtag> hashtags = new ArrayList<>();
 
     public void update(Article updateArticle) {
