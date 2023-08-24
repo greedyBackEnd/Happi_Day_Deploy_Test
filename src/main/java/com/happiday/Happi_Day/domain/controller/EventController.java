@@ -5,6 +5,7 @@ import com.happiday.Happi_Day.domain.entity.event.dto.EventListResponseDto;
 import com.happiday.Happi_Day.domain.entity.event.dto.EventResponseDto;
 import com.happiday.Happi_Day.domain.entity.event.dto.EventUpdateDto;
 import com.happiday.Happi_Day.domain.service.EventService;
+import com.happiday.Happi_Day.utils.SecurityUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +29,10 @@ public class EventController {
     public ResponseEntity<EventResponseDto> createEvent(
             @Valid @RequestPart(value = "event") EventCreateDto eventCreateDto,
             @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
-            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
-            Authentication authentication
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
             ){
-        EventResponseDto responseDto = eventService.createEvent(eventCreateDto, thumbnailFile, imageFile, authentication.getName());
+        String username = SecurityUtils.getCurrentUsername();
+        EventResponseDto responseDto = eventService.createEvent(eventCreateDto, thumbnailFile, imageFile, username);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
@@ -52,10 +53,10 @@ public class EventController {
             @PathVariable Long eventId,
             @Valid @RequestPart(value = "event") EventUpdateDto eventUpdateDto,
             @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
-            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
-            Authentication authentication
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
     ){
-        EventResponseDto responseDto = eventService.updateEvent(eventId, eventUpdateDto, thumbnailFile, imageFile, authentication.getName());
+        String username = SecurityUtils.getCurrentUsername();
+        EventResponseDto responseDto = eventService.updateEvent(eventId, eventUpdateDto, thumbnailFile, imageFile, username);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -64,6 +65,4 @@ public class EventController {
         eventService.deleteEvent(eventId, authentication.getName());
         return new ResponseEntity<>("삭제 성공", HttpStatus.NO_CONTENT);
     }
-
-
 }
