@@ -2,6 +2,9 @@ package com.happiday.Happi_Day.domain.entity.event.dto;
 
 import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.event.Event;
+import com.happiday.Happi_Day.domain.entity.team.Team;
+import com.happiday.Happi_Day.domain.repository.ArtistRepository;
+import com.happiday.Happi_Day.domain.repository.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -14,6 +17,8 @@ import java.util.stream.Collectors;
 @Setter
 @Builder
 public class EventCreateDto {
+    private final ArtistRepository artistRepository;
+    private final TeamRepository teamRepository;
 
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
@@ -35,27 +40,25 @@ public class EventCreateDto {
     private String imageUrl;
 
     @NotBlank(message = "아티스트를 입력해주세요")
-    private List<String> artists;
+    private List<Artist> artists;
 
-    private List<String> teams;
+    private List<Team> teams;
 
-    public Event toEntity() {
-//        List<Artist> artistList = artists.stream()
-//                .map(artistName -> artistRepository.findByName(artistName)
-//                        .orElseThrow(() -> new EntityNotFoundException("Artist not found with name: " + artistName)))
-//                .collect(Collectors.toList());
-//
-//        List<Artist> teamList = teams.stream()
-//                .map(teamName -> teamRepository.findByName(teamName)
-//                        .orElseThrow(() -> new EntityNotFoundException("Team not found with name: " + teamName)))
-//                .collect(Collectors.toList());
-//
+    public Event toEntity(String defaultThumbnailUrl, String defaultImageUrl) {
+        // TODO - defaultImageUrl 추가
+        if (thumbnailUrl == null || thumbnailUrl.isEmpty()) {
+            thumbnailUrl = defaultThumbnailUrl;
+        }
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            imageUrl = defaultImageUrl;
+        }
+
         return Event.builder()
                 .title(title)
-//                .imageUrl()
-//                .thumbnailUrl()
-//                .artists(artistList) TODO 아티스트, 팀 추가
-//                .teams(teamList)
+                .imageUrl(imageUrl)
+                .thumbnailUrl(thumbnailUrl)
+                .artists(artists)
+                .teams(teams)
                 .startTime(startTime)
                 .endTime(endTime)
                 .description(description)

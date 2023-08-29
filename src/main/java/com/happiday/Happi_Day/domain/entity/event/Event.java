@@ -5,10 +5,7 @@ import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.team.Team;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -47,8 +44,10 @@ public class Event extends BaseEntity {
     @Column(nullable = false)
     private String location;
 
+    @Setter
     private String thumbnailUrl;
 
+    @Setter
     private String imageUrl;
 
     // 이벤트 댓글 관계 설정
@@ -96,6 +95,10 @@ public class Event extends BaseEntity {
         }
         if (updateEvent.getLocation() != null) {
             this.location = updateEvent.getLocation();
+        }
+        if (updateEvent.getTeams() != null && !updateEvent.getTeams().isEmpty()) {
+            this.teams.clear();
+            this.teams = updateEvent.getTeams();
         }
         if (updateEvent.getArtists() != null && !updateEvent.getArtists().isEmpty()) {
             this.artists.clear();
