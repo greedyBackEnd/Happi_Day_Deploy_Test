@@ -21,7 +21,7 @@ public class ReadOneArticleDto {
     private String content;
     private List<Team> teams;
     private List<Artist> artists;
-    private List<Hashtag> hashtags;
+    private List<String> hashtags;
     //    private User user;
     private String createdAt;
 //    private List<Comment> comments;
@@ -35,7 +35,6 @@ public class ReadOneArticleDto {
                 .content(article.getContent())
                 .teams(article.getTeams())
                 .artists(article.getArtists())
-                .hashtags(article.getHashtags())
                 .build();
     }
 }
