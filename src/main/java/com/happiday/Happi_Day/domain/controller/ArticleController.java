@@ -23,11 +23,11 @@ public class ArticleController {
 
     // 글 작성
     @PostMapping(value = "/{categoryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<Article> writeArticle(
+    public ResponseEntity<ReadOneArticleDto> writeArticle(
             @PathVariable("categoryId") Long id,
             @RequestPart(name = "article") WriteArticleDto requestDto,
             @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
-        Article responseArticle = articleService.writeArticle(id, requestDto, thumbnailImage);
+        ReadOneArticleDto responseArticle = articleService.writeArticle(id, requestDto, thumbnailImage);
         return new ResponseEntity<>(responseArticle, HttpStatus.CREATED);
     }
 
@@ -39,7 +39,7 @@ public class ArticleController {
     }
 
     // 글 목록 조회
-    @GetMapping("/{categoryId}")
+    @GetMapping("/{categoryId}/list")
     public ResponseEntity<List<ReadListArticleDto>> readList(
             @PathVariable("categoryId") Long categoryId,
             @RequestPart(name = "filter", required = false) String filter) {
