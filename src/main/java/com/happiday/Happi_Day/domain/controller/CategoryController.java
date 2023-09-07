@@ -6,10 +6,7 @@ import com.happiday.Happi_Day.domain.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/category")
@@ -19,7 +16,7 @@ public class CategoryController {
 
     @PostMapping()
     public ResponseEntity<BoardCategory> createCategory(
-            @RequestPart(name="category")CreateCategoryDto dto){
+            @RequestBody CreateCategoryDto dto){
         BoardCategory responseCategory = categoryService.createCategory(dto);
         return new ResponseEntity<>(responseCategory, HttpStatus.CREATED);
     }
