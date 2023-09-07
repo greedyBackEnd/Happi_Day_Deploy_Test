@@ -30,7 +30,7 @@ public class ArticleService {
     private final BoardCategoryRepository categoryRepository;
 
     @Transactional
-    public Article writeArticle(Long categoryId, WriteArticleDto dto, MultipartFile image) throws IOException {
+    public ReadOneArticleDto writeArticle(Long categoryId, WriteArticleDto dto, MultipartFile image) throws IOException {
         // 아티스트 목록
         List<String> artistList = Arrays.asList(dto.getArtists().replace(" ", "").split("#"));
         // 팀 목록
@@ -65,7 +65,15 @@ public class ArticleService {
 
             image.transferTo(path);
         }
-        return articleRepository.save(newArticle);
+        articleRepository.save(newArticle);
+
+        // TODO teams, artists, user 추가예정
+        ReadOneArticleDto responseDto = ReadOneArticleDto.builder()
+                .title(newArticle.getTitle())
+                .content(newArticle.getContent())
+                .hashtags(hashtags)
+                .build();
+        return responseDto;
     }
 
 
