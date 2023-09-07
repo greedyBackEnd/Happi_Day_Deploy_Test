@@ -25,7 +25,6 @@ public class CommentService {
 
     @Transactional
     public ReadCommentDto writeComment(Long articleId, WriteCommentDto dto){
-        log.info("과연통과?");
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
