@@ -23,16 +23,6 @@ public class Article extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 게시판 id
-//    @ManyToMany
-//    @JoinTable(
-//            name = "article_board",
-//            joinColumns = @JoinColumn(name = "article_id"),
-//            inverseJoinColumns = @JoinColumn(name = "board_id")
-//    )
-//    private List<Board> boards  = new ArrayList<>();
-
-
     // 유저 id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -83,7 +73,7 @@ public class Article extends BaseEntity {
     private List<Team> teams = new ArrayList<>();
 
     // 해시태그 매핑
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "article_hashtag",
             joinColumns = @JoinColumn(name = "article_id"),
