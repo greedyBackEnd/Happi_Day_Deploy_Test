@@ -13,6 +13,9 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 @Table(name = "board_category")
 public class BoardCategory extends BaseEntity {
     @Id
