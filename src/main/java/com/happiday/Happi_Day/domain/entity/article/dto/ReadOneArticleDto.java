@@ -22,7 +22,7 @@ public class ReadOneArticleDto {
     private List<Team> teams;
     private List<Artist> artists;
     private List<String> hashtags;
-        private String user;
+    private String user;
     private String createdAt;
     private List<ReadCommentDto> comments;
     private int likeUsersNum;

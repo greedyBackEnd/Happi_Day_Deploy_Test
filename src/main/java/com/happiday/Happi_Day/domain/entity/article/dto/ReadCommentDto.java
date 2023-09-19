@@ -13,19 +13,19 @@ import java.util.List;
 @Builder
 public class ReadCommentDto {
     private Long id;
-    private User user;
+    private String user;
     private String content;
     private LocalDateTime createdAt;
 
     public static ReadCommentDto fromEntity(Comment comment) {
         return ReadCommentDto.builder()
                 .id(comment.getId())
+                .user(comment.getUser().getNickname())
                 .content(comment.getContent())
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
 
-    // TODO
     public static List<ReadCommentDto> toReadCommentDto(List<Comment> commentList){
         List<ReadCommentDto> newList = new ArrayList<>();
         for (Comment comment: commentList) {

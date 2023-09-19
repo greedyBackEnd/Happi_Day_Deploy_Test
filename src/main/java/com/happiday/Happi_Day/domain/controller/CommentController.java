@@ -3,6 +3,7 @@ package com.happiday.Happi_Day.domain.controller;
 import com.happiday.Happi_Day.domain.entity.article.dto.ReadCommentDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.WriteCommentDto;
 import com.happiday.Happi_Day.domain.service.CommentService;
+import com.happiday.Happi_Day.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,8 @@ public class CommentController {
     public ResponseEntity<ReadCommentDto> writeComment(
             @PathVariable("articleId") Long articleId,
             @RequestBody WriteCommentDto requestDto) {
-        ReadCommentDto responseComment = commentService.writeComment(articleId, requestDto);
+        String username = SecurityUtils.getCurrentUsername();
+        ReadCommentDto responseComment = commentService.writeComment(articleId, requestDto,username);
         return new ResponseEntity<>(responseComment, HttpStatus.CREATED);
     }
 
