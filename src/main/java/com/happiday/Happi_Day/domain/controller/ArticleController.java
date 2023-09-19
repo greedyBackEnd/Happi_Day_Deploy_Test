@@ -67,4 +67,13 @@ public class ArticleController {
         return new ResponseEntity<>("삭제 성공", HttpStatus.OK);
     }
 
+    // 글 좋아요
+    @PostMapping("/{articleId}/like")
+    public ResponseEntity<String> likeArticle(
+            @PathVariable("articleId") Long articleId){
+        String username = SecurityUtils.getCurrentUsername();
+        String response = articleService.likeArticle(articleId, username);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

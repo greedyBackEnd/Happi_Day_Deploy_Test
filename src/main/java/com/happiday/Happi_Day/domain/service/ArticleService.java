@@ -2,7 +2,6 @@ package com.happiday.Happi_Day.domain.service;
 
 import com.happiday.Happi_Day.domain.entity.article.Article;
 import com.happiday.Happi_Day.domain.entity.article.Hashtag;
-import com.happiday.Happi_Day.domain.entity.article.dto.ReadCommentDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.ReadListArticleDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.ReadOneArticleDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.WriteArticleDto;
@@ -22,7 +21,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -143,5 +141,28 @@ public class ArticleService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         articleRepository.deleteById(articleId);
+    }
+
+    @Transactional
+    public String likeArticle(Long articleId, String username){
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        String response = "";
+        if(article.getLikeUsers().contains(user)){
+            article.getLikeUsers().remove(user);
+            user.getArticleLikes().remove(article);
+            response = "이미 좋아요를 눌렀습니다. 현재 좋아요 수 : "+article.getLikeUsers().size();
+        }else{
+            article.getLikeUsers().add(user);
+            user.getArticleLikes().add(article);
+            response = "좋아요를 눌렀습니다. 현재 좋아요 수 : "+article.getLikeUsers().size();
+        }
+
+        articleRepository.save(article);
+        return response;
     }
 }
