@@ -5,6 +5,7 @@ import com.happiday.Happi_Day.domain.entity.article.dto.ReadListArticleDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.ReadOneArticleDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.WriteArticleDto;
 import com.happiday.Happi_Day.domain.service.ArticleService;
+import com.happiday.Happi_Day.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,12 +24,13 @@ public class ArticleController {
 
     // 글 작성
     @PostMapping(value = "/{categoryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ReadOneArticleDto> writeArticle(
+    public ResponseEntity<String> writeArticle(
             @PathVariable("categoryId") Long id,
             @RequestPart(name = "article") WriteArticleDto requestDto,
             @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
-        ReadOneArticleDto responseArticle = articleService.writeArticle(id, requestDto, thumbnailImage);
-        return new ResponseEntity<>(responseArticle, HttpStatus.CREATED);
+        String username = SecurityUtils.getCurrentUsername();
+        articleService.writeArticle(id, requestDto, thumbnailImage, username);
+        return new ResponseEntity<>("글이 게시되었습니다.",HttpStatus.CREATED);
     }
 
     // 글 상세 조회
@@ -49,20 +51,20 @@ public class ArticleController {
 
     // 글 수정
     @PutMapping("/{articleId}")
-    public ResponseEntity<Article> updateArticle(
+    public ResponseEntity<ReadOneArticleDto> updateArticle(
             @PathVariable("articleId") Long articleId,
             @RequestPart(name = "article") WriteArticleDto requestDto,
             @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
-        Article responseArticle = articleService.updateArticle(articleId, requestDto, thumbnailImage);
+        ReadOneArticleDto responseArticle = articleService.updateArticle(articleId, requestDto, thumbnailImage);
         return new ResponseEntity<>(responseArticle, HttpStatus.OK);
     }
 
     // 글 삭제
     @DeleteMapping("/{articleId}")
     public ResponseEntity<String> deleteArticle(
-            @PathVariable("articleId") Long articleId) throws IOException {
+            @PathVariable("articleId") Long articleId){
         articleService.deleteArticle(articleId);
-        return new ResponseEntity<>("삭제 성공", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("삭제 성공", HttpStatus.OK);
     }
 
 }

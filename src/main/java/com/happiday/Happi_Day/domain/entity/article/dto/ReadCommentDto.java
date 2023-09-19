@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -22,4 +24,14 @@ public class ReadCommentDto {
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
+
+    // TODO
+    public static List<ReadCommentDto> toReadCommentDto(List<Comment> commentList){
+        List<ReadCommentDto> newList = new ArrayList<>();
+        for (Comment comment: commentList) {
+            newList.add(ReadCommentDto.fromEntity(comment));
+        }
+        return newList;
+    }
+
 }
