@@ -3,6 +3,7 @@ package com.happiday.Happi_Day.domain.controller;
 import com.happiday.Happi_Day.domain.entity.chat.ChatRoomResponse;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import com.happiday.Happi_Day.domain.repository.UserRepository;
+import com.happiday.Happi_Day.domain.repository.chat.ChatRoomRepository;
 import com.happiday.Happi_Day.domain.service.ChatRoomService;
 import com.happiday.Happi_Day.utils.SecurityUtils;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ChatRoomController {
 
     private final UserRepository userRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomService chatRoomService;
 
     // 채팅방 만들기
@@ -43,6 +45,19 @@ public class ChatRoomController {
     public ResponseEntity<ChatRoomResponse> getChatRoom(@PathVariable Long roomId) {
         String username = SecurityUtils.getCurrentUsername();
         return new ResponseEntity<>(chatRoomService.findChatRoom(username, roomId), HttpStatus.OK);
+    }
+
+    @GetMapping("/findAll")
+    public ResponseEntity<List<User>> getNicknameList() {
+        List<User> userList = userRepository.findAll();
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{roomId}")
+    public ResponseEntity<Void> deleteChatRoom(@PathVariable Long roomId) {
+        String username = SecurityUtils.getCurrentUsername();
+        chatRoomRepository.deleteById(roomId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

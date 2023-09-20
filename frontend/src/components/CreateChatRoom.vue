@@ -1,60 +1,56 @@
 <template>
     <div>
         <h1>사용자 검색</h1>
-        <input type="text" v-model="searchedNickname" @input="searchUsers" placeholder="닉네임을 입력하세요" />
+        <!-- 사용자 닉네임 입력 폼 -->
+        <input v-model="userNickname" placeholder="사용자 닉네임" @input="searchUsers">
 
-        <!-- 검색 결과 표시 -->
-        <div v-if="filteredUsers.length > 0">
-            <h2>검색 결과:</h2>
-            <ul>
-                <li v-for="user in filteredUsers" :key="user.id">
-                    <span @click="startChat(user)">{{ user.name }}</span>
-                    <button v-if="user.showChatButton" @click="openChat(user)">채팅하기</button>
-                </li>
-            </ul>
-        </div>
+        <!-- 닉네임 리스트 -->
+        <ul>
+            <li v-for="user in filteredUsers" :key="user.id">
+                <button @click="startChat(user)">{{ user.name }}</button>
+                <button v-if="user === selectedUser" @click="openChat">채팅하기</button>
+            </li>
+        </ul>
 
-        <!-- 검색 결과가 없을 때 메시지 표시 -->
-        <div v-else>
-            <p>해당 닉네임을 찾을 수 없습니다.</p>
+        <!-- 채팅 화면 또는 컴포넌트 -->
+        <div v-if="selectedUser">
+            <ChatWithUser :user="selectedUser"/>
         </div>
     </div>
 </template>
 
 <script>
+import ChatWithUser from "@/components/ChatWithUser.vue";
+import axios from "axios";
+
 export default {
-    name: "ChatRoom",
+    name: "CreateChatRoom",
     data() {
         return {
-            searchedNickname: '',
+            userNickname: '',
             users: [],
+            filteredUsers: [],
+            selectedUser: null,
         };
-    },
-    computed: {
-        filteredUsers() {
-            const searchTerm = this.searchedNickname.toLowerCase();
-            return this.users.filter(user => user.name.toLowerCase().includes(searchTerm));
-        },
     },
     methods: {
         async searchUsers() {
-            // 사용자 검색 로직을 수행합니다.
-            // 이 부분에서 백엔드 API를 호출하여 검색하거나,
-            // 서버에서 데이터를 가져와야 합니다.
+            const response = await axios.get("/api/v1/chat/find");
+            this.users = response.data;
+            this.filteredUsers = this.users.filter(user => user.name.includes(this.userNickname));
 
-            // 여기에서는 간단한 예시로 사용자 목록을 로컬 데이터로 사용합니다.
-            // 실제로는 백엔드 API를 호출하여 검색해야 합니다.
+
         },
         startChat(user) {
-            // 해당 사용자와의 채팅을 시작하는 로직을 수행합니다.
-            // 여기에서는 사용자를 클릭하면 채팅 버튼이 나타나도록 설정합니다.
-            user.showChatButton = true;
+            // 사용자 선택 시 선택한 사용자를 selectedUser에 할당
+            this.selectedUser = user;
         },
-        openChat(user) {
-            // 채팅을 열기 위한 로직을 수행합니다.
-            // 여기에서는 사용자를 클릭하면 채팅을 열 수 있도록 설정합니다.
-            console.log(`채팅을 시작합니다: ${user.name}`);
+        openChat() {
+            // 채팅하기 버튼을 눌렀을 때 채팅창 열기 또는 다른 채팅 화면으로 이동하는 로직을 구현
         },
+    },
+    components: {
+        ChatWithUser,
     },
 };
 </script>
