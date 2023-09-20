@@ -6,6 +6,7 @@ import com.happiday.Happi_Day.domain.entity.article.dto.ReadListArticleDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.ReadOneArticleDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.WriteArticleDto;
 import com.happiday.Happi_Day.domain.entity.board.BoardCategory;
+import com.happiday.Happi_Day.domain.entity.user.User;
 import com.happiday.Happi_Day.domain.repository.*;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,9 +28,14 @@ import java.util.Optional;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final BoardCategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public ReadOneArticleDto writeArticle(Long categoryId, WriteArticleDto dto, MultipartFile image) throws IOException {
+    public void writeArticle(Long categoryId, WriteArticleDto dto, MultipartFile image, String username) throws IOException {
+        // user 확인
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
         // 아티스트 목록
         List<String> artistList = Arrays.asList(dto.getArtists().replace(" ", "").split("#"));
         // 팀 목록
@@ -50,14 +55,16 @@ public class ArticleService {
         BoardCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // TODO 정보 저장 : 유저, 댓글, 좋아요, 스크랩, 아티스트 리스트, 팀 리스트 추가예정
+        // TODO 정보 저장 : 아티스트 리스트, 팀 리스트 추가예정
         Article newArticle = Article.builder()
+                .user(user)
                 .category(category)
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .eventAddress(dto.getEventAddress())
                 .hashtags(hashtagList)
                 .build();
+
         // 썸네일 이미지 저장
         if (image != null) {
             Files.createDirectories(Path.of(String.format("image/%d", newArticle.getId())));
@@ -66,14 +73,6 @@ public class ArticleService {
             image.transferTo(path);
         }
         articleRepository.save(newArticle);
-
-        // TODO teams, artists, user 추가예정
-        ReadOneArticleDto responseDto = ReadOneArticleDto.builder()
-                .title(newArticle.getTitle())
-                .content(newArticle.getContent())
-                .hashtags(hashtags)
-                .build();
-        return responseDto;
     }
 
 
@@ -91,15 +90,19 @@ public class ArticleService {
         BoardCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        List<ReadListArticleDto> articles = articleRepository.findAllByCategory(category);
+        List<Article> articles = articleRepository.findAllByCategory(category);
+        List<ReadListArticleDto> newList = new ArrayList<>();
+        for (Article article: articles) {
+            newList.add(ReadListArticleDto.fromEntity(article));
+        }
         // TODO 필터 적용 추가 예정
 
-        return articles;
+        return newList;
     }
 
     // 글 수정
     @Transactional
-    public Article updateArticle(Long articleId, WriteArticleDto dto, MultipartFile image) throws IOException {
+    public ReadOneArticleDto updateArticle(Long articleId, WriteArticleDto dto, MultipartFile image) throws IOException {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -122,18 +125,44 @@ public class ArticleService {
         article.update(dto.toEntity());
 
         // 썸네일 이미지 수정
-        if (image != null) {
-            Path path = Path.of(String.format("image/%d/thumbnail.png", article.getId()));
-            image.transferTo(path);
-        }
+//        if (image != null) {
+//            Path path = Path.of(String.format("image/%d/thumbnail.png", article.getId()));
+//            image.transferTo(path);
+//        }
 
-        return articleRepository.save(article);
+        articleRepository.save(article);
+
+        return ReadOneArticleDto.fromEntity(article);
     }
 
+    @Transactional
     public void deleteArticle(Long articleId) {
-        Optional<Article> optionalArticle = articleRepository.findById(articleId);
-        if (!optionalArticle.isEmpty()) {
-            articleRepository.deleteById(articleId);
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        articleRepository.deleteById(articleId);
+    }
+
+    @Transactional
+    public String likeArticle(Long articleId, String username){
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        String response = "";
+        if(article.getLikeUsers().contains(user)){
+            article.getLikeUsers().remove(user);
+            user.getArticleLikes().remove(article);
+            response = "이미 좋아요를 눌렀습니다. 현재 좋아요 수 : "+article.getLikeUsers().size();
+        }else{
+            article.getLikeUsers().add(user);
+            user.getArticleLikes().add(article);
+            response = "좋아요를 눌렀습니다. 현재 좋아요 수 : "+article.getLikeUsers().size();
         }
+
+        articleRepository.save(article);
+        return response;
     }
 }

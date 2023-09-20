@@ -4,8 +4,10 @@ import com.happiday.Happi_Day.domain.entity.article.Article;
 import com.happiday.Happi_Day.domain.entity.article.Comment;
 import com.happiday.Happi_Day.domain.entity.article.dto.ReadCommentDto;
 import com.happiday.Happi_Day.domain.entity.article.dto.WriteCommentDto;
+import com.happiday.Happi_Day.domain.entity.user.User;
 import com.happiday.Happi_Day.domain.repository.ArticleRepository;
 import com.happiday.Happi_Day.domain.repository.CommentRepository;
+import com.happiday.Happi_Day.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,20 +24,22 @@ import java.util.List;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public ReadCommentDto writeComment(Long articleId, WriteCommentDto dto){
+    public ReadCommentDto writeComment(Long articleId, WriteCommentDto dto, String username){
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // TODO user 정보 저장 예정
         Comment newComment = Comment.builder()
                 .content(dto.getContent())
                 .article(article)
+                .user(user)
                 .build();
         commentRepository.save(newComment);
 
-        // TODO user 정보 저장 예정
         ReadCommentDto response = ReadCommentDto.fromEntity(newComment);
         return response;
     }
@@ -44,10 +48,10 @@ public class CommentService {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // TODO user 정보 저장 예정
-        List<ReadCommentDto> comments = commentRepository.findAllByArticle(article);
+        List<Comment> comments = commentRepository.findAllByArticle(article);
+        List<ReadCommentDto> response = ReadCommentDto.toReadCommentDto(comments);
 
-        return comments;
+        return response;
     }
 
     @Transactional
@@ -65,6 +69,7 @@ public class CommentService {
         return response;
     }
 
+    @Transactional
     public void deleteComment(Long articleId, Long commentId){
         articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
