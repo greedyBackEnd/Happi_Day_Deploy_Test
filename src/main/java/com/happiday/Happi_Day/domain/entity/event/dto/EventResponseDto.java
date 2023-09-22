@@ -37,7 +37,6 @@ public class EventResponseDto {
 
     private List<String> teams;
 
-
     public static EventResponseDto fromEntity(Event event) {
         // 이벤트의 artists 필드에서 이름을 꺼내오기
         List<String> eventArtists = event.getArtists().stream().map(Artist::getName).collect(Collectors.toList());

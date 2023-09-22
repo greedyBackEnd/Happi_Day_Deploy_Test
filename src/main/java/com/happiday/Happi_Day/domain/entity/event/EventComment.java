@@ -34,4 +34,8 @@ public class EventComment extends BaseEntity {
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
+    public void update(EventComment updateComment) {
+        this.content = updateComment.getContent();
+    }
 }
