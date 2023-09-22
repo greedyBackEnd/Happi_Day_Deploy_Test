@@ -39,7 +39,7 @@ export default {
             .then((response) => {
                 // API 응답 처리
                 this.roomList = response.data;
-                console.log('채팅방 목록:', response.data);
+                console.log('내 채팅방 목록:', response.data);
             })
             .catch((error) => {
                 console.error('API 요청 실패', error);
@@ -50,10 +50,10 @@ export default {
             const token = this.$route.query.token;
             this.$router.push({ name: 'CreateChatRoom', query: { token }});
         },
-        // goToChatRoom(roomId) {
-        //     // 채팅방 컴포넌트로 이동하고 roomId 전달
-        //     this.$router.push({ name: 'ChatWithUser', params: { roomId } });
-        // },
+        goToChatRoom(roomId) {
+            // 채팅방 컴포넌트로 이동하고 roomId 전달
+            this.$router.push({ name: 'ChatWithUser', params: { roomId } });
+        },
         async deleteRoom(roomId) {
             if (roomId === undefined) {
                 console.error("Invalid roomId:", roomId);

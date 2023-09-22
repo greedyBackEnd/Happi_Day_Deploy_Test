@@ -2,6 +2,7 @@ package com.happiday.Happi_Day.domain.controller;
 
 import com.happiday.Happi_Day.domain.entity.chat.ChatRoomResponse;
 import com.happiday.Happi_Day.domain.entity.user.User;
+import com.happiday.Happi_Day.domain.entity.user.dto.UserResponseDto;
 import com.happiday.Happi_Day.domain.repository.UserRepository;
 import com.happiday.Happi_Day.domain.repository.chat.ChatRoomRepository;
 import com.happiday.Happi_Day.domain.service.ChatRoomService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/chat")
@@ -48,10 +50,10 @@ public class ChatRoomController {
     }
 
     @GetMapping("/findAllUser")
-    public ResponseEntity<List<User>> getNicknameList() {
-//        String username = SecurityUtils.getCurrentUsername();
-        List<User> userList = userRepository.findAll();
-        return new ResponseEntity<>(userList, HttpStatus.OK);
+    public ResponseEntity<List<UserResponseDto>> getNicknameList() {
+        String username = SecurityUtils.getCurrentUsername();
+        List<User> userList = userRepository.findAllByUsernameNot(username);
+        return new ResponseEntity<>(userList.stream().map(UserResponseDto::fromEntity).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{roomId}")
