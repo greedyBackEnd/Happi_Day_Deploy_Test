@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,7 +63,7 @@ public class EventController {
     }
 
     @DeleteMapping("/{eventId}")
-    public ResponseEntity<String> deleteArtlst(@PathVariable Long eventId){
+    public ResponseEntity<String> deleteEvent(@PathVariable Long eventId){
         String username = SecurityUtils.getCurrentUsername();
         eventService.deleteEvent(eventId, username);
         return ResponseEntity.ok("삭제 성공");
