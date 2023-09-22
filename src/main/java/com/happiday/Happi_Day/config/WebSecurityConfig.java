@@ -25,6 +25,7 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtTokenFilter, AuthorizationFilter.class)
                 .authorizeHttpRequests(authHttp -> authHttp
                         .requestMatchers("/api/v1/auth/signup", "/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/events/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(
