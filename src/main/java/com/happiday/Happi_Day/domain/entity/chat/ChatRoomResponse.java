@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatRoomResponse {
+    Long roomId;
     String receiver;
 
     public static ChatRoomResponse fromEntity(ChatRoom chatRoom) {
         return ChatRoomResponse.builder()
+                .roomId(chatRoom.getId())
                 .receiver(chatRoom.getReceiver().getNickname())
                 .build();
     }

@@ -6,11 +6,11 @@
 
         <!-- 채팅방 목록 표시 -->
         <ul>
-            <li v-for="room in roomList" :key="room.id">
+            <li v-for="room in roomList" :key="room.roomId">
                 {{ room.receiver }}
-                <button @click="goToChatRoom(room.id)">채팅하기</button>
+                <button @click="goToChatRoom(room.roomId)">채팅하기</button>
                 <!-- 방 삭제하기 버튼 -->
-                <button @click="deleteRoom(room.id)">방 삭제하기</button>
+                <button @click="deleteRoom(room.roomId)">방 삭제하기</button>
             </li>
         </ul>
     </div>
@@ -31,7 +31,7 @@ export default {
         const token = this.$route.query.token;
 
         // 토큰을 사용하여 API 요청 보내기
-        axios.get('/api/v1/chat/rooms', {
+        axios.get(`/api/v1/chat/rooms`, {
             headers: {
                 Authorization: `Bearer ${token}`, // 토큰을 Authorization 헤더에 추가
             },
@@ -50,15 +50,29 @@ export default {
             const token = this.$route.query.token;
             this.$router.push({ name: 'CreateChatRoom', query: { token }});
         },
-        goToChatRoom(roomId) {
-            // 채팅방 컴포넌트로 이동하고 roomId 전달
-            //this.$router.push({ name: 'ChatWithUser', params: { roomId } });
-        },
+        // goToChatRoom(roomId) {
+        //     // 채팅방 컴포넌트로 이동하고 roomId 전달
+        //     this.$router.push({ name: 'ChatWithUser', params: { roomId } });
+        // },
+        async deleteRoom(roomId) {
+            if (roomId === undefined) {
+                console.error("Invalid roomId:", roomId);
+                return; // roomId가 정의되지 않은 경우 요청을 보내지 않음
+            }
 
-        deleteRoom(roomId) {
-            // 방 삭제 로직을 구현하고 API 호출 등을 수행
-            // 삭제 후 목록에서도 제거해야 할 수 있습니다.
-            // this.roomList에서 roomId에 해당하는 방을 삭제하는 로직 추가
+            const token = this.$route.query.token;
+            axios.delete(`/api/v1/chat/${roomId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // 토큰을 Authorization 헤더에 추가
+                },
+            })
+                .then(() => {
+                    console.log(`Chat room with ID ${roomId} deleted successfully.`);
+                    location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error deleting chat room:", error);
+                });
         }
     },
 };

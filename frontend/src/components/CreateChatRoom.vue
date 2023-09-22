@@ -2,20 +2,16 @@
     <div>
         <h1>사용자 검색</h1>
         <!-- 사용자 닉네임 입력 폼 -->
-        <input v-model="userNickname" placeholder="사용자 닉네임" @input="searchUsers">
+        <input type="text" id="nickname" v-model="searchQuery" @keyup.enter="searchNicknames"/>
+        <button @click="searchNicknames">검색</button>
 
         <!-- 닉네임 리스트 -->
         <ul>
-            <li v-for="user in filteredUsers" :key="user.id">
-                <button @click="startChat(user)">{{ user.name }}</button>
-                <button v-if="user === selectedUser" @click="openChat">채팅하기</button>
+            <li v-for="nick in users" :key="nick.id">
+                {{ nick.id }}
+                <button @click="startChat(nick.nickname)">Chat</button>
             </li>
         </ul>
-
-        <!-- 채팅 화면 또는 컴포넌트 -->
-        <div v-if="selectedUser">
-            <ChatWithUser :user="selectedUser"/>
-        </div>
     </div>
 </template>
 
@@ -27,26 +23,33 @@ export default {
     name: "CreateChatRoom",
     data() {
         return {
-            userNickname: '',
+            searchQuery: '',
             users: [],
-            filteredUsers: [],
-            selectedUser: null,
+            nicknameList: [],
+            isSearching: false,
         };
     },
+    created() {
+        // 라우터에서 전달받은 토큰 추출
+        const token = this.$route.query.token;
+
+        // 토큰을 사용하여 API 요청 보내기
+        axios.get("/api/v1/chat/findAllUser")
+            .then((response) => {
+                // API 응답 처리
+                this.roomList = response.data;
+                console.log('채팅방 목록:', response.data);
+            })
+            .catch((error) => {
+                console.error('API 요청 실패', error);
+            });
+    },
     methods: {
-        async searchUsers() {
-            const response = await axios.get("/api/v1/chat/find");
-            this.users = response.data;
-            this.filteredUsers = this.users.filter(user => user.name.includes(this.userNickname));
-
+        searchNicknames() {
 
         },
-        startChat(user) {
-            // 사용자 선택 시 선택한 사용자를 selectedUser에 할당
-            this.selectedUser = user;
-        },
-        openChat() {
-            // 채팅하기 버튼을 눌렀을 때 채팅창 열기 또는 다른 채팅 화면으로 이동하는 로직을 구현
+        startChat(nickname) {
+            // 채팅 시작 로직을 구현하세요.
         },
     },
     components: {

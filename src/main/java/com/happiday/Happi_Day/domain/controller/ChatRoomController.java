@@ -47,8 +47,9 @@ public class ChatRoomController {
         return new ResponseEntity<>(chatRoomService.findChatRoom(username, roomId), HttpStatus.OK);
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("/findAllUser")
     public ResponseEntity<List<User>> getNicknameList() {
+//        String username = SecurityUtils.getCurrentUsername();
         List<User> userList = userRepository.findAll();
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
