@@ -31,7 +31,5 @@ public class Product {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private SalesStatus salesStatus;
-
-
+    private ProductStatus productStatus;
 }

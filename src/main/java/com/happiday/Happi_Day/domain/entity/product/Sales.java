@@ -66,4 +66,8 @@ public class Sales extends BaseEntity {
     // 팀-판매글 매핑
     @ManyToMany(mappedBy = "salesList")
     private List<Team> teams = new ArrayList<>();
+
+    public void updateProduct(List<Product> products){
+        this.products = products;
+    }
 }
