@@ -7,6 +7,7 @@ import com.happiday.Happi_Day.domain.repository.ArtistRepository;
 import com.happiday.Happi_Day.domain.repository.TeamRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,16 +18,27 @@ import java.util.stream.Collectors;
 @Setter
 @Builder
 public class EventCreateDto {
-    private final ArtistRepository artistRepository;
-    private final TeamRepository teamRepository;
+
+    public EventCreateDto() {
+    }
+
+    public EventCreateDto(String title, LocalDateTime startTime, LocalDateTime endTime, String description, String location, List<String> artists, List<String> teams) {
+        this.title = title;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+        this.location = location;
+        this.artists = artists;
+        this.teams = teams;
+    }
 
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
 
-    @NotBlank(message = "이벤트 시작일을 입력해주세요.")
+    @NotNull(message = "이벤트 시작일을 입력해주세요.")
     private LocalDateTime startTime;
 
-    @NotBlank(message = "이벤트 종료일을 입력해주세요.")
+    @NotNull(message = "이벤트 종료일을 입력해주세요.")
     private LocalDateTime endTime;
 
     @NotBlank(message = "내용을 입력해주세요.")
@@ -35,34 +47,21 @@ public class EventCreateDto {
     @NotBlank(message = "장소를 입력해주세요.")
     private String location;
 
-    private String thumbnailUrl;
+    private List<String> artists;
 
-    private String imageUrl;
+    private List<String> teams;
 
-    @NotBlank(message = "아티스트를 입력해주세요")
-    private List<Artist> artists;
-
-    private List<Team> teams;
-
-    public Event toEntity(String defaultThumbnailUrl, String defaultImageUrl) {
-        // TODO - defaultImageUrl 추가
-        if (thumbnailUrl == null || thumbnailUrl.isEmpty()) {
-            thumbnailUrl = defaultThumbnailUrl;
-        }
-        if (imageUrl == null || imageUrl.isEmpty()) {
-            imageUrl = defaultImageUrl;
-        }
-
-        return Event.builder()
-                .title(title)
-                .imageUrl(imageUrl)
-                .thumbnailUrl(thumbnailUrl)
-                .artists(artists)
-                .teams(teams)
-                .startTime(startTime)
-                .endTime(endTime)
-                .description(description)
-                .location(location)
-                .build();
-    }
+//    public Event toEntity() {
+//        return Event.builder()
+//                .title(title)
+//                .imageUrl(imageUrl)
+//                .thumbnailUrl(thumbnailUrl)
+//                .artists(artists)
+//                .teams(teams)
+//                .startTime(startTime)
+//                .endTime(endTime)
+//                .description(description)
+//                .location(location)
+//                .build();
+//    }
 }

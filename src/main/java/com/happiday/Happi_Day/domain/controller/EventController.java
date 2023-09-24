@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,23 +27,26 @@ public class EventController {
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<EventResponseDto> createEvent(
             @Valid @RequestPart(value = "event") EventCreateDto eventCreateDto,
-            @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
-            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
+            @RequestPart(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
             ){
         String username = SecurityUtils.getCurrentUsername();
         EventResponseDto responseDto = eventService.createEvent(eventCreateDto, thumbnailFile, imageFile, username);
+        log.info("이벤트 게시글 작성");
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<EventResponseDto> readEvent(@PathVariable Long eventId){
         EventResponseDto responseDto = eventService.readEvent(eventId);
+        log.info("이벤트 단일 조회");
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<EventListResponseDto>> readEvents(){
         List<EventListResponseDto> responseDtoList = eventService.readEvents();
+        log.info("이벤트 리스트 조회");
         return new ResponseEntity<>(responseDtoList, HttpStatus.OK);
     }
 
@@ -61,8 +63,18 @@ public class EventController {
     }
 
     @DeleteMapping("/{eventId}")
-    public ResponseEntity<String> deleteArtlst(@PathVariable Long eventId,Authentication authentication){
-        eventService.deleteEvent(eventId, authentication.getName());
-        return new ResponseEntity<>("삭제 성공", HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> deleteEvent(@PathVariable Long eventId){
+        String username = SecurityUtils.getCurrentUsername();
+        eventService.deleteEvent(eventId, username);
+        return ResponseEntity.ok("삭제 성공");
     }
+
+    @PostMapping("/{eventId}/like")
+    public ResponseEntity<String> likeEvent(@PathVariable Long eventId){
+        String username = SecurityUtils.getCurrentUsername();
+        String response = eventService.likeEvent(eventId, username);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
 }

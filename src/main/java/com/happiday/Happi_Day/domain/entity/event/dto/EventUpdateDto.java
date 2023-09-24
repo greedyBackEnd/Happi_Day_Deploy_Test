@@ -16,6 +16,20 @@ import java.util.List;
 @Builder
 public class EventUpdateDto {
 
+    public EventUpdateDto() {
+    }
+    public EventUpdateDto(String title, LocalDateTime startTime, LocalDateTime endTime, String description, String location, String thumbnailUrl, String imageUrl, List<String> artists, List<String> teams) {
+        this.title = title;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.description = description;
+        this.location = location;
+        this.thumbnailUrl = thumbnailUrl;
+        this.imageUrl = imageUrl;
+        this.artists = artists;
+        this.teams = teams;
+    }
+
     private String title;
 
     private LocalDateTime startTime;
@@ -30,22 +44,20 @@ public class EventUpdateDto {
 
     private String imageUrl;
 
-    private List<Artist> artists;
+    private List<String> artists;
 
-    private List<Team> teams;
+    private List<String> teams;
 
-    public Event toEntity() {
-
-        return Event.builder()
-                .title(title)
-                .imageUrl(imageUrl)
-                .thumbnailUrl(thumbnailUrl)
-                .artists(artists)
-                .teams(teams)
-                .startTime(startTime)
-                .endTime(endTime)
-                .description(description)
-                .location(location)
-                .build();
-    }
+//    public Event toEntity() {
+//
+//        return Event.builder()
+//                .title(title)
+//                .artists(artists)
+//                .teams(teams)
+//                .startTime(startTime)
+//                .endTime(endTime)
+//                .description(description)
+//                .location(location)
+//                .build();
+//    }
 }

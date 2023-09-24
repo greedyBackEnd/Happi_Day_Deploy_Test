@@ -7,11 +7,13 @@ import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,7 +24,7 @@ public class Event extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "event_id")
+//    @Column(name = "event_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -80,6 +82,15 @@ public class Event extends BaseEntity {
     )
     private List<Artist> artists = new ArrayList<>();
 
+    @Column
+    private String ectTeams;
+
+    @Column
+    private String ectArtists;
+
+
+
+
     public void update(Event updateEvent) {
         if (updateEvent.getTitle() != null &&  !updateEvent.getTitle().isEmpty()) {
             this.title = updateEvent.getTitle();
@@ -104,5 +115,17 @@ public class Event extends BaseEntity {
             this.artists.clear();
             this.artists = updateEvent.getArtists();
         }
+        if (updateEvent.getEctArtists() != null) {
+            log.info("아티스트 + : " + updateEvent.getEctArtists());
+            this.ectArtists = updateEvent.getEctArtists();
+        }
+        if (updateEvent.getEctTeams() != null) {
+            log.info("팀 + : " + updateEvent.getEctTeams());
+            this.ectTeams = updateEvent.getEctTeams();
+        }
+    }
+
+    public int getLikeCount() {
+        return likes.size();
     }
 }
