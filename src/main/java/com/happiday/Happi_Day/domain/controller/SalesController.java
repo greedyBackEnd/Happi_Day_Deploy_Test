@@ -59,6 +59,16 @@ public class SalesController {
         return new ResponseEntity<>(responseSales, HttpStatus.OK);
     }
 
+    // TODO 판매글 삭제
+    @DeleteMapping("/{categoryId}/{salesId}")
+    public ResponseEntity<String> deleteSales(
+            @PathVariable("categoryId") Long categoryId,
+            @PathVariable("salesId") Long salesId){
+        String username = SecurityUtils.getCurrentUsername();
+        salesService.deleteSales(categoryId, salesId, username);
+        return new ResponseEntity<>("판매글 삭제 성공", HttpStatus.OK);
+    }
+
 //    // TODO 판매글 product 삭제
 //    @DeleteMapping(value = "{salesId}/product",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
 //    public void deleteProduct(

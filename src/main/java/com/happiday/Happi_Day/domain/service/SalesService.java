@@ -137,4 +137,21 @@ public class SalesService {
         return ReadOneSalesDto.fromEntity(sales, dtoList);
     }
 
+    @Transactional
+    public void deleteSales(Long categoryId, Long salesId, String username){
+        SalesCategory category = salesCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Sales sales = salesRepository.findById(salesId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(user != sales.getUsers()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
+        productRepository.deleteAllBySales(sales);
+        salesRepository.deleteById(salesId);
+    }
+
+
 }
