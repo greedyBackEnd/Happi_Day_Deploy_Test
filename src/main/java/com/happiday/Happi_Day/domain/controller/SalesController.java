@@ -1,6 +1,7 @@
 package com.happiday.Happi_Day.domain.controller;
 
 import com.happiday.Happi_Day.domain.entity.product.dto.ReadListSalesDto;
+import com.happiday.Happi_Day.domain.entity.product.dto.ReadOneSalesDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.WriteSalesDto;
 import com.happiday.Happi_Day.domain.service.SalesService;
 import com.happiday.Happi_Day.utils.SecurityUtils;
@@ -30,11 +31,41 @@ public class SalesController {
         salesService.createSales(id, requestDto, thumbnailImage, username);
     }
 
-    // TODO 판매글 목록 조회
+    // 판매글 목록 조회
     @GetMapping("/{categoryId}")
     public ResponseEntity<List<ReadListSalesDto>> readSalesList(
-            @PathVariable("categoryId") Long id){
+            @PathVariable("categoryId") Long id) {
         List<ReadListSalesDto> responseSalesList = salesService.readSalesList(id);
         return new ResponseEntity<>(responseSalesList, HttpStatus.OK);
     }
+
+    // 판매글 상세 조회
+    @GetMapping("/{categoryId}/{salesId}")
+    public ResponseEntity<ReadOneSalesDto> readSalesOne(
+            @PathVariable("categoryId") Long categoryId,
+            @PathVariable("salesId") Long salesId) {
+        ReadOneSalesDto responseSales = salesService.readSalesOne(categoryId,salesId);
+        return new ResponseEntity<>(responseSales, HttpStatus.OK);
+    }
+
+    // 판매글 수정
+    @PutMapping(value = "/{salesId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ReadOneSalesDto> updateSales(
+            @PathVariable("salesId") Long salesId,
+            @RequestPart(name = "sale") WriteSalesDto requestDto,
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) {
+        String username = SecurityUtils.getCurrentUsername();
+        ReadOneSalesDto responseSales =  salesService.updateSales(salesId, requestDto, thumbnailImage, username);
+        return new ResponseEntity<>(responseSales, HttpStatus.OK);
+    }
+
+//    // TODO 판매글 product 삭제
+//    @DeleteMapping(value = "{salesId}/product",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+//    public void deleteProduct(
+//            @PathVariable("salesId") Long salesId,
+//            @RequestPart(name="deleteProducts") Map<String, Integer> deleteList){
+//        salesService.deleteProducts(salesId, deleteList);
+//    }
+
+
 }

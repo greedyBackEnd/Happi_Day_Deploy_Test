@@ -14,9 +14,9 @@ public class WriteSalesDto {
     private String name;
     private String description;
     private String artists;
-    private String hashtags;
     private Map<String, Integer> products;
 
+    // TODO artist 추가예정
     public Sales toEntity(){
         return Sales.builder()
                 .name(name)

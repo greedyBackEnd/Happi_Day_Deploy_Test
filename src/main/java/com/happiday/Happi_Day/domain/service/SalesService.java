@@ -1,8 +1,7 @@
 package com.happiday.Happi_Day.domain.service;
 
 import com.happiday.Happi_Day.domain.entity.product.*;
-import com.happiday.Happi_Day.domain.entity.product.dto.ReadListSalesDto;
-import com.happiday.Happi_Day.domain.entity.product.dto.WriteSalesDto;
+import com.happiday.Happi_Day.domain.entity.product.dto.*;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import com.happiday.Happi_Day.domain.repository.ProductRepository;
 import com.happiday.Happi_Day.domain.repository.SalesCategoryRepository;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.security.sasl.SaslException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,12 +55,7 @@ public class SalesService {
 
         // products 저장
         dto.getProducts().forEach((key, value)->{
-            Product newProduct = Product.builder()
-                    .sales(newSalesArticle)
-                    .productStatus(ProductStatus.ON_SALE)
-                    .name(key)
-                    .price(value)
-                    .build();
+            Product newProduct = Product.createProduct(key, value, newSalesArticle);
             productList.add(newProduct);
             productRepository.save(newProduct);
         });
@@ -85,4 +78,63 @@ public class SalesService {
 
         return responseSalesList;
     }
+
+    public ReadOneSalesDto readSalesOne(Long categoryId, Long salesId){
+        SalesCategory category = salesCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Sales sales = salesRepository.findById(salesId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        List<ReadProductDto> dtoList = new ArrayList<>();
+        for (Product product: sales.getProducts()) {
+            dtoList.add(ReadProductDto.fromEntity(product));
+        }
+
+        return ReadOneSalesDto.fromEntity(sales, dtoList);
+    }
+
+    @Transactional
+    public ReadOneSalesDto updateSales(Long salesId, WriteSalesDto dto, MultipartFile img, String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Sales sales = salesRepository.findById(salesId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // user 확인
+        if(user != sales.getUsers()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
+        // TODO 이미지 저장예정
+
+        // TODO 아티스트 추가예정
+
+        sales.updateSales(dto.toEntity());
+
+        Sales newSalesArticle = salesRepository.save(sales);
+
+        // TODO product 추가
+        if(dto.getProducts() != null){
+            List<Product> productList = sales.getProducts();
+
+            dto.getProducts().forEach((key, value)->{
+                Product newProduct = Product.createProduct(key, value, newSalesArticle);
+                productList.add(newProduct);
+                productRepository.save(newProduct);
+            });
+
+            // 판매글에 products 등록
+            sales.updateProduct(productList);
+            salesRepository.save(sales);
+        }
+        List<ReadProductDto> dtoList = new ArrayList<>();
+        log.info(sales.getProducts().toString());
+
+        for (Product product: sales.getProducts()) {
+            dtoList.add(ReadProductDto.fromEntity(product));
+        }
+
+        return ReadOneSalesDto.fromEntity(sales, dtoList);
+    }
+
 }

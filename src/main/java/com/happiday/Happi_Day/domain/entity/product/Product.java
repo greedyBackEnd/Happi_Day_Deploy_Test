@@ -32,4 +32,14 @@ public class Product {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
+
+    public static Product createProduct(String key, int value, Sales newSales){
+        Product newProduct = Product.builder()
+                .sales(newSales)
+                .productStatus(ProductStatus.ON_SALE)
+                .name(key)
+                .price(value)
+                .build();
+        return newProduct;
+    }
 }
