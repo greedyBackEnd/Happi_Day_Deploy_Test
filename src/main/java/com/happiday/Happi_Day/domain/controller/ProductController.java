@@ -39,7 +39,7 @@ public class ProductController {
 
     // product 삭제
     @DeleteMapping("{productId}")
-    public ResponseEntity<String> deleteProduct경(
+    public ResponseEntity<String> deleteProduct(
             @PathVariable("salesId") Long salesId,
             @PathVariable("productId") Long productId){
         String username = SecurityUtils.getCurrentUsername();
