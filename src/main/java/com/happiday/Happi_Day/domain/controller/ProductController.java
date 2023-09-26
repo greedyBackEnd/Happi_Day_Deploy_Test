@@ -1,5 +1,6 @@
 package com.happiday.Happi_Day.domain.controller;
 
+import com.happiday.Happi_Day.domain.entity.product.dto.CreateProductDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.ReadProductDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.UpdateProductDto;
 import com.happiday.Happi_Day.domain.service.ProductService;
@@ -14,6 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+
+    // product 생성
+    @PostMapping("/{salesId}")
+    public ResponseEntity<ReadProductDto> createProduct(
+            @PathVariable("salesId") Long salesId,
+            @RequestPart(name="product")CreateProductDto productDto){
+        String username = SecurityUtils.getCurrentUsername();
+        ReadProductDto response = productService.createProduct(salesId, productDto, username);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
     // product 수정
     @PutMapping("/{salesId}/{productId}")
