@@ -11,13 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/products")
+@RequestMapping("/api/v1/{salesId}/products")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
 
     // product 생성
-    @PostMapping("/{salesId}")
+    @PostMapping()
     public ResponseEntity<ReadProductDto> createProduct(
             @PathVariable("salesId") Long salesId,
             @RequestPart(name="product")CreateProductDto productDto){
@@ -27,7 +27,7 @@ public class ProductController {
     }
 
     // product 수정
-    @PutMapping("/{salesId}/{productId}")
+    @PutMapping("/{productId}")
     public ResponseEntity<ReadProductDto> updateProduct(
             @PathVariable("salesId") Long salesId,
             @PathVariable("productId") Long productId,
@@ -35,5 +35,15 @@ public class ProductController {
         String username = SecurityUtils.getCurrentUsername();
         ReadProductDto response = productService.updateProduct(salesId, productId, productDto, username);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    // product 삭제
+    @DeleteMapping("{productId}")
+    public ResponseEntity<String> deleteProduct경(
+            @PathVariable("salesId") Long salesId,
+            @PathVariable("productId") Long productId){
+        String username = SecurityUtils.getCurrentUsername();
+        productService.deleteProduct(salesId, productId, username);
+        return new ResponseEntity<>("삭제 완료되었습니다.",HttpStatus.OK);
     }
 }

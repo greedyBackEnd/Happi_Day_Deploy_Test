@@ -57,4 +57,22 @@ public class ProductService {
 
         return ReadProductDto.fromEntity(product);
     }
+
+    @Transactional
+    public void deleteProduct(Long salesId, Long productId, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Sales sales = salesRepository.findById(salesId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(!sales.getProducts().contains(product)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        // user 확인
+        if(!user.equals(sales.getUsers())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
+        productRepository.deleteById(productId);
+    }
 }
