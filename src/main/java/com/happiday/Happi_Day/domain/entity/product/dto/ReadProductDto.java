@@ -7,12 +7,14 @@ import lombok.Data;
 @Data
 @Builder
 public class ReadProductDto {
+    private Long id;
     private String name;
     private int price;
     private String productStatus;
 
     public static ReadProductDto fromEntity(Product product){
         ReadProductDto dto = ReadProductDto.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
                 .productStatus(product.getProductStatus().getValue())

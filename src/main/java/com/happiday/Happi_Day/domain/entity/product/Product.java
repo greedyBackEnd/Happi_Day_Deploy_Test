@@ -27,7 +27,7 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private int price;
+    private Integer price;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -41,5 +41,11 @@ public class Product {
                 .price(value)
                 .build();
         return newProduct;
+    }
+
+    public void update(Product product){
+        if(product.getName() != null) this.name = product.getName();
+        if(product.getPrice() != null) this.price = product.getPrice();
+        if(product.getProductStatus() != null) this.productStatus = product.getProductStatus();
     }
 }

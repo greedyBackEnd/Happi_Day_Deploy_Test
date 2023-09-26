@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -60,7 +59,7 @@ public class SalesController {
         return new ResponseEntity<>(responseSales, HttpStatus.OK);
     }
 
-    // TODO 판매글 삭제
+    // 판매글 삭제
     @DeleteMapping("/{categoryId}/{salesId}")
     public ResponseEntity<String> deleteSales(
             @PathVariable("categoryId") Long categoryId,
@@ -69,14 +68,4 @@ public class SalesController {
         salesService.deleteSales(categoryId, salesId, username);
         return new ResponseEntity<>("판매글 삭제 성공", HttpStatus.OK);
     }
-
-//    // TODO 판매글 product 삭제
-//    @DeleteMapping(value = "{salesId}/product",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-//    public void deleteProduct(
-//            @PathVariable("salesId") Long salesId,
-//            @RequestPart(name="deleteProducts") Map<String, Integer> deleteList){
-//        salesService.deleteProducts(salesId, deleteList);
-//    }
-
-
 }
