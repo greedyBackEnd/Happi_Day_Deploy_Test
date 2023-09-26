@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -31,7 +30,7 @@ public class SalesService {
 
     // TODO 이미지 저장 예정
     @Transactional
-    public void createSales(Long categoryId, WriteSalesDto dto, MultipartFile image, String username){
+    public ReadOneSalesDto createSales(Long categoryId, WriteSalesDto dto, MultipartFile image, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -39,7 +38,6 @@ public class SalesService {
         SalesCategory category = salesCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        log.info(dto.getProducts().toString());
         List<Product> productList = new ArrayList<>();
 
         Sales newSales = Sales.builder()
@@ -63,6 +61,14 @@ public class SalesService {
         // 판매글에 products 등록
         newSales.updateProduct(productList);
         salesRepository.save(newSales);
+
+        List<ReadProductDto> dtoList = new ArrayList<>();
+        for (Product product: newSales.getProducts()) {
+            dtoList.add(ReadProductDto.fromEntity(product));
+        }
+
+        ReadOneSalesDto response = ReadOneSalesDto.fromEntity(newSales,dtoList);
+        return response;
     }
 
     public List<ReadListSalesDto> readSalesList(Long categoryId){
@@ -95,7 +101,7 @@ public class SalesService {
     }
 
     @Transactional
-    public ReadOneSalesDto updateSales(Long salesId, WriteSalesDto dto, MultipartFile img, String username){
+    public ReadOneSalesDto updateSales(Long salesId, UpdateSalesDto dto, MultipartFile img, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -103,37 +109,19 @@ public class SalesService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         // user 확인
-        if(user != sales.getUsers()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        if(!user.equals(sales.getUsers())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         // TODO 이미지 저장예정
 
         // TODO 아티스트 추가예정
 
         sales.updateSales(dto.toEntity());
+        salesRepository.save(sales);
 
-        Sales newSalesArticle = salesRepository.save(sales);
-
-        // TODO product 추가
-        if(dto.getProducts() != null){
-            List<Product> productList = sales.getProducts();
-
-            dto.getProducts().forEach((key, value)->{
-                Product newProduct = Product.createProduct(key, value, newSalesArticle);
-                productList.add(newProduct);
-                productRepository.save(newProduct);
-            });
-
-            // 판매글에 products 등록
-            sales.updateProduct(productList);
-            salesRepository.save(sales);
-        }
         List<ReadProductDto> dtoList = new ArrayList<>();
-        log.info(sales.getProducts().toString());
-
         for (Product product: sales.getProducts()) {
             dtoList.add(ReadProductDto.fromEntity(product));
         }
-
         return ReadOneSalesDto.fromEntity(sales, dtoList);
     }
 
@@ -147,7 +135,7 @@ public class SalesService {
         Sales sales = salesRepository.findById(salesId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if(user != sales.getUsers()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        if(!user.equals(sales.getUsers())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         productRepository.deleteAllBySales(sales);
         salesRepository.deleteById(salesId);

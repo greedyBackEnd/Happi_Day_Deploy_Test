@@ -2,6 +2,7 @@ package com.happiday.Happi_Day.domain.controller;
 
 import com.happiday.Happi_Day.domain.entity.product.dto.ReadListSalesDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.ReadOneSalesDto;
+import com.happiday.Happi_Day.domain.entity.product.dto.UpdateSalesDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.WriteSalesDto;
 import com.happiday.Happi_Day.domain.service.SalesService;
 import com.happiday.Happi_Day.utils.SecurityUtils;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,12 +23,13 @@ public class SalesController {
 
     // 판매글 작성
     @PostMapping(value = "/{categoryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public void createSales(
+    public ResponseEntity<ReadOneSalesDto> createSales(
             @PathVariable("categoryId") Long id,
             @RequestPart(name = "sale") WriteSalesDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage){
         String username = SecurityUtils.getCurrentUsername();
-        salesService.createSales(id, requestDto, thumbnailImage, username);
+        ReadOneSalesDto response = salesService.createSales(id, requestDto, thumbnailImage, username);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // 판매글 목록 조회
@@ -52,14 +53,14 @@ public class SalesController {
     @PutMapping(value = "/{salesId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReadOneSalesDto> updateSales(
             @PathVariable("salesId") Long salesId,
-            @RequestPart(name = "sale") WriteSalesDto requestDto,
+            @RequestPart(name = "sale") UpdateSalesDto requestDto,
             @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) {
         String username = SecurityUtils.getCurrentUsername();
         ReadOneSalesDto responseSales =  salesService.updateSales(salesId, requestDto, thumbnailImage, username);
         return new ResponseEntity<>(responseSales, HttpStatus.OK);
     }
 
-    // TODO 판매글 삭제
+    // 판매글 삭제
     @DeleteMapping("/{categoryId}/{salesId}")
     public ResponseEntity<String> deleteSales(
             @PathVariable("categoryId") Long categoryId,
@@ -68,14 +69,4 @@ public class SalesController {
         salesService.deleteSales(categoryId, salesId, username);
         return new ResponseEntity<>("판매글 삭제 성공", HttpStatus.OK);
     }
-
-//    // TODO 판매글 product 삭제
-//    @DeleteMapping(value = "{salesId}/product",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-//    public void deleteProduct(
-//            @PathVariable("salesId") Long salesId,
-//            @RequestPart(name="deleteProducts") Map<String, Integer> deleteList){
-//        salesService.deleteProducts(salesId, deleteList);
-//    }
-
-
 }
