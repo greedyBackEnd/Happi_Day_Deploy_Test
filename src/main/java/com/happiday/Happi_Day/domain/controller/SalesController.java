@@ -23,12 +23,13 @@ public class SalesController {
 
     // 판매글 작성
     @PostMapping(value = "/{categoryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public void createSales(
+    public ResponseEntity<ReadOneSalesDto> createSales(
             @PathVariable("categoryId") Long id,
             @RequestPart(name = "sale") WriteSalesDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage){
         String username = SecurityUtils.getCurrentUsername();
-        salesService.createSales(id, requestDto, thumbnailImage, username);
+        ReadOneSalesDto response = salesService.createSales(id, requestDto, thumbnailImage, username);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // 판매글 목록 조회

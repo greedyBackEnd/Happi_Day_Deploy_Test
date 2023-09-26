@@ -24,13 +24,13 @@ public class ArticleController {
 
     // 글 작성
     @PostMapping(value = "/{categoryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> writeArticle(
+    public ResponseEntity<ReadOneArticleDto> writeArticle(
             @PathVariable("categoryId") Long id,
             @RequestPart(name = "article") WriteArticleDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage){
         String username = SecurityUtils.getCurrentUsername();
-        articleService.writeArticle(id, requestDto, thumbnailImage, username);
-        return new ResponseEntity<>("글이 게시되었습니다.",HttpStatus.CREATED);
+        ReadOneArticleDto response = articleService.writeArticle(id, requestDto, thumbnailImage, username);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // 글 상세 조회
@@ -54,7 +54,7 @@ public class ArticleController {
     public ResponseEntity<ReadOneArticleDto> updateArticle(
             @PathVariable("articleId") Long articleId,
             @RequestPart(name = "article") WriteArticleDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) throws IOException {
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage){
         ReadOneArticleDto responseArticle = articleService.updateArticle(articleId, requestDto, thumbnailImage);
         return new ResponseEntity<>(responseArticle, HttpStatus.OK);
     }
@@ -62,7 +62,7 @@ public class ArticleController {
     // 글 삭제
     @DeleteMapping("/{articleId}")
     public ResponseEntity<String> deleteArticle(
-            @PathVariable("articleId") Long articleId){
+            @PathVariable("articleId") Long articleId) {
         articleService.deleteArticle(articleId);
         return new ResponseEntity<>("삭제 성공", HttpStatus.OK);
     }
@@ -70,7 +70,7 @@ public class ArticleController {
     // 글 좋아요
     @PostMapping("/{articleId}/like")
     public ResponseEntity<String> likeArticle(
-            @PathVariable("articleId") Long articleId){
+            @PathVariable("articleId") Long articleId) {
         String username = SecurityUtils.getCurrentUsername();
         String response = articleService.likeArticle(articleId, username);
         return new ResponseEntity<>(response, HttpStatus.OK);

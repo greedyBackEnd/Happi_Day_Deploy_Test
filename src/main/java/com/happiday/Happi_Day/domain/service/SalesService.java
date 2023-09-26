@@ -17,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -31,7 +30,7 @@ public class SalesService {
 
     // TODO 이미지 저장 예정
     @Transactional
-    public void createSales(Long categoryId, WriteSalesDto dto, MultipartFile image, String username){
+    public ReadOneSalesDto createSales(Long categoryId, WriteSalesDto dto, MultipartFile image, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -39,7 +38,6 @@ public class SalesService {
         SalesCategory category = salesCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        log.info(dto.getProducts().toString());
         List<Product> productList = new ArrayList<>();
 
         Sales newSales = Sales.builder()
@@ -63,6 +61,14 @@ public class SalesService {
         // 판매글에 products 등록
         newSales.updateProduct(productList);
         salesRepository.save(newSales);
+
+        List<ReadProductDto> dtoList = new ArrayList<>();
+        for (Product product: newSales.getProducts()) {
+            dtoList.add(ReadProductDto.fromEntity(product));
+        }
+
+        ReadOneSalesDto response = ReadOneSalesDto.fromEntity(newSales,dtoList);
+        return response;
     }
 
     public List<ReadListSalesDto> readSalesList(Long categoryId){
@@ -103,7 +109,7 @@ public class SalesService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         // user 확인
-        if(user != sales.getUsers()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        if(!user.equals(sales.getUsers())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         // TODO 이미지 저장예정
 
@@ -147,7 +153,7 @@ public class SalesService {
         Sales sales = salesRepository.findById(salesId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if(user != sales.getUsers()) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        if(!user.equals(sales.getUsers())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         productRepository.deleteAllBySales(sales);
         salesRepository.deleteById(salesId);

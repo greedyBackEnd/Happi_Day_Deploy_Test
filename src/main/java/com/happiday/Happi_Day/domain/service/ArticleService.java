@@ -31,7 +31,7 @@ public class ArticleService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void writeArticle(Long categoryId, WriteArticleDto dto, MultipartFile image, String username) throws IOException {
+    public ReadOneArticleDto writeArticle(Long categoryId, WriteArticleDto dto, MultipartFile image, String username){
         // user 확인
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -63,16 +63,21 @@ public class ArticleService {
                 .content(dto.getContent())
                 .eventAddress(dto.getEventAddress())
                 .hashtags(hashtagList)
+                .likeUsers(new ArrayList<>())
+                .comments(new ArrayList<>())
                 .build();
 
         // 썸네일 이미지 저장
-        if (image != null) {
-            Files.createDirectories(Path.of(String.format("image/%d", newArticle.getId())));
-            Path path = Path.of(String.format("image/%d/thumbnail.png", newArticle.getId()));
+//        if (image != null) {
+//            Files.createDirectories(Path.of(String.format("image/%d", newArticle.getId())));
+//            Path path = Path.of(String.format("image/%d/thumbnail.png", newArticle.getId()));
+//
+//            image.transferTo(path);
+//        }
 
-            image.transferTo(path);
-        }
         articleRepository.save(newArticle);
+        ReadOneArticleDto responseArticle = ReadOneArticleDto.fromEntity(newArticle);
+        return responseArticle;
     }
 
 
@@ -102,7 +107,7 @@ public class ArticleService {
 
     // 글 수정
     @Transactional
-    public ReadOneArticleDto updateArticle(Long articleId, WriteArticleDto dto, MultipartFile image) throws IOException {
+    public ReadOneArticleDto updateArticle(Long articleId, WriteArticleDto dto, MultipartFile image){
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
