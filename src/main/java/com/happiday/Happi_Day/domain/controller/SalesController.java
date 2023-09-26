@@ -2,6 +2,7 @@ package com.happiday.Happi_Day.domain.controller;
 
 import com.happiday.Happi_Day.domain.entity.product.dto.ReadListSalesDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.ReadOneSalesDto;
+import com.happiday.Happi_Day.domain.entity.product.dto.UpdateSalesDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.WriteSalesDto;
 import com.happiday.Happi_Day.domain.service.SalesService;
 import com.happiday.Happi_Day.utils.SecurityUtils;
@@ -52,7 +53,7 @@ public class SalesController {
     @PutMapping(value = "/{salesId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReadOneSalesDto> updateSales(
             @PathVariable("salesId") Long salesId,
-            @RequestPart(name = "sale") WriteSalesDto requestDto,
+            @RequestPart(name = "sale") UpdateSalesDto requestDto,
             @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) {
         String username = SecurityUtils.getCurrentUsername();
         ReadOneSalesDto responseSales =  salesService.updateSales(salesId, requestDto, thumbnailImage, username);

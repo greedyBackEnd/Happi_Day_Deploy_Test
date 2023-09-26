@@ -76,5 +76,6 @@ public class Sales extends BaseEntity {
         if(sales.getDescription() != null) this.description = sales.getDescription();
         if(sales.getArtists() != null) this.artists = sales.getArtists();
         if(sales.getProducts() != null) this.products = sales.getProducts();
+        if(sales.getSalesStatus() != null) this.salesStatus = sales.getSalesStatus();
     }
 }

@@ -101,7 +101,7 @@ public class SalesService {
     }
 
     @Transactional
-    public ReadOneSalesDto updateSales(Long salesId, WriteSalesDto dto, MultipartFile img, String username){
+    public ReadOneSalesDto updateSales(Long salesId, UpdateSalesDto dto, MultipartFile img, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -116,30 +116,12 @@ public class SalesService {
         // TODO 아티스트 추가예정
 
         sales.updateSales(dto.toEntity());
+        salesRepository.save(sales);
 
-        Sales newSalesArticle = salesRepository.save(sales);
-
-        // TODO product 추가
-        if(dto.getProducts() != null){
-            List<Product> productList = sales.getProducts();
-
-            dto.getProducts().forEach((key, value)->{
-                Product newProduct = Product.createProduct(key, value, newSalesArticle);
-                productList.add(newProduct);
-                productRepository.save(newProduct);
-            });
-
-            // 판매글에 products 등록
-            sales.updateProduct(productList);
-            salesRepository.save(sales);
-        }
         List<ReadProductDto> dtoList = new ArrayList<>();
-        log.info(sales.getProducts().toString());
-
         for (Product product: sales.getProducts()) {
             dtoList.add(ReadProductDto.fromEntity(product));
         }
-
         return ReadOneSalesDto.fromEntity(sales, dtoList);
     }
 
