@@ -7,12 +7,12 @@ import lombok.Data;
 @Data
 @Builder
 public class ReadListSalesDto {
-    // TODO 썸네일 이미지 추가예정, 좋아요 개수 추가예정
+    // TODO 썸네일 이미지 추가예정
     private Long id;
     private String salesCategory;
     private String name;
     private String user;
-//    private int likeNum;
+    private int likeNum;
 
     public static ReadListSalesDto fromEntity(Sales sales){
         return ReadListSalesDto.builder()
@@ -20,6 +20,7 @@ public class ReadListSalesDto {
                 .salesCategory(sales.getSalesCategory().getName())
                 .name(sales.getName())
                 .user(sales.getUsers().getNickname())
+                .likeNum(sales.getSalesLikesUsers().size())
                 .build();
     }
 }
