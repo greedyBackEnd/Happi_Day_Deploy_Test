@@ -69,4 +69,13 @@ public class SalesController {
         salesService.deleteSales(categoryId, salesId, username);
         return new ResponseEntity<>("판매글 삭제 성공", HttpStatus.OK);
     }
+
+    // 판매글 찜하기
+    @PostMapping("/{salesId}/like")
+    public ResponseEntity<String> likeSales(
+            @PathVariable("salesId") Long salesId){
+        String username = SecurityUtils.getCurrentUsername();
+        String response = salesService.likeSales(salesId, username);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
