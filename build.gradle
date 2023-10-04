@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.1'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id 'jacoco'
 }
 
 group = 'com.happiday'
@@ -55,6 +56,54 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
+
+// JaCoCo 설정
+jacoco {
+	toolVersion = "0.8.9"
+	reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
+test {
+	finalizedBy jacocoTestReport // 테스트 후 보고서가 항상 생성되도록 설정
+	jacoco {
+		destinationFile = layout.buildDirectory.file('jacoco/jacocoTest.exec').get().asFile
+		classDumpDir = layout.buildDirectory.dir('jacoco/classpathdumps').get().asFile
+	}
+}
+
+jacocoTestReport {
+	dependsOn test // 보고서를 생성하기 전에 테스트가 실행되어야 함
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+	}
+}
+
+// 코드 커버리지 요구 사항 검증 (선택 사항, 필요에 따라 추가 및 수정)
+jacocoTestCoverageVerification {
+	violationRules {
+		// 기본 규칙: 전체 프로젝트 코드의 라인 커버리지는 0.5 이상
+		rule {
+			limit {
+				enabled  = false
+				counter = 'LINE'
+				minimum = 0.5
+			}
+		}
+		// 서비스 레이어 규칙: 서비스 레이어 코드의 라인 커버리지는 0.7 이상
+		rule {
+			element = 'PACKAGE'
+			includes = ['com.happiday.Happi_Day.domain.service.*']
+			limit {
+				counter = 'LINE'
+				minimum = 0.7
+			}
+		}
+	}
+}
+
+check.dependsOn jacocoTestCoverageVerification
 
 tasks.named('test') {
 	useJUnitPlatform()
