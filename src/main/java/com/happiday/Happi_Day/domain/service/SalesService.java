@@ -116,7 +116,7 @@ public class SalesService {
         // TODO 아티스트 추가예정
 
         sales.updateSales(dto.toEntity());
-        salesRepository.save(sales);
+//        salesRepository.save(sales);
 
         List<ReadProductDto> dtoList = new ArrayList<>();
         for (Product product: sales.getProducts()) {
@@ -141,5 +141,25 @@ public class SalesService {
         salesRepository.deleteById(salesId);
     }
 
+    @Transactional
+    public String likeSales(Long salesId, String username) {
+        Sales sales = salesRepository.findById(salesId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        String resposne = "";
+        if(sales.getSalesLikesUsers().contains(user)){
+            sales.getSalesLikesUsers().remove(user);
+            user.getSalesLikes().remove(sales);
+            resposne="찜하기가 취소되었습니다. 현재 찜하기 수 : "+ sales.getSalesLikesUsers().size();
+        }else{
+            sales.getSalesLikesUsers().add(user);
+            user.getSalesLikes().add(sales);
+            resposne = "찜하기를 눌렀습니다. 현재 찜하기 수 : "+sales.getSalesLikesUsers().size();
+        }
+//        salesRepository.save(sales)
+        return resposne;
+    }
 }

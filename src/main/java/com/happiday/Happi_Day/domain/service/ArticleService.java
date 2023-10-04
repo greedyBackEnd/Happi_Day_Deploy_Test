@@ -160,7 +160,7 @@ public class ArticleService {
         if(article.getLikeUsers().contains(user)){
             article.getLikeUsers().remove(user);
             user.getArticleLikes().remove(article);
-            response = "이미 좋아요를 눌렀습니다. 현재 좋아요 수 : "+article.getLikeUsers().size();
+            response = "좋아요가 취소되었습니다. 현재 좋아요 수 : "+article.getLikeUsers().size();
         }else{
             article.getLikeUsers().add(user);
             user.getArticleLikes().add(article);

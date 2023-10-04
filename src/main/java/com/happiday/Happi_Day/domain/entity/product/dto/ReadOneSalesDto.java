@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Builder
 public class ReadOneSalesDto {
-    // TODO 이미지 추가예정, 찜하기 개수 추가예정
+    // TODO 이미지 추가예정
     private Long id;
     private String salesCategory;
     private String user;
@@ -17,7 +17,7 @@ public class ReadOneSalesDto {
     private String description;
     private String salesStatus;
     private List<ReadProductDto> products;
-//    private int likeNum;
+    private int likeNum;
 
     public static ReadOneSalesDto fromEntity(Sales sales, List<ReadProductDto> productList){
         return ReadOneSalesDto.builder()
@@ -28,6 +28,7 @@ public class ReadOneSalesDto {
                 .description(sales.getDescription())
                 .salesStatus(sales.getSalesStatus().getValue())
                 .products(productList)
+                .likeNum(sales.getSalesLikesUsers().size())
                 .build();
     }
 }
