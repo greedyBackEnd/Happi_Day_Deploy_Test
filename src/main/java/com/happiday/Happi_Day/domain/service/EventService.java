@@ -272,4 +272,33 @@ public class EventService {
         eventRepository.save(event);
         return response + " / 좋아요 개수 : " + event.getLikeCount();
     }
+
+    @Transactional
+    public String joinEvent(Long eventId, String username) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        boolean isJoined = event.getJoinList().contains(user);
+
+        log.info(String.valueOf(isJoined));
+        String response = "";
+        if (isJoined) {
+            // 이미 참여한 경우, 취소
+            user.getEventJoinList().remove(event);
+            event.getJoinList().remove(user);
+            response = " 이벤트 참여 취소";
+        } else {
+            // 참여하지 않은 경우, 참여
+            user.getEventJoinList().add(event);
+            event.getJoinList().add(user);
+            response = " 이벤트 참여";
+        }
+
+        eventRepository.save(event);
+        return event.getTitle() + response;
+    }
 }
