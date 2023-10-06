@@ -8,7 +8,7 @@
         <ul>
             <li v-for="room in roomList" :key="room.roomId">
                 {{ room.receiver }}
-                <button @click="goToChatRoom(room.roomId)">채팅하기</button>
+                <button @click="startChat(room.roomId)">채팅하기</button>
                 <!-- 방 삭제하기 버튼 -->
                 <button @click="deleteRoom(room.roomId)">방 삭제하기</button>
             </li>
@@ -23,7 +23,7 @@ export default {
     name: "MyChatRoom",
     data() {
         return {
-            roomList : []
+            roomList: []
         }
     },
     created() {
@@ -48,11 +48,11 @@ export default {
     methods: {
         goToCreateRoom() {
             const token = this.$route.query.token;
-            this.$router.push({ name: 'CreateChatRoom', query: { token }});
+            this.$router.push({name: 'CreateChatRoom', query: {token}});
         },
-        goToChatRoom(roomId) {
-            // 채팅방 컴포넌트로 이동하고 roomId 전달
-            this.$router.push({ name: 'ChatWithUser', params: { roomId } });
+        startChat(roomId) {
+            const token = this.$route.query.token;
+            this.$router.push({name: 'ChatWithUser', params: {roomId}, query: {token}});
         },
         async deleteRoom(roomId) {
             if (roomId === undefined) {

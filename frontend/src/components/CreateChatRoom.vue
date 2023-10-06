@@ -56,6 +56,9 @@ export default {
         },
         startChat(nickname) {
             // 채팅 시작 로직을 구현하세요.
+            const token = this.$route.query.token;
+            this.$router.push({name: 'ChatWithUser', params: {roomId}, query: {token}});
+
         },
     },
     components: {
