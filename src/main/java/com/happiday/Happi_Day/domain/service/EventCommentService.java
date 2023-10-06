@@ -55,7 +55,6 @@ public class EventCommentService {
 
     @Transactional
     public EventCommentResponseDto updateComment(Long eventId, Long commentId, EventCommentUpdateDto request, String username) {
-        log.info("서비스단 수정 테스트");
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -76,7 +75,6 @@ public class EventCommentService {
 
     @Transactional
     public void deleteComment(Long eventId, Long commentId, String username) {
-        log.info("서비스단 삭제 테스트");
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

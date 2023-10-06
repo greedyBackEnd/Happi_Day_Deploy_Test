@@ -76,5 +76,12 @@ public class EventController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/{eventId}/join")
+    public ResponseEntity<String> joinEvent(@PathVariable Long eventId){
+        String username = SecurityUtils.getCurrentUsername();
+        String response = eventService.joinEvent(eventId, username);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 
 }

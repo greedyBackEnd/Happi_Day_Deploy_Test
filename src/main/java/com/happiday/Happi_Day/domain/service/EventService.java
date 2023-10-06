@@ -44,15 +44,13 @@ public class EventService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // default 이미지 추가
+        // TODO - default 이미지 추가
 //        if (thumbnailFile == null || thumbnailFile.isEmpty()) {
 //            thumbnailFile = defaultThumbnailUrl;
 //        }
 //        if (imageFile == null || imageFile.isEmpty()) {
 //            imageFile = defaultImageUrl;
 //        }
-
-//        Event event = request.toEntity();
 
         String imageUrl = fileUtils.uploadFile(imageFile);
         String thumbnailUrl = fileUtils.uploadFile(thumbnailFile);
@@ -132,35 +130,6 @@ public class EventService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return EventResponseDto.fromEntity(event);
     }
-
-//    @Transactional
-//    public EventResponseDto updateEvent(
-//            Long eventId, EventUpdateDto request, MultipartFile thumbnailFile, MultipartFile imageFile, String username) {
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//
-//        if(!user.getUsername().equals(username)) throw new IllegalArgumentException("사용자 정보가 일치하지 않습니다.");
-//
-//        Event event = eventRepository.findById(eventId)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//
-//        // 이미지 업로드 추가
-//        if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
-//            fileUtils.deleteFile(event.getThumbnailUrl());
-//            String newThumbnailUrl = fileUtils.uploadFile(thumbnailFile);
-//            event.setThumbnailUrl(newThumbnailUrl);
-//        }
-//
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            fileUtils.deleteFile(event.getImageUrl());
-//            String newImageUrl = fileUtils.uploadFile(imageFile);
-//            event.setImageUrl(newImageUrl);
-//        }
-//
-////        event.update(request.toEntity());
-//        eventRepository.save(event);
-//        return EventResponseDto.fromEntity(event);
-//    }
 
     @Transactional
     public EventResponseDto updateEvent(Long eventId, EventUpdateDto request, MultipartFile thumbnailFile, MultipartFile imageFile, String username) {
@@ -271,5 +240,34 @@ public class EventService {
 
         eventRepository.save(event);
         return response + " / 좋아요 개수 : " + event.getLikeCount();
+    }
+
+    @Transactional
+    public String joinEvent(Long eventId, String username) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        boolean isJoined = event.getJoinList().contains(user);
+
+        log.info(String.valueOf(isJoined));
+        String response = "";
+        if (isJoined) {
+            // 이미 참여한 경우, 취소
+            user.getEventJoinList().remove(event);
+            event.getJoinList().remove(user);
+            response = " 이벤트 참여 취소";
+        } else {
+            // 참여하지 않은 경우, 참여
+            user.getEventJoinList().add(event);
+            event.getJoinList().add(user);
+            response = " 이벤트 참여";
+        }
+
+        eventRepository.save(event);
+        return event.getTitle() + response;
     }
 }
