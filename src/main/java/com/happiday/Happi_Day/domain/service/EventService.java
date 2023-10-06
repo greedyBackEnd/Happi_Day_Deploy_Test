@@ -44,15 +44,13 @@ public class EventService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // default 이미지 추가
+        // TODO - default 이미지 추가
 //        if (thumbnailFile == null || thumbnailFile.isEmpty()) {
 //            thumbnailFile = defaultThumbnailUrl;
 //        }
 //        if (imageFile == null || imageFile.isEmpty()) {
 //            imageFile = defaultImageUrl;
 //        }
-
-//        Event event = request.toEntity();
 
         String imageUrl = fileUtils.uploadFile(imageFile);
         String thumbnailUrl = fileUtils.uploadFile(thumbnailFile);
@@ -132,35 +130,6 @@ public class EventService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return EventResponseDto.fromEntity(event);
     }
-
-//    @Transactional
-//    public EventResponseDto updateEvent(
-//            Long eventId, EventUpdateDto request, MultipartFile thumbnailFile, MultipartFile imageFile, String username) {
-//        User user = userRepository.findByUsername(username)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//
-//        if(!user.getUsername().equals(username)) throw new IllegalArgumentException("사용자 정보가 일치하지 않습니다.");
-//
-//        Event event = eventRepository.findById(eventId)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//
-//        // 이미지 업로드 추가
-//        if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
-//            fileUtils.deleteFile(event.getThumbnailUrl());
-//            String newThumbnailUrl = fileUtils.uploadFile(thumbnailFile);
-//            event.setThumbnailUrl(newThumbnailUrl);
-//        }
-//
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            fileUtils.deleteFile(event.getImageUrl());
-//            String newImageUrl = fileUtils.uploadFile(imageFile);
-//            event.setImageUrl(newImageUrl);
-//        }
-//
-////        event.update(request.toEntity());
-//        eventRepository.save(event);
-//        return EventResponseDto.fromEntity(event);
-//    }
 
     @Transactional
     public EventResponseDto updateEvent(Long eventId, EventUpdateDto request, MultipartFile thumbnailFile, MultipartFile imageFile, String username) {
