@@ -51,17 +51,4 @@ public class EventCreateDto {
 
     private List<String> teams;
 
-//    public Event toEntity() {
-//        return Event.builder()
-//                .title(title)
-//                .imageUrl(imageUrl)
-//                .thumbnailUrl(thumbnailUrl)
-//                .artists(artists)
-//                .teams(teams)
-//                .startTime(startTime)
-//                .endTime(endTime)
-//                .description(description)
-//                .location(location)
-//                .build();
-//    }
 }
