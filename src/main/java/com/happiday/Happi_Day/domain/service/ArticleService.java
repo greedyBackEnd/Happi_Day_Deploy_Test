@@ -9,6 +9,7 @@ import com.happiday.Happi_Day.domain.entity.board.BoardCategory;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import com.happiday.Happi_Day.domain.repository.*;
 import com.happiday.Happi_Day.utils.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ArticleService {
@@ -116,7 +118,7 @@ public class ArticleService {
 
     // 글 수정
     @Transactional
-    public ReadOneArticleDto updateArticle(Long articleId, WriteArticleDto dto, MultipartFile image){
+    public ReadOneArticleDto updateArticle(Long articleId, WriteArticleDto dto, MultipartFile thumbnailImage, List<MultipartFile> imageFileList){
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -135,15 +137,41 @@ public class ArticleService {
             hashtagList.add(newHashtag);
         }
 
+        // 썸네일 이미지 저장
+        if(thumbnailImage != null && !thumbnailImage.isEmpty()){
+            if(article.getThumbnailUrl() != null && !article.getThumbnailUrl().isEmpty()){
+                try{
+                    fileUtils.deleteFile(article.getThumbnailUrl());
+                    log.info("썸네일 이미지 삭제완료");
+                }catch(Exception e){
+                    log.error("이미지 삭제 실패");
+                }
+            }
+            String thumbnailImageUrl = fileUtils.uploadFile(thumbnailImage);
+            article.setThumbnailImage(thumbnailImageUrl);
+        }
+
+        if(imageFileList != null && !imageFileList.isEmpty()){
+            if(article.getImageUrl() != null && !article.getImageUrl().isEmpty()){
+                try{
+                    for (String url: article.getImageUrl()) {
+                        fileUtils.deleteFile(url);
+                        log.info("글 이미지 삭제 완료");
+                    }
+                }catch(Exception e){
+                    log.error("이미지 삭제 실패");
+                }
+            }
+            List<String> imageList = new ArrayList<>();
+            for (MultipartFile image:imageFileList) {
+                String imageUrl = fileUtils.uploadFile(image);
+                imageList.add(imageUrl);
+            }
+            article.setImageUrl(imageList);
+        }
+
         // TODO 아티스트 리스트, 팀 리스트 추가예정
         article.update(dto.toEntity());
-
-        // 썸네일 이미지 수정
-//        if (image != null) {
-//            Path path = Path.of(String.format("image/%d/thumbnail.png", article.getId()));
-//            image.transferTo(path);
-//        }
-
         articleRepository.save(article);
 
         return ReadOneArticleDto.fromEntity(article);

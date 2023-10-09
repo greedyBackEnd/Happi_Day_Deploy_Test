@@ -54,8 +54,9 @@ public class ArticleController {
     public ResponseEntity<ReadOneArticleDto> updateArticle(
             @PathVariable("articleId") Long articleId,
             @RequestPart(name = "article") WriteArticleDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) {
-        ReadOneArticleDto responseArticle = articleService.updateArticle(articleId, requestDto, thumbnailImage);
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage,
+            @RequestPart(name = "imageFile", required = false) List<MultipartFile> imageFileList) {
+        ReadOneArticleDto responseArticle = articleService.updateArticle(articleId, requestDto, thumbnailImage, imageFileList);
         return new ResponseEntity<>(responseArticle, HttpStatus.OK);
     }
 
