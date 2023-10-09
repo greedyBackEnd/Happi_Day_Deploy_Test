@@ -26,8 +26,8 @@ public class ChatRoomService {
     public Long createChatRoom(User receiver, String username) {
         User sender = userRepository.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        ChatRoom chatRoom1 = chatRoomRepository.findBySenderOrReceiver(sender, receiver);
-        ChatRoom chatRoom2 = chatRoomRepository.findBySenderOrReceiver(receiver, sender);
+        ChatRoom chatRoom1 = chatRoomRepository.findBySenderAndReceiver(sender, receiver);
+        ChatRoom chatRoom2 = chatRoomRepository.findBySenderAndReceiver(receiver, sender);
 
         ChatRoom chatRoom = null;
 

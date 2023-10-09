@@ -48,4 +48,8 @@ public class JwtTokenUtils {
         return Jwts.builder().setClaims(jwtClaims).signWith(signingKey).compact();
     }
 
+    public String getUsernameFromJwt(String token) {
+        return this.parseClaims(token).getId();
+    }
+
 }

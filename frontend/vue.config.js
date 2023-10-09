@@ -5,5 +5,12 @@ module.exports = defineConfig({
   outputDir: '../src/main/resources/static',
   devServer:{
     proxy: 'http://localhost:8080'
+  },
+  configureWebpack: {
+    resolve: {
+      fallback: {
+        net: false,
+      },
+    },
   }
 })

@@ -54,11 +54,37 @@ export default {
                 this.nicknameList = this.users.filter(user => user.nickname.includes(this.nickname));
             }
         },
-        startChat(nickname) {
-            // 채팅 시작 로직을 구현하세요.
+        startChat(selected) {
             const token = this.$route.query.token;
-            this.$router.push({name: 'ChatWithUser', params: {roomId}, query: {token}});
 
+            axios.post(`/api/v1/chat`, {},{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                params: {
+                    nickname: selected
+                }
+            })
+                .then((response) => {
+                    // API 응답이 올바르게 받아졌는지 확인합니다.
+                    if (response.status === 201) {
+                        // API 응답 처리
+                        const roomId = response.data;
+
+                        // roomId와 nickname을 로컬 스토리지에 저장합니다.
+                        localStorage.setItem('roomId', roomId);
+                        localStorage.setItem('receiver', selected);
+
+                        // ChatWithUser 페이지로 이동합니다.
+                        this.$router.push({ name: 'ChatWithUser', params: { roomId: roomId }, query: { token } });
+                    } else {
+                        // API 응답이 올바르지 않은 경우 에러 처리
+                        console.error('API 응답이 올바르지 않습니다.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('API 요청 실패', error);
+                });
         },
     },
     components: {

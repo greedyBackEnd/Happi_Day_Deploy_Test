@@ -8,7 +8,7 @@
         <ul>
             <li v-for="room in roomList" :key="room.roomId">
                 {{ room.receiver }}
-                <button @click="startChat(room.roomId)">채팅하기</button>
+                <button @click="startChat(room.roomId, room.receiver)">채팅하기</button>
                 <!-- 방 삭제하기 버튼 -->
                 <button @click="deleteRoom(room.roomId)">방 삭제하기</button>
             </li>
@@ -50,9 +50,11 @@ export default {
             const token = this.$route.query.token;
             this.$router.push({name: 'CreateChatRoom', query: {token}});
         },
-        startChat(roomId) {
+        startChat(roomId, receiver) {
             const token = this.$route.query.token;
             this.$router.push({name: 'ChatWithUser', params: {roomId}, query: {token}});
+            localStorage.setItem('roomId', roomId);
+            localStorage.setItem('receiver', receiver);
         },
         async deleteRoom(roomId) {
             if (roomId === undefined) {

@@ -27,7 +27,7 @@ public class ChatRoomController {
 
     // 채팅방 만들기
     @PostMapping
-    public ResponseEntity<Long> createChatRoom(@RequestParam String nickname) {
+    public ResponseEntity<Long> createChatRoom(@RequestParam("nickname") String nickname) {
         String username = SecurityUtils.getCurrentUsername();
         User receiver = userRepository.findByNickname(nickname).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         Long roomId = chatRoomService.createChatRoom(receiver, username);
