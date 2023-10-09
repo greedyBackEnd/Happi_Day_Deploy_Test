@@ -8,6 +8,7 @@ import com.happiday.Happi_Day.domain.entity.article.dto.WriteArticleDto;
 import com.happiday.Happi_Day.domain.entity.board.BoardCategory;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import com.happiday.Happi_Day.domain.repository.*;
+import com.happiday.Happi_Day.utils.FileUtils;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,9 +30,10 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final BoardCategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final FileUtils fileUtils;
 
     @Transactional
-    public ReadOneArticleDto writeArticle(Long categoryId, WriteArticleDto dto, MultipartFile image, String username){
+    public ReadOneArticleDto writeArticle(Long categoryId, WriteArticleDto dto, MultipartFile thumbnailImage, List<MultipartFile> imageFileList, String username){
         // user 확인
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -65,15 +67,22 @@ public class ArticleService {
                 .hashtags(hashtagList)
                 .likeUsers(new ArrayList<>())
                 .comments(new ArrayList<>())
+                .imageUrl(new ArrayList<>())
                 .build();
 
-        // 썸네일 이미지 저장
-//        if (image != null) {
-//            Files.createDirectories(Path.of(String.format("image/%d", newArticle.getId())));
-//            Path path = Path.of(String.format("image/%d/thumbnail.png", newArticle.getId()));
-//
-//            image.transferTo(path);
-//        }
+        // 이미지 저장
+        if(thumbnailImage != null && !thumbnailImage.isEmpty()){
+            String saveThumbnailUrl = fileUtils.uploadFile(thumbnailImage);
+            newArticle.setThumbnailImage(saveThumbnailUrl);
+        }
+        if(imageFileList != null && !imageFileList.isEmpty()){
+            List<String> imageList = new ArrayList<>();
+            for (MultipartFile image:imageFileList) {
+                String imageUrl = fileUtils.uploadFile(image);
+                imageList.add(imageUrl);
+            }
+            newArticle.setImageUrl(imageList);
+        }
 
         articleRepository.save(newArticle);
         ReadOneArticleDto responseArticle = ReadOneArticleDto.fromEntity(newArticle);
@@ -144,6 +153,12 @@ public class ArticleService {
     public void deleteArticle(Long articleId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // TODO 이미지 삭제
+        for (String imageUrl: article.getImageUrl()) {
+            fileUtils.deleteFile(imageUrl);
+        }
+        fileUtils.deleteFile(article.getThumbnailUrl());
 
         articleRepository.deleteById(articleId);
     }
