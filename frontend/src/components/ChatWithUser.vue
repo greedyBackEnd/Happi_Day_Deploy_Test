@@ -36,7 +36,7 @@ export default {
     },
     methods: {
         initializeWebSocket() {
-            var socket = new SockJS('/ws');
+            var socket = new SockJS("/ws");
             this.stompClient = Stomp.over(socket);
             var _this = this;
             _this.token = this.$route.query.token;
