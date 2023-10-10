@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -26,10 +25,11 @@ public class ArticleController {
     @PostMapping(value = "/{categoryId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReadOneArticleDto> writeArticle(
             @PathVariable("categoryId") Long id,
-            @RequestPart(name = "article") WriteArticleDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage){
+            @RequestPart(value = "article") WriteArticleDto requestDto,
+            @RequestPart(value = "thumbnailImage", required = false) MultipartFile thumbnailImage,
+            @RequestPart(value = "imageFile", required = false) List<MultipartFile> imageFileList) {
         String username = SecurityUtils.getCurrentUsername();
-        ReadOneArticleDto response = articleService.writeArticle(id, requestDto, thumbnailImage, username);
+        ReadOneArticleDto response = articleService.writeArticle(id, requestDto, thumbnailImage, imageFileList, username);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -54,8 +54,9 @@ public class ArticleController {
     public ResponseEntity<ReadOneArticleDto> updateArticle(
             @PathVariable("articleId") Long articleId,
             @RequestPart(name = "article") WriteArticleDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage){
-        ReadOneArticleDto responseArticle = articleService.updateArticle(articleId, requestDto, thumbnailImage);
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage,
+            @RequestPart(name = "imageFile", required = false) List<MultipartFile> imageFileList) {
+        ReadOneArticleDto responseArticle = articleService.updateArticle(articleId, requestDto, thumbnailImage, imageFileList);
         return new ResponseEntity<>(responseArticle, HttpStatus.OK);
     }
 

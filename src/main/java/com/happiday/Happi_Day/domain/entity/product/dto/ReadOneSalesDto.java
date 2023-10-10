@@ -18,6 +18,7 @@ public class ReadOneSalesDto {
     private String salesStatus;
     private List<ReadProductDto> products;
     private int likeNum;
+    private List<String> imageList;
 
     public static ReadOneSalesDto fromEntity(Sales sales, List<ReadProductDto> productList){
         return ReadOneSalesDto.builder()
@@ -29,6 +30,7 @@ public class ReadOneSalesDto {
                 .salesStatus(sales.getSalesStatus().getValue())
                 .products(productList)
                 .likeNum(sales.getSalesLikesUsers().size())
+                .imageList(sales.getImageUrl())
                 .build();
     }
 }

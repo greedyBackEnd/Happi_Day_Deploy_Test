@@ -26,6 +26,7 @@ public class ReadOneArticleDto {
     private String createdAt;
     private List<ReadCommentDto> comments;
     private int likeUsersNum;
+    private List<String> imageUrl;
 //    private int scrapUserNum;
 
     // TODO 댓글, 좋아요, 스크랩 추가예정
@@ -38,6 +39,7 @@ public class ReadOneArticleDto {
                 .artists(article.getArtists())
                 .comments(ReadCommentDto.toReadCommentDto(article.getComments()))
                 .likeUsersNum(article.getLikeUsers().size())
+                .imageUrl(article.getImageUrl())
                 .build();
     }
 

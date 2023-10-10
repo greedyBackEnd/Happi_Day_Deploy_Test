@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 @Entity
@@ -34,7 +34,14 @@ public class Article extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    // 카테고리 -홍보 에만 필요
+    @Setter
+    private String thumbnailUrl;
+
+    @Setter
+    @ElementCollection
+    private List<String> imageUrl = new ArrayList<>();
+
+    // 카테고리 홍보 에만 필요
     private String eventAddress;
 
     // 게시글 카테고리
@@ -90,4 +97,7 @@ public class Article extends BaseEntity {
         if (updateArticle.getHashtags() != null) this.hashtags = updateArticle.getHashtags();
     }
 
+    public void setThumbnailImage(String thumbnailImage) {
+        this.thumbnailUrl = thumbnailImage;
+    }
 }

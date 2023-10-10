@@ -7,6 +7,7 @@ import com.happiday.Happi_Day.domain.repository.ProductRepository;
 import com.happiday.Happi_Day.domain.repository.SalesCategoryRepository;
 import com.happiday.Happi_Day.domain.repository.SalesRepository;
 import com.happiday.Happi_Day.domain.repository.UserRepository;
+import com.happiday.Happi_Day.utils.FileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,10 +28,10 @@ public class SalesService {
     private final SalesCategoryRepository salesCategoryRepository;
     private final SalesRepository salesRepository;
     private final ProductRepository productRepository;
+    private final FileUtils fileUtils;
 
-    // TODO 이미지 저장 예정
     @Transactional
-    public ReadOneSalesDto createSales(Long categoryId, WriteSalesDto dto, MultipartFile image, String username){
+    public ReadOneSalesDto createSales(Long categoryId, WriteSalesDto dto, MultipartFile thumbnailImage,List<MultipartFile> imageFile, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -47,7 +48,22 @@ public class SalesService {
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .products(productList)
+                .salesLikesUsers(new ArrayList<>())
+                .imageUrl(new ArrayList<>())
                 .build();
+
+        // 이미지 저장
+        if(thumbnailImage != null && !thumbnailImage.isEmpty()){
+            String saveThumbnailImage = fileUtils.uploadFile(thumbnailImage);
+            newSales.setThumbnailImage(saveThumbnailImage);
+        }if(imageFile != null && !imageFile.isEmpty()){
+            List<String> imageList = new ArrayList<>();
+            for(MultipartFile image: imageFile){
+                String imageUrl = fileUtils.uploadFile(image);
+                imageList.add(imageUrl);
+            }
+            newSales.setImageUrl(imageList);
+        }
 
         Sales newSalesArticle = salesRepository.save(newSales);
 
@@ -101,7 +117,7 @@ public class SalesService {
     }
 
     @Transactional
-    public ReadOneSalesDto updateSales(Long salesId, UpdateSalesDto dto, MultipartFile img, String username){
+    public ReadOneSalesDto updateSales(Long salesId, UpdateSalesDto dto, MultipartFile thumbnailImage, List<MultipartFile> imageFile, String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -112,6 +128,37 @@ public class SalesService {
         if(!user.equals(sales.getUsers())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
         // TODO 이미지 저장예정
+        if(thumbnailImage != null && !thumbnailImage.isEmpty()){
+            if(sales.getThumbnailImage() != null && !sales.getThumbnailImage().isEmpty()){
+                try{
+                    fileUtils.deleteFile(sales.getThumbnailImage());
+                    log.info("썸네일 이미지 삭제완료");
+                }catch(Exception e){
+                    log.error("썸네일 삭제 실패");
+                }
+            }
+            String thumbnailImageUrl = fileUtils.uploadFile(thumbnailImage);
+            sales.setThumbnailImage(thumbnailImageUrl);
+        }
+
+        if(imageFile != null && !imageFile.isEmpty()){
+            if(sales.getImageUrl() != null && !sales.getImageUrl().isEmpty()){
+                try{
+                    for(String url: sales.getImageUrl()){
+                        fileUtils.deleteFile(url);
+                        log.info("판매글 이미지 삭제완료");
+                    }
+                }catch(Exception e){
+                    log.error("판매글 이미지 삭제 실패");
+                }
+            }
+            List<String> imageList = new ArrayList<>();
+            for(MultipartFile image: imageFile){
+                String imageUrl = fileUtils.uploadFile(image);
+                imageList.add(imageUrl);
+            }
+            sales.setImageUrl(imageList);
+        }
 
         // TODO 아티스트 추가예정
 
@@ -136,6 +183,12 @@ public class SalesService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if(!user.equals(sales.getUsers())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+
+        // 이미지 삭제
+        for(String imageUrl: sales.getImageUrl()){
+            fileUtils.deleteFile(imageUrl);
+        }
+        fileUtils.deleteFile(sales.getThumbnailImage());
 
         productRepository.deleteAllBySales(sales);
         salesRepository.deleteById(salesId);
