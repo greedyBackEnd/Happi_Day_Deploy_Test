@@ -26,9 +26,10 @@ public class SalesController {
     public ResponseEntity<ReadOneSalesDto> createSales(
             @PathVariable("categoryId") Long id,
             @RequestPart(name = "sale") WriteSalesDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage){
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage,
+            @RequestPart(name = "imageFile", required = false) List<MultipartFile> imageFile) {
         String username = SecurityUtils.getCurrentUsername();
-        ReadOneSalesDto response = salesService.createSales(id, requestDto, thumbnailImage, username);
+        ReadOneSalesDto response = salesService.createSales(id, requestDto, thumbnailImage, imageFile, username);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -45,7 +46,7 @@ public class SalesController {
     public ResponseEntity<ReadOneSalesDto> readSalesOne(
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("salesId") Long salesId) {
-        ReadOneSalesDto responseSales = salesService.readSalesOne(categoryId,salesId);
+        ReadOneSalesDto responseSales = salesService.readSalesOne(categoryId, salesId);
         return new ResponseEntity<>(responseSales, HttpStatus.OK);
     }
 
@@ -56,7 +57,7 @@ public class SalesController {
             @RequestPart(name = "sale") UpdateSalesDto requestDto,
             @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) {
         String username = SecurityUtils.getCurrentUsername();
-        ReadOneSalesDto responseSales =  salesService.updateSales(salesId, requestDto, thumbnailImage, username);
+        ReadOneSalesDto responseSales = salesService.updateSales(salesId, requestDto, thumbnailImage, username);
         return new ResponseEntity<>(responseSales, HttpStatus.OK);
     }
 
@@ -64,7 +65,7 @@ public class SalesController {
     @DeleteMapping("/{categoryId}/{salesId}")
     public ResponseEntity<String> deleteSales(
             @PathVariable("categoryId") Long categoryId,
-            @PathVariable("salesId") Long salesId){
+            @PathVariable("salesId") Long salesId) {
         String username = SecurityUtils.getCurrentUsername();
         salesService.deleteSales(categoryId, salesId, username);
         return new ResponseEntity<>("판매글 삭제 성공", HttpStatus.OK);
@@ -73,7 +74,7 @@ public class SalesController {
     // 판매글 찜하기
     @PostMapping("/{salesId}/like")
     public ResponseEntity<String> likeSales(
-            @PathVariable("salesId") Long salesId){
+            @PathVariable("salesId") Long salesId) {
         String username = SecurityUtils.getCurrentUsername();
         String response = salesService.likeSales(salesId, username);
         return new ResponseEntity<>(response, HttpStatus.OK);

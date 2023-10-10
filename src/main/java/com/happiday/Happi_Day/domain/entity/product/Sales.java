@@ -5,10 +5,7 @@ import com.happiday.Happi_Day.domain.entity.artist.Artist;
 import com.happiday.Happi_Day.domain.entity.team.Team;
 import com.happiday.Happi_Day.domain.entity.user.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -41,11 +38,16 @@ public class Sales extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private String imageUrl;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SalesStatus salesStatus;
+
+    @Setter
+    private String thumbnailImage;
+
+    @Setter
+    @ElementCollection
+    private List<String> imageUrl = new ArrayList<>();
 
     // 상품
     @OneToMany(mappedBy = "sales")

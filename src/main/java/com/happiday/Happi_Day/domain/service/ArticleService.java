@@ -182,7 +182,7 @@ public class ArticleService {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        // TODO 이미지 삭제
+        // 이미지 삭제
         for (String imageUrl: article.getImageUrl()) {
             fileUtils.deleteFile(imageUrl);
         }
