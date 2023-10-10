@@ -20,7 +20,7 @@ public class SalesDetailResponseDto {
     private User user;
     private String name;
     private String description;
-    private String imageUrl;
+    private List<String> imageUrl;
     private SalesStatus salesStatus;
     private List<Product> products;
     private List<Artist> artists;

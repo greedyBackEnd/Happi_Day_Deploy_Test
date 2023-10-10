@@ -55,9 +55,10 @@ public class SalesController {
     public ResponseEntity<ReadOneSalesDto> updateSales(
             @PathVariable("salesId") Long salesId,
             @RequestPart(name = "sale") UpdateSalesDto requestDto,
-            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage) {
+            @RequestPart(name = "thumbnailImage", required = false) MultipartFile thumbnailImage,
+            @RequestPart(name = "imageFile", required = false) List<MultipartFile> imageFile) {
         String username = SecurityUtils.getCurrentUsername();
-        ReadOneSalesDto responseSales = salesService.updateSales(salesId, requestDto, thumbnailImage, username);
+        ReadOneSalesDto responseSales = salesService.updateSales(salesId, requestDto, thumbnailImage, imageFile, username);
         return new ResponseEntity<>(responseSales, HttpStatus.OK);
     }
 
