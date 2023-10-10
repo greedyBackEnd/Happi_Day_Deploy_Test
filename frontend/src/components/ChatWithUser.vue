@@ -39,11 +39,10 @@ export default {
             var socket = new SockJS("/ws");
             this.stompClient = Stomp.over(socket);
             var _this = this;
-            _this.token = this.$route.query.token;
+            _this.token = localStorage.getItem('accessToken');
 
             _this.stompClient.connect({ token: _this.token }, function(frame) {
                 console.log('WebSocket 연결 성공'); // 웹소켓 연결이 성공한 경우 콘솔에 메시지 출력
-                console.log(_this.token);
                 _this.stompClient.subscribe(`/sub/chat/room/${_this.roomId}`, function(message) {
                     var recv = JSON.parse(message.body);
                     _this.recvMessage(recv);
