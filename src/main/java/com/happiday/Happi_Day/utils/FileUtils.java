@@ -2,7 +2,10 @@ package com.happiday.Happi_Day.utils;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.happiday.Happi_Day.exception.CustomException;
+import com.happiday.Happi_Day.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FileUtils {
@@ -36,7 +40,8 @@ public class FileUtils {
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, metadata));
         } catch (IOException e) {
-            throw new RuntimeException("파일을 업로드할 수 없습니다." + e);
+            log.error("S3 이미지 업로드 실패 filename : " + multipartFile.getOriginalFilename(), e);
+            throw new CustomException(ErrorCode.FILE_UPLOAD_BAD_REQUEST);
         }
         return amazonS3.getUrl(bucket, fileName).toString();
     }
@@ -56,8 +61,9 @@ public class FileUtils {
 
     private String getFileExtension(String filename) {
         int dotIndex = filename.lastIndexOf(".");
-        if(dotIndex < 0) {
-            throw new IllegalArgumentException("파일에 확장자가 없습니다");
+        if (dotIndex < 0) {
+            log.error("파일에 확장자가 없음 filename : " + filename);
+            throw new CustomException(ErrorCode.FILE_MISSING_EXTENSION);
         }
         return filename.substring(dotIndex + 1);
     }
@@ -65,8 +71,8 @@ public class FileUtils {
     private void validateFileExtension(String filename) {
         String fileExtension = getFileExtension(filename);
         if (!ALLOWED_FILE_EXTENSIONS.contains(fileExtension.toLowerCase())) {
-            throw new IllegalArgumentException("잘못된 파일 확장자입니다. 이미지만 허용됩니다.");
+            log.error("잘못된 파일 확장자. 이미지만 허용. filename : " + filename);
+            throw new CustomException(ErrorCode.FILE_INVALID_EXTENSION);
         }
     }
 }
-
