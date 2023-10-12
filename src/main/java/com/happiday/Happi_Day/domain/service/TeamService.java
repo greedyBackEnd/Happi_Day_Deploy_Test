@@ -9,8 +9,9 @@ import com.happiday.Happi_Day.domain.entity.team.dto.TeamRegisterDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamDetailResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamUpdateDto;
 import com.happiday.Happi_Day.domain.repository.TeamRepository;
+import com.happiday.Happi_Day.exception.CustomException;
+import com.happiday.Happi_Day.exception.ErrorCode;
 import com.happiday.Happi_Day.utils.FileUtils;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class TeamService {
     @Transactional
     public TeamDetailResponseDto updateTeam(Long teamId, TeamUpdateDto requestDto, MultipartFile imageFile) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         // 이미지 저장 및 기존 이미지 삭제 로직
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -57,6 +58,7 @@ public class TeamService {
                     log.info("이미지 삭제 완료: " + team.getLogoUrl());
                 } catch (Exception e) {
                     log.error("이미지 삭제 실패: " + team.getLogoUrl(), e);
+                    throw new CustomException(ErrorCode.FILE_DELETE_BAD_REQUEST);
                 }
             }
 
@@ -75,13 +77,13 @@ public class TeamService {
     @Transactional
     public void deleteTeam(Long teamId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
         teamRepository.delete(team);
     }
 
     public TeamDetailResponseDto getTeam(Long teamId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
         return TeamDetailResponseDto.of(team);
     }
 
@@ -93,7 +95,7 @@ public class TeamService {
 
     public List<ArtistListResponseDto> getTeamArtists(Long teamId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         return team.getArtists().stream()
                 .map(ArtistListResponseDto::of)
@@ -102,7 +104,7 @@ public class TeamService {
 
     public List<SalesListResponseDto> getSalesList(Long teamId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         return team.getSalesList().stream()
                 .map(SalesListResponseDto::of)
@@ -111,7 +113,7 @@ public class TeamService {
 
     public List<EventListResponseDto> getEvents(Long teamId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new EntityNotFoundException("Team을 찾을 수 없습니다. " + teamId));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         return team.getEvents().stream()
                 .map(EventListResponseDto::fromEntity)

@@ -26,6 +26,9 @@ public enum ErrorCode {
     // artist
     ARTIST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 아티스트를 찾을 수 없습니다."),
 
+    // team
+    TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 팀을 찾을 수 없습니다."),
+
     ;
 
     private final HttpStatus status;
