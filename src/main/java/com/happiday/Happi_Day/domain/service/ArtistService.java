@@ -9,8 +9,9 @@ import com.happiday.Happi_Day.domain.entity.event.dto.EventListResponseDto;
 import com.happiday.Happi_Day.domain.entity.team.dto.TeamListResponseDto;
 import com.happiday.Happi_Day.domain.entity.product.dto.SalesListResponseDto;
 import com.happiday.Happi_Day.domain.repository.ArtistRepository;
+import com.happiday.Happi_Day.exception.CustomException;
+import com.happiday.Happi_Day.exception.ErrorCode;
 import com.happiday.Happi_Day.utils.FileUtils;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class ArtistService {
     @Transactional
     public ArtistDetailResponseDto updateArtist(Long artistId, ArtistUpdateDto requestDto, MultipartFile imageFile) {
         Artist artist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. : " + artistId));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
 
         // 이미지 저장 및 기존 이미지 삭제 로직
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -57,6 +58,7 @@ public class ArtistService {
                     log.info("이미지 삭제 완료: " + artist.getProfileUrl());
                 } catch (Exception e) {
                     log.error("이미지 삭제 실패: " + artist.getProfileUrl(), e);
+                    throw new CustomException(ErrorCode.FILE_DELETE_BAD_REQUEST);
                 }
             }
 
@@ -75,13 +77,13 @@ public class ArtistService {
     @Transactional
     public void delete(Long artistId) {
         Artist artist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
         artistRepository.delete(artist);
     }
 
     public ArtistDetailResponseDto getArtist(Long artistId) {
         Artist artist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
         return ArtistDetailResponseDto.of(artist);
     }
 
@@ -93,7 +95,7 @@ public class ArtistService {
 
     public List<TeamListResponseDto> getArtistTeams(Long artistId) {
         Artist artist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
 
         return artist.getTeams().stream()
                 .map(TeamListResponseDto::of)
@@ -102,7 +104,7 @@ public class ArtistService {
 
     public List<SalesListResponseDto> getSalesList(Long artistId) {
         Artist artist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
 
         return artist.getSalesList().stream()
                 .map(SalesListResponseDto::of)
@@ -111,7 +113,7 @@ public class ArtistService {
 
     public List<EventListResponseDto> getEvents(Long artistId) {
         Artist artist = artistRepository.findById(artistId)
-                .orElseThrow(() -> new EntityNotFoundException("Artist를 찾을 수 없습니다. " + artistId));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTIST_NOT_FOUND));
 
         return artist.getEvents().stream()
                 .map(EventListResponseDto::fromEntity)

@@ -23,6 +23,9 @@ public enum ErrorCode {
     FILE_MISSING_EXTENSION(HttpStatus.BAD_REQUEST, "파일에 확장자가 없습니다"),
     FILE_INVALID_EXTENSION(HttpStatus.BAD_REQUEST, "잘못된 파일 확장자입니다. 이미지만 허용됩니다."),
 
+    // artist
+    ARTIST_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 아티스트를 찾을 수 없습니다."),
+
     ;
 
     private final HttpStatus status;
