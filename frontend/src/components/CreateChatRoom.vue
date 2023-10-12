@@ -1,9 +1,15 @@
 <template>
     <div>
         <h1>사용자 검색</h1>
-        <!-- 사용자 닉네임 입력 폼 -->
-        <input type="text" id="nickname" v-model="nickname" @keyup.enter="searchNicknames"/>
-        <button @click="searchNicknames">검색</button>
+        <div>
+            <button @click="goToMyRoom">내 채팅방</button>
+        </div>
+        <br>
+        <div>
+            <!-- 사용자 닉네임 입력 폼 -->
+            <input type="text" id="nickname" v-model="nickname" @keyup.enter="searchNicknames"/>
+            <button @click="searchNicknames">검색</button>
+        </div>
 
         <!-- 닉네임 리스트 -->
         <ul>
@@ -18,6 +24,7 @@
 <script>
 import ChatWithUser from "@/components/ChatWithUser.vue";
 import axios from "axios";
+import {getToken} from "@/authentication/token";
 
 export default {
     name: "CreateChatRoom",
@@ -31,7 +38,7 @@ export default {
     },
     created() {
         // 라우터에서 전달받은 토큰 추출
-        const token = this.$route.query.token;
+        const token = getToken();
         // 토큰을 사용하여 API 요청 보내기
         axios.get("/api/v1/chat/findAllUser", {
             headers: {
@@ -55,7 +62,7 @@ export default {
             }
         },
         startChat(selected) {
-            const token = this.$route.query.token;
+            const token = getToken();
 
             axios.post(`/api/v1/chat`, {},{
                 headers: {
@@ -86,6 +93,9 @@ export default {
                     console.error('API 요청 실패', error);
                 });
         },
+        goToMyRoom() {
+            this.$router.push({name: 'MyChatRoom'});
+        }
     },
     components: {
         ChatWithUser,

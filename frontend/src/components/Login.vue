@@ -42,7 +42,7 @@ export default {
                     saveToken(token);
 
                     // 로그인 후 MyChatRoom으로 이동
-                    this.$router.push({ name: 'MyChatRoom', query: {token}});
+                    this.$router.push({ name: 'MyChatRoom'});
                 })
                 .catch((error) => {
                     // 로그인 실패 처리

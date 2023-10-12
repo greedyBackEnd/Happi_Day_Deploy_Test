@@ -64,8 +64,7 @@ export default {
             this.messages.unshift({ type: recv.type, sender: recv.sender, message: recv.message });
         },
         goToMyRoom() {
-            const token = this.$route.query.token;
-            this.$router.push({name: 'MyChatRoom', query: {token}});
+            this.$router.push({name: 'MyChatRoom'});
         }
     }
 };

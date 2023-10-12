@@ -18,6 +18,7 @@
 
 <script>
 import axios from "axios";
+import {getToken} from "@/authentication/token";
 
 export default {
     name: "MyChatRoom",
@@ -28,8 +29,7 @@ export default {
     },
     created() {
         // 라우터에서 전달받은 토큰 추출
-        const token = this.$route.query.token;
-
+        const token = getToken()
         // 토큰을 사용하여 API 요청 보내기
         axios.get(`/api/v1/chat/rooms`, {
             headers: {
@@ -47,12 +47,10 @@ export default {
     },
     methods: {
         goToCreateRoom() {
-            const token = this.$route.query.token;
-            this.$router.push({name: 'CreateChatRoom', query: {token}});
+            this.$router.push({name: 'CreateChatRoom'});
         },
         startChat(roomId, receiver) {
-            const token = this.$route.query.token;
-            this.$router.push({name: 'ChatWithUser', params: {roomId}, query: {token}});
+            this.$router.push({name: 'ChatWithUser', params: {roomId}});
             localStorage.setItem('roomId', roomId);
             localStorage.setItem('receiver', receiver);
         },
@@ -62,7 +60,7 @@ export default {
                 return; // roomId가 정의되지 않은 경우 요청을 보내지 않음
             }
 
-            const token = this.$route.query.token;
+            const token = getToken();
             axios.delete(`/api/v1/chat/${roomId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`, // 토큰을 Authorization 헤더에 추가
