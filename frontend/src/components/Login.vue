@@ -42,7 +42,7 @@ export default {
                     saveToken(token);
 
                     // 로그인 후 Option 이동
-                    this.$router.push({ name: 'Option'});
+                    this.$router.push({ name: 'SelectOption'});
                 })
                 .catch((error) => {
                     // 로그인 실패 처리

@@ -30,7 +30,7 @@ const routes = [
   },
   {
     path: "/choose-option",
-    name: "Option",
+    name: "SelectOption",
     component: SelectOption,
   },
   {
