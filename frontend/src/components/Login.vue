@@ -41,8 +41,8 @@ export default {
                     // 토큰을 저장
                     saveToken(token);
 
-                    // 로그인 후 MyChatRoom으로 이동
-                    this.$router.push({ name: 'MyChatRoom', query: {token}});
+                    // 로그인 후 Option 이동
+                    this.$router.push({ name: 'SelectOption'});
                 })
                 .catch((error) => {
                     // 로그인 실패 처리

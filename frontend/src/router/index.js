@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import {getToken} from "@/authentication/token";
 import CreateChatRoom from "@/components/CreateChatRoom.vue";
 import ChatWithUser from "@/components/ChatWithUser.vue";
+import SelectOption from "@/components/SelectOption.vue";
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     path: "/chat/:roomId",
     name: "ChatWithUser",
     component: ChatWithUser,
+  },
+  {
+    path: "/choose-option",
+    name: "SelectOption",
+    component: SelectOption,
   },
   {
     path: '/',
