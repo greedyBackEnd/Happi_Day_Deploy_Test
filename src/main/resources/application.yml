@@ -1,0 +1,69 @@
+server:
+  compression:
+    enabled: true
+  port: 8080
+
+spring:
+  profiles:
+    active: prod
+    default: secret
+  data:
+    redis:
+      port: 6379
+      host: localhost
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: #url
+    username: #username
+    password: #password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+    open-in-view: true
+
+logging.level:
+  org.hibernate.SQL: info
+  org.hibernate.type: info
+
+jwt:
+  secret: #secretKey
+
+cloud:
+  aws:
+    s3:
+      bucket: #bucket
+    credentials:
+      access-key: #access-key
+      secret-key: #secret-key
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+springdoc:
+  version: '@project.version@'
+  api-docs:
+    path: /api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    display-query-params-without-oauth2: true
+    doc-expansion: none
+  paths-to-match:
+    - /api/**
